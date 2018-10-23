@@ -25,7 +25,6 @@
 package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
@@ -124,11 +123,9 @@ public class TstScreenshotAction {
 
         Path screenshotFile = screenshotAction.getScreenshotFile();
 
-        assertNotNull( screenshotFile );
-
         if( screenshotFile != null ) {
             String screenshotFileName = screenshotFile.getFileName().toString();
-
+            Files.delete( screenshotFile );
             // [0-9]{14} => 14 because there is a timestamp at the end of the Filename
             // (yyyyMMddHHmmss)
             assertTrue( screenshotFileName.matches( "screenshot_testIdentifier_[0-9]{14}\\.html" ) );
