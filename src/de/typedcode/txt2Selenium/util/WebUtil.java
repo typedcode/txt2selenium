@@ -26,6 +26,7 @@ package de.typedcode.txt2Selenium.util;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openqa.selenium.By;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 @NonNullByDefault
@@ -50,5 +51,15 @@ public class WebUtil {
     @Nullable
     public String getPageSource() {
         return this.driver.getPageSource();
+    }
+
+    /**
+     * Performs the Click Action on the given <code>By</code> Element.
+     * 
+     * @param by
+     *            Element to Click
+     */
+    public void click( By by ) {
+        driver.findElement( by ).click();
     }
 }

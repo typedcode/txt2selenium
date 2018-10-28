@@ -25,47 +25,41 @@
 package de.typedcode.txt2Selenium.actions;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openqa.selenium.By;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2Selenium.util.ByInitializer;
+import de.typedcode.txt2Selenium.util.ByType;
+import de.typedcode.txt2Selenium.util.WebUtil;
 
 @NonNullByDefault
-public class ActionFactory {
+public class ClickAction extends AAction {
+
+    public static final String IDENTIFIER = "clickAction";
 
     /**
-     * Instantiating this Class is not allowed.
+     * By Object to perform the Action on.
      */
-    private ActionFactory() {
+    private By by;
 
-    }
+    public ClickAction( Txt2Selenium instance, String byParameters ) {
+        super( instance );
 
-    /**
-     * Tries to create the action identified by <code>action</code> with the given
-     * <code>parameters</code>
-     * 
-     * @param action
-     * @param parameters
-     * @return
-     */
-    public static AAction createAction( Txt2Selenium instance, String action, String parameters )
-            throws ActionInitiationException {
-        switch( action ) {
-            case OpenAction.IDENTIFIER: {
-                return new OpenAction( instance, parameters );
-            }
+        String[] parameters = byParameters.split( " " );
 
-            case ScreenshotAction.IDENTIFIER: {
-                // Ignore parameters because the ScreenshotAction does not need them.
-                return new ScreenshotAction( instance );
-            }
-            case ClickAction.IDENTIFIER: {
-                return new ClickAction( instance, parameters );
-            }
-            default:
-                RuntimeException exception = new RuntimeException( "Action '" + action + "' is unknown." );
-                UnitLogger.logSevere( "Action '" + action + "' is unknown", exception );
-                throw exception;
+        String param1 = parameters[ 0 ];
+        String param2 = parameters[ 1 ];
+
+        if( param1 == null || param2 == null ) {
+            throw new RuntimeException( "" );
         }
+
+        this.by = ByInitializer.initialize( ByType.getType( param1 ), param2 );
     }
+
+    @Override
+    public void execute() {
+        WebUtil.WEB_UTIL.click( by );
+    }
+
 }
