@@ -45,7 +45,7 @@ public class ClickAction extends AAction {
     public ClickAction( Txt2Selenium instance, String byParameters ) {
         super( instance );
 
-        String[] parameters = byParameters.split( " " );
+        String[] parameters = byParameters.split( " ", 2 );
 
         String param1 = parameters[ 0 ];
         String param2 = parameters[ 1 ];

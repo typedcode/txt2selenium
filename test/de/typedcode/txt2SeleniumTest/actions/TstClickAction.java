@@ -92,4 +92,19 @@ public class TstClickAction {
 
         assertEquals( "After Click XPath", WebUtil.WEB_UTIL.getTitle() );
     }
+
+    @Test
+    void clickByXPath2() throws ActionInitiationException {
+        Path fileToOpen = Paths.get( "test/testFiles/actions/clickAction/beforeClick.html" );
+        @SuppressWarnings( "null" )
+        OpenAction openAction = new OpenAction( txt2SeleniumMock, fileToOpen.toUri().toString() );
+        openAction.execute();
+
+        assertEquals( "Before Click", WebUtil.WEB_UTIL.getTitle() );
+
+        ClickAction action = new ClickAction( txt2SeleniumMock, "xpath //*[contains(text(),'with spaces')]" );
+        action.execute();
+
+        assertEquals( "After Click XPath 2", WebUtil.WEB_UTIL.getTitle() );
+    }
 }
