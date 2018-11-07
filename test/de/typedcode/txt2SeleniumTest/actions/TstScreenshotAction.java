@@ -39,6 +39,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.actions.ActionFactory;
 import de.typedcode.txt2Selenium.actions.OpenAction;
 import de.typedcode.txt2Selenium.actions.ScreenshotAction;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
@@ -62,17 +63,19 @@ public class TstScreenshotAction {
      * When the Action was not yet performed, the screenshot file has to be null.
      */
     @Test
-    void nullResultWhenNotExecuted() {
-        ScreenshotAction screenshotAction = new ScreenshotAction( txt2SeleniumMock );
+    void nullResultWhenNotExecuted() throws ActionInitiationException {
+        ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
+                "screenshot", "" );
         assertNull( screenshotAction.getScreenshotFile() );
     }
 
     @Test
-    void screenshotWithNoOpenActionBefore() throws IOException {
+    void screenshotWithNoOpenActionBefore() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "test/testFiles/actions/screenshotAction/" ).toAbsolutePath() );
 
-        ScreenshotAction screenshotAction = new ScreenshotAction( txt2SeleniumMock );
+        ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
+                "screenshot", "" );
         screenshotAction.execute();
 
         Path screenshot = screenshotAction.getScreenshotFile();
@@ -95,10 +98,12 @@ public class TstScreenshotAction {
 
         Path fileToOpen = Paths.get( "test/testFiles/actions/screenshotAction/siteWithContent.html" );
 
-        OpenAction openAction = new OpenAction( txt2SeleniumMock, fileToOpen.toUri().toString() );
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+                fileToOpen.toUri().toString() );
         openAction.execute();
 
-        ScreenshotAction screenshotAction = new ScreenshotAction( txt2SeleniumMock );
+        ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
+                "screenshot", "" );
         screenshotAction.execute();
 
         Path screenshot = screenshotAction.getScreenshotFile();
@@ -118,7 +123,8 @@ public class TstScreenshotAction {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "test/testFiles/actions/screenshotAction/" ).toAbsolutePath() );
 
-        ScreenshotAction screenshotAction = new ScreenshotAction( txt2SeleniumMock, "testIdentifier" );
+        ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
+                "screenshot", "testIdentifier" );
         screenshotAction.execute();
 
         Path screenshotFile = screenshotAction.getScreenshotFile();

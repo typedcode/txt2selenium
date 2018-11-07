@@ -34,42 +34,42 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.actions.ActionFactory;
 import de.typedcode.txt2Selenium.actions.OpenAction;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
+@SuppressWarnings( "null" )
 public class TstOpenAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @Test
     void emptyUrl() {
-        @SuppressWarnings( "null" )
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> new OpenAction( txt2SeleniumMock, "" ) );
+                () -> ActionFactory.createAction( txt2SeleniumMock, "open", "" ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
     void spaceParameter() {
-        @SuppressWarnings( "null" )
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> new OpenAction( txt2SeleniumMock, "  " ) );
+                () -> ActionFactory.createAction( txt2SeleniumMock, "open", "  " ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
     void successfullInitiation() throws ActionInitiationException {
         String url = "http://www.typedcode.de";
-        OpenAction action = new OpenAction( txt2SeleniumMock, url );
+        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open", url );
         assertEquals( url, action.URL );
     }
 
     @Test
     void executeOpen() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "test/testFiles/actions/openAction/open.html" );
-        @SuppressWarnings( "null" )
-        OpenAction action = new OpenAction( txt2SeleniumMock, fileToOpen.toUri().toString() );
+        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+                fileToOpen.toUri().toString() );
         action.execute();
 
         assertEquals( "One", WebUtil.WEB_UTIL.getTitle() );

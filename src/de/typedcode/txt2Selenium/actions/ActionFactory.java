@@ -54,16 +54,19 @@ public class ActionFactory {
             case OpenAction.IDENTIFIER: {
                 return new OpenAction( instance, parameters );
             }
-
             case ScreenshotAction.IDENTIFIER: {
-                // Ignore parameters because the ScreenshotAction does not need them.
-                return new ScreenshotAction( instance );
+                // Second Parameter is
+                return new ScreenshotAction( instance, parameters );
             }
             case ClickAction.IDENTIFIER: {
-                return new ClickAction( instance, parameters );
+                return new ClickAction( instance );
+            }
+            case SelectAction.IDENTIFIER: {
+                return new SelectAction( instance, parameters );
             }
             default:
-                RuntimeException exception = new RuntimeException( "Action '" + action + "' is unknown." );
+                ActionInitiationException exception = new ActionInitiationException(
+                        "Action '" + action + "' is unknown." );
                 UnitLogger.logSevere( "Action '" + action + "' is unknown", exception );
                 throw exception;
         }

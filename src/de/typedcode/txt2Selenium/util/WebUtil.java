@@ -27,16 +27,21 @@ package de.typedcode.txt2Selenium.util;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 @NonNullByDefault
 public class WebUtil {
     private HtmlUnitDriver driver = new HtmlUnitDriver();
 
+    @Nullable
+    private WebElement selectedElement;
+
     public static final WebUtil WEB_UTIL = new WebUtil();
 
     public void reset() {
         this.driver = new HtmlUnitDriver();
+        this.selectedElement = null;
     }
 
     public void openUrl( String url ) {
@@ -53,13 +58,34 @@ public class WebUtil {
         return this.driver.getPageSource();
     }
 
+    @Nullable
+    public WebElement getSelectedElement() {
+        return this.selectedElement;
+    }
+
     /**
      * Performs the Click Action on the given <code>By</code> Element.
      * 
      * @param by
      *            Element to Click
      */
-    public void click( By by ) {
-        driver.findElement( by ).click();
+    public void click() {
+        WebElement element = this.selectedElement;
+
+        if( element == null ) {
+            throw new RuntimeException();
+        }
+
+        element.click();
+    }
+
+    /**
+     * Selects the Element identified by <code>By</code>
+     * 
+     * @param by
+     *            Identifying Object
+     */
+    public void select( By by ) {
+        this.selectedElement = driver.findElement( by );
     }
 }

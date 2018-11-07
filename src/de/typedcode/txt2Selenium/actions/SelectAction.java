@@ -25,28 +25,41 @@
 package de.typedcode.txt2Selenium.actions;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openqa.selenium.By;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.util.ByInitializer;
+import de.typedcode.txt2Selenium.util.ByType;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 @NonNullByDefault
-public class ClickAction extends AAction {
+public class SelectAction extends AAction {
 
-    public static final String IDENTIFIER = "click";
+    public static final String IDENTIFIER = "select";
 
     /**
-     * Creating the ClickAction. To run the ClickAction the {@link SelectAction} has
-     * to be performed before.
-     * 
-     * @param instance
+     * By Object to perform the SelectAction on.
      */
-    public ClickAction( Txt2Selenium instance ) {
-        super( instance );
+    private By by;
+
+    public SelectAction( Txt2Selenium correspondingInstance, String byParameters ) {
+        super( correspondingInstance );
+
+        String[] parameters = byParameters.split( " ", 2 );
+
+        String param1 = parameters[ 0 ];
+        String param2 = parameters[ 1 ];
+
+        if( param1 == null || param2 == null ) {
+            throw new RuntimeException( "" );
+        }
+
+        this.by = ByInitializer.initialize( ByType.getType( param1 ), param2 );
     }
 
     @Override
     public void execute() {
-        WebUtil.WEB_UTIL.click();
+        WebUtil.WEB_UTIL.select( by );
     }
 
 }
