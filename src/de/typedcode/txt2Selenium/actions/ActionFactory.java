@@ -67,6 +67,9 @@ public class ActionFactory {
             case ReadAction.IDENTIFIER: {
                 return new ReadAction( instance, parameters );
             }
+            case TypeAction.IDENTIFIER: {
+                return new TypeAction( instance, parameters );
+            }
             default:
                 ActionInitiationException exception = new ActionInitiationException(
                         "Action '" + action + "' is unknown." );
