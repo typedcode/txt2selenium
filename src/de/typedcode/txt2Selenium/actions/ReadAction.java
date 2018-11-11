@@ -22,15 +22,46 @@
  * SOFTWARE.
  */
 
-package de.typedcode.txt2Selenium.exceptions;
+package de.typedcode.txt2Selenium.actions;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-@NonNullByDefault
-public class ActionInitiationException extends RuntimeException {
-    private static final long serialVersionUID = 2321677703092470817L;
+import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.WebUtil;
 
-    public ActionInitiationException( String message ) {
-        super( message );
+/**
+ * Action to read Text from previously selected Elements.
+ * 
+ * Usage: read varName
+ * 
+ * with varName representing the identifier to read the varName to for later
+ * reference.
+ */
+
+@NonNullByDefault
+public class ReadAction extends AAction {
+
+    public static final String IDENTIFIER = "read";
+
+    private String readToName;
+
+    public ReadAction( Txt2Selenium correspondingInstance, String readToVar ) {
+        super( correspondingInstance );
+
+        String varName = readToVar.trim();
+
+        if( varName.isEmpty() ) {
+            throw new ActionInitiationException(
+                    "Could not create 'ReadAction'. varIdentifier was empty. Use 'read varIdentifier'." );
+        }
+
+        this.readToName = varName;
     }
+
+    @Override
+    public void execute() {
+        WebUtil.WEB_UTIL.readText( this.readToName );
+    }
+
 }

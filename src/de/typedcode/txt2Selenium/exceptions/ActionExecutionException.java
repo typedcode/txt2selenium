@@ -27,10 +27,10 @@ package de.typedcode.txt2Selenium.exceptions;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
-public class ActionInitiationException extends RuntimeException {
+public class ActionExecutionException extends RuntimeException {
     private static final long serialVersionUID = 2321677703092470817L;
 
-    public ActionInitiationException( String message ) {
+    public ActionExecutionException( String message ) {
         super( message );
     }
 }
