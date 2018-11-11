@@ -26,8 +26,10 @@ package de.typedcode.txt2SeleniumTest.parsers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
@@ -40,20 +42,21 @@ import de.typedcode.txt2Selenium.actions.ScreenshotAction;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.TestFileParser;
 
+@SuppressWarnings( "null" )
 public class TstTestFileParser {
 
-    private Txt2Selenium tst2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @Test
     public void emptyTestFile() throws ParseException {
-        AAction action = TestFileParser.parse( tst2SeleniumMock,
+        AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "test/testFiles/parsers/testFileParser/emptyTestFile.t2s" ) );
         assertNull( action );
     }
 
     @Test
     public void multipleActions() throws ParseException {
-        AAction action = TestFileParser.parse( tst2SeleniumMock,
+        AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "test/testFiles/parsers/testFileParser/multipleActions.t2s" ) );
         if( action == null ) {
             fail( "action is null" );
@@ -73,7 +76,7 @@ public class TstTestFileParser {
 
     @Test
     public void oneAction() throws ParseException {
-        AAction action = TestFileParser.parse( tst2SeleniumMock,
+        AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "test/testFiles/parsers/testFileParser/oneAction.t2s" ) );
 
         if( action == null ) {
@@ -87,7 +90,7 @@ public class TstTestFileParser {
 
     @Test
     public void twoActions() throws ParseException {
-        AAction action = TestFileParser.parse( tst2SeleniumMock,
+        AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "test/testFiles/parsers/testFileParser/twoActions.t2s" ) );
 
         if( action == null ) {
@@ -98,6 +101,16 @@ public class TstTestFileParser {
             assertEquals( ScreenshotAction.class, action.getClass() );
             assertNull( action.nextAction );
         }
+    }
+
+    @Test
+    public void initiationError() throws ParseException {
+        String testFilePath = "test/testFiles/parsers/testFileParser/initiationError.t2s";
+        Path path = Paths.get( testFilePath );
+        Throwable exception = assertThrows( ParseException.class,
+                () -> TestFileParser.parse( txt2SeleniumMock, path ) );
+        assertEquals( "Error Parsing file '" + path.toAbsolutePath().toString() + "' at line 3",
+                exception.getMessage() );
     }
 
 }
