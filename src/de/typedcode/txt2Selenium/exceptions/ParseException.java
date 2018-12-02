@@ -26,16 +26,40 @@ package de.typedcode.txt2Selenium.exceptions;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import de.typedcode.txt2Selenium.util.UnitLogger;
+
 @NonNullByDefault
-public class ParseException extends Exception {
+public class ParseException extends RuntimeException {
 
     private static final long serialVersionUID = 6997876310350164158L;
 
+    /**
+     * Exception will be thrown when parsing a File was erroneous.
+     * 
+     * Will automatically log the given message to the UnitLogger.
+     * 
+     * @param message
+     *            Message to define what went wrong.
+     */
     public ParseException( String message ) {
         super( message );
+
+        UnitLogger.logSevere( message, this );
     }
 
+    /**
+     * Exception will be thrown when parsing a File was erroneous.
+     * 
+     * Will automatically log the given message to the UnitLogger.
+     * 
+     * @param message
+     *            Message to define what went wrong.
+     * @param e
+     *            Exception that was thrown.
+     */
     public ParseException( String message, Exception e ) {
         super( message, e );
+
+        UnitLogger.logSevere( message, this );
     }
 }

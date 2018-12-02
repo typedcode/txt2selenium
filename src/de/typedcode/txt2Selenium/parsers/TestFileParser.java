@@ -42,6 +42,23 @@ import de.typedcode.txt2Selenium.exceptions.ParseException;
 @NonNullByDefault
 public class TestFileParser {
 
+    /**
+     * Do not instantiate
+     */
+    private TestFileParser() {
+
+    }
+
+    /**
+     * Will parse a Testfile.
+     * 
+     * @param instance
+     *            Current instance of Txt2Selenium
+     * @param testFile
+     *            File to parse
+     * @return The first action to execute after parsing the file
+     * @throws ParseException
+     */
     @Nullable
     public static AAction parse( Txt2Selenium instance, Path testFile ) throws ParseException {
         AAction firstAction = null;
@@ -112,7 +129,7 @@ public class TestFileParser {
 
             }
         } catch( IOException e ) {
-            throw new ParseException( "Error reading File: " + e.getMessage() );
+            throw new ParseException( "Error reading File.", e );
         }
 
         return firstAction;

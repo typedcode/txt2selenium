@@ -26,11 +26,23 @@ package de.typedcode.txt2Selenium.exceptions;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import de.typedcode.txt2Selenium.util.UnitLogger;
+
 @NonNullByDefault
 public class ActionExecutionException extends RuntimeException {
     private static final long serialVersionUID = 2321677703092470817L;
 
+    /**
+     * Exception will be thrown when an Action could not be executed.
+     * 
+     * Will automatically log the given message to the UnitLogger.
+     * 
+     * @param message
+     *            Message to define what went wrong.
+     */
     public ActionExecutionException( String message ) {
         super( message );
+
+        UnitLogger.logSevere( message, this );
     }
 }

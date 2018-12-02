@@ -44,30 +44,32 @@ public class ByInitializer {
      *            Type to create the Element for
      * @param param
      *            Parameters to pass to the By-Element
-     * @return A corresponding By-Object to use in Selenium for searching WebElents
-     *         within a Web-Page
+     * @return A corresponding By-Object to use in Selenium for searching
+     *         WebElements within a Web-Page
+     * @throws NullPointerException
+     *             if the given ByType is not supported.
      */
-    public static By initialize( ByType byType, String param ) {
-        By result = null;
+    public static By initialize( ByType byType, String param ) throws NullPointerException {
+        By returnValue = null;
 
         switch( byType ) {
             case ID: {
-                result = By.id( param );
+                returnValue = By.id( param );
                 break;
             }
             case NAME:
-                result = By.name( param );
+                returnValue = By.name( param );
                 break;
             case XPATH:
-                result = By.xpath( param );
+                returnValue = By.xpath( param );
                 break;
             default:
         }
 
-        if( result != null ) {
-            return result;
+        if( returnValue != null ) {
+            return returnValue;
+        } else {
+            throw new NullPointerException( String.format( "No By Identifier named '%s' found.", byType ) );
         }
-
-        throw new RuntimeException( "asdf" );
     }
 }

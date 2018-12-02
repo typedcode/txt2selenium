@@ -22,46 +22,27 @@
  * SOFTWARE.
  */
 
-package de.typedcode.txt2Selenium.actions;
+package de.typedcode.txt2Selenium.exceptions;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openqa.selenium.By;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.ByInitializer;
-import de.typedcode.txt2Selenium.util.ByType;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 
 @NonNullByDefault
-public class SelectAction extends AAction {
-
-    public static final String IDENTIFIER = "select";
+public class InstanceInitiationException extends RuntimeException {
+    private static final long serialVersionUID = 2321677703092470817L;
 
     /**
-     * By Object to perform the SelectAction on.
+     * Exception to throw when the Instance of Txt2Selenium could not be created.
+     * 
+     * Will automatically log the given message.
+     * 
+     * @param message
+     *            Message to define what went wrong.
      */
-    private By by;
+    public InstanceInitiationException( String message ) {
+        super( message );
 
-    public SelectAction( Txt2Selenium correspondingInstance, String byParameters ) {
-        super( correspondingInstance );
-
-        String[] parameters = byParameters.split( " ", 2 );
-
-        String param1 = parameters[ 0 ];
-        String param2 = parameters[ 1 ];
-
-        if( param1 == null || param2 == null ) {
-            throw new ActionInitiationException(
-                    "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id" );
-        }
-
-        this.by = ByInitializer.initialize( ByType.getType( param1 ), param2 );
+        UnitLogger.logSevere( message, this );
     }
-
-    @Override
-    public void execute() {
-        WebUtil.WEB_UTIL.select( by );
-    }
-
 }

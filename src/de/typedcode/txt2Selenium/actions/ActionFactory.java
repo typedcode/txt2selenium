@@ -28,7 +28,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.UnitLogger;
 
 @NonNullByDefault
 public class ActionFactory {
@@ -71,10 +70,7 @@ public class ActionFactory {
                 return new TypeAction( instance, parameters );
             }
             default:
-                ActionInitiationException exception = new ActionInitiationException(
-                        "Action '" + action + "' is unknown." );
-                UnitLogger.logSevere( "Action '" + action + "' is unknown", exception );
-                throw exception;
+                throw new ActionInitiationException( "Action '" + action + "' is unknown." );
         }
     }
 }

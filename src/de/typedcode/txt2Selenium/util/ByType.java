@@ -42,10 +42,10 @@ public enum ByType {
      * @param type
      *            Type to create the Enum for.
      * @return Returns the corresponding Enum ByType to <code>type</code>.
-     * @throws A
-     *             RuntimeException if the given <code>type</code> is unknown.
+     * @throws NullPointerException
+     *             If the given <code>type</code> is unknown.
      */
-    public static ByType getType( String type ) {
+    public static ByType getType( String type ) throws NullPointerException {
         String lowerCaseType = type.toLowerCase();
 
         if( NAME.type.equals( lowerCaseType ) ) {
@@ -60,6 +60,6 @@ public enum ByType {
             return XPATH;
         }
 
-        throw new RuntimeException();
+        throw new NullPointerException( String.format( "Given type '%s' is unknown.", type ) );
     }
 }

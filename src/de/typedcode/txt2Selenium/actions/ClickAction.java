@@ -27,6 +27,7 @@ package de.typedcode.txt2Selenium.actions;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 @NonNullByDefault
@@ -46,7 +47,11 @@ public class ClickAction extends AAction {
 
     @Override
     public void execute() {
-        WebUtil.WEB_UTIL.click();
+        try {
+            WebUtil.WEB_UTIL.click();
+        } catch( NullPointerException e ) {
+            throw new ActionExecutionException( "Error execution ClickAction. No element was selected" );
+        }
     }
 
 }

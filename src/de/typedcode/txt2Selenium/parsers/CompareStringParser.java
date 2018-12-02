@@ -104,7 +104,7 @@ public class CompareStringParser {
                 }
             }
         } catch( IOException e ) {
-            throw new ParseException( "Error reading File: " + e.getMessage() );
+            throw new ParseException( "Error reading File.", e );
         }
 
         return result;

@@ -115,12 +115,14 @@ public class WebUtil {
      * 
      * @param by
      *            Element to Click
+     * @throws NullPointerException
+     *             if there was no Element selected.
      */
-    public void click() {
+    public void click() throws NullPointerException {
         WebElement element = this.selectedElement;
 
         if( element == null ) {
-            throw new RuntimeException();
+            throw new NullPointerException( "No Element Selected." );
         }
 
         element.click();
@@ -164,7 +166,7 @@ public class WebUtil {
         String text = currentElement.getText();
 
         if( text == null ) {
-            throw new RuntimeException( "Reading the Text from selected Element returned null" );
+            throw new ActionExecutionException( "Reading the Text from selected Element returned null" );
         }
 
         this.readElements.put( readToName, text );

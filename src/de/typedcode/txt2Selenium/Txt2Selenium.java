@@ -39,10 +39,10 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import de.typedcode.txt2Selenium.actions.AAction;
+import de.typedcode.txt2Selenium.exceptions.InstanceInitiationException;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 import de.typedcode.txt2Selenium.parsers.TestFileParser;
-import de.typedcode.txt2Selenium.util.UnitLogger;
 
 @NonNullByDefault
 public class Txt2Selenium {
@@ -63,13 +63,11 @@ public class Txt2Selenium {
         this.tests = new HashMap<>();
 
         if( !Files.exists( this.mainDirectory ) ) {
-            UnitLogger.logSevere( "Given directory does not exist: " + this.mainDirectory );
-            throw new RuntimeException( "Given directory does not exist: " + this.mainDirectory );
+            throw new InstanceInitiationException( "Given directory does not exist: " + this.mainDirectory );
         }
 
         if( !Files.isDirectory( this.mainDirectory ) ) {
-            UnitLogger.logSevere( "Given Path is not a directory: " + this.mainDirectory );
-            throw new RuntimeException( "Given Path is not a directory: " + this.mainDirectory );
+            throw new InstanceInitiationException( "Given Path is not a directory: " + this.mainDirectory );
         }
 
         // Getting the compareStrings file
@@ -94,8 +92,8 @@ public class Txt2Selenium {
             // TODO add exception Handling
         }
         if( testFiles.size() == 0 ) {
-            UnitLogger.logSevere( "Given directory does not contain any test-Files: " + this.mainDirectory );
-            throw new RuntimeException( "Given directory does not contain any testfiles: " + this.mainDirectory );
+            throw new InstanceInitiationException(
+                    "Given directory does not contain any testfiles: " + this.mainDirectory );
         }
 
         try {
@@ -109,12 +107,7 @@ public class Txt2Selenium {
     private void parseCompareStrings() {
         Path compFile = COMPARE_STRINGS_FILE;
         if( compFile != null ) {
-            try {
-                this.compareStrings = CompareStringParser.parse( compFile );
-            } catch( ParseException e ) {
-                // TODO logging
-                throw new RuntimeException( e );
-            }
+            this.compareStrings = CompareStringParser.parse( compFile );
         }
     }
 
