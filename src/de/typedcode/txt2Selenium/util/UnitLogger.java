@@ -24,10 +24,8 @@
 
 package de.typedcode.txt2Selenium.util;
 
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -35,44 +33,86 @@ import org.eclipse.jdt.annotation.Nullable;
 @NonNullByDefault
 public class UnitLogger {
 
+    @Nullable
     private static Logger INSTANCE;
 
     static {
+        // Logging will only be done to the stdout
         INSTANCE = Logger.getLogger( Logger.GLOBAL_LOGGER_NAME );
-
-        INSTANCE.setLevel( Level.INFO );
-        try {
-            FileHandler fileTxt = new FileHandler( "Logging.txt" );
-            SimpleFormatter formatterTxt = new SimpleFormatter();
-            fileTxt.setFormatter( formatterTxt );
-            INSTANCE.addHandler( fileTxt );
-        } catch( Exception e ) {
-            throw new RuntimeException( "Can't create log.", e );
-        }
     }
 
+    /**
+     * No Instantiation allowed.
+     */
     private UnitLogger() {
 
     }
 
-    private static void log( Level logLevel, String logMessage, @Nullable Throwable throwable ) {
+    /**
+     * Logs a message with the given level to the logger.
+     * 
+     * @param logLevel
+     *            Level to log the Message with
+     * @param logMessage
+     *            Message to Log
+     * @param throwable
+     *            The throwable to log. Can be null if no throwable is to log.
+     */
+    private static void log( @Nullable Level logLevel, String logMessage, @Nullable Throwable throwable ) {
+        Logger localInstance = INSTANCE;
+
+        if( localInstance == null ) {
+            throw new RuntimeException( "Logging not Possible. Instance is null." );
+        }
+
         if( throwable == null ) {
-            INSTANCE.log( logLevel, logMessage );
+            localInstance.log( logLevel, logMessage );
         } else {
-            INSTANCE.log( logLevel, logMessage, throwable );
+            localInstance.log( logLevel, logMessage, throwable );
         }
     }
 
+    /**
+     * Logs a Severe message.
+     * 
+     * @param logMessage
+     *            Message to log.
+     */
     public static void logSevere( String logMessage ) {
         log( Level.SEVERE, logMessage, null );
     }
 
+    /**
+     * Logs a Severe message and the given Throwable
+     * 
+     * @param logMessage
+     *            Message to log.
+     * @param exception
+     *            Throwable to log.
+     */
     public static void logSevere( String logMessage, Throwable exception ) {
         log( Level.SEVERE, logMessage, exception );
     }
 
+    /**
+     * Logs an Info message.
+     * 
+     * @param logMessage
+     *            Message to log.
+     */
     public static void logInfo( String logMessage ) {
         log( Level.INFO, logMessage, null );
     }
 
+    /**
+     * Logs an Info message and the given Throwable
+     * 
+     * @param logMessage
+     *            Message to log.
+     * @param exception
+     *            Throwable to log.
+     */
+    public static void logInfo( String logMessage, Throwable exception ) {
+        log( Level.INFO, logMessage, exception );
+    }
 }
