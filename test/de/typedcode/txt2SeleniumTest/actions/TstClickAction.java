@@ -25,6 +25,7 @@
 package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +39,7 @@ import de.typedcode.txt2Selenium.actions.ActionFactory;
 import de.typedcode.txt2Selenium.actions.ClickAction;
 import de.typedcode.txt2Selenium.actions.OpenAction;
 import de.typedcode.txt2Selenium.actions.SelectAction;
+import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
@@ -49,6 +51,15 @@ public class TstClickAction {
     @BeforeEach
     public void before() {
         WebUtil.WEB_UTIL.reset();
+    }
+
+    @Test
+    void clickWithoudSelect() {
+        ClickAction ca = new ClickAction( this.txt2SeleniumMock );
+
+        Throwable exception = assertThrows( ActionExecutionException.class, () -> ca.execute() );
+
+        assertEquals( "Error execution ClickAction. No element was selected.", exception.getMessage() );
     }
 
     @Test

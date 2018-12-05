@@ -50,7 +50,7 @@ public class ClickAction extends AAction {
         try {
             WebUtil.WEB_UTIL.click();
         } catch( NullPointerException e ) {
-            throw new ActionExecutionException( "Error execution ClickAction. No element was selected" );
+            throw new ActionExecutionException( "Error execution ClickAction. No element was selected." );
         }
     }
 

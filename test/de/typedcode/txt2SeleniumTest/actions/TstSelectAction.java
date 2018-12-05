@@ -26,6 +26,7 @@ package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,6 +51,24 @@ public class TstSelectAction {
     @BeforeEach
     public void before() {
         WebUtil.WEB_UTIL.reset();
+    }
+
+    @Test
+    void selectNoParameter() {
+        Throwable exception = assertThrows( ActionInitiationException.class,
+                () -> new SelectAction( this.txt2SeleniumMock, "" ) );
+
+        assertEquals( "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id",
+                exception.getMessage() );
+    }
+
+    @Test
+    void selectOneParameter() {
+        Throwable exception = assertThrows( ActionInitiationException.class,
+                () -> new SelectAction( this.txt2SeleniumMock, "by" ) );
+
+        assertEquals( "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id",
+                exception.getMessage() );
     }
 
     @Test

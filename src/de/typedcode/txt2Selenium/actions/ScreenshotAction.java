@@ -35,6 +35,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 /**
@@ -83,9 +84,7 @@ public class ScreenshotAction extends AAction {
 
             Files.write( this.screenshotFile, source.getBytes() );
         } catch( IOException e ) {
-            // TODO Exception Handling
-            //
-            e.printStackTrace();
+            throw new ActionExecutionException( "Could not write File.", e );
         }
     }
 

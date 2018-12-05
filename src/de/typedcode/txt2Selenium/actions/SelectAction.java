@@ -48,13 +48,13 @@ public class SelectAction extends AAction {
 
         String[] parameters = byParameters.split( " ", 2 );
 
-        String param1 = parameters[ 0 ];
-        String param2 = parameters[ 1 ];
-
-        if( param1 == null || param2 == null ) {
+        if( parameters.length != 2 ) {
             throw new ActionInitiationException(
                     "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id" );
         }
+
+        String param1 = parameters[ 0 ];
+        String param2 = parameters[ 1 ];
 
         this.by = ByInitializer.initialize( ByType.getType( param1 ), param2 );
     }

@@ -22,43 +22,35 @@
  * SOFTWARE.
  */
 
-package de.typedcode.txt2Selenium.exceptions;
+package de.typedcode.txt2SeleniumTest.actions;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import de.typedcode.txt2Selenium.util.UnitLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-@NonNullByDefault
-public class ActionExecutionException extends RuntimeException {
-    private static final long serialVersionUID = 2321677703092470817L;
+import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.actions.ActionFactory;
+import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.WebUtil;
 
-    /**
-     * Exception will be thrown when an Action could not be executed.
-     * 
-     * Will automatically log the given message to the UnitLogger.
-     * 
-     * @param message
-     *            Message to define what went wrong.
-     */
-    public ActionExecutionException( String message ) {
-        super( message );
+@SuppressWarnings( "null" )
+public class TstActionFactory {
 
-        UnitLogger.logSevere( message, this );
+    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+
+    @BeforeEach
+    public void before() {
+        WebUtil.WEB_UTIL.reset();
     }
 
-    /**
-     * Exception will be thrown when an Action could not be executed.
-     * 
-     * Will automatically log the given message and Throwable to the UnitLogger.
-     * 
-     * @param message
-     *            Message to log
-     * @param throwable
-     *            Throwable to log
-     */
-    public ActionExecutionException( String message, Throwable throwable ) {
-        super( message );
+    @Test
+    void unknownAction() throws ActionInitiationException {
 
-        UnitLogger.logSevere( message, throwable );
+        Throwable exception = assertThrows( ActionInitiationException.class,
+                () -> ActionFactory.createAction( this.txt2SeleniumMock, "unknownAction", "" ) );
+        assertEquals( "Action 'unknownAction' is unknown.", exception.getMessage() );
     }
 }
