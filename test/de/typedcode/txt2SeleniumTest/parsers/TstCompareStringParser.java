@@ -36,6 +36,7 @@ import org.junit.jupiter.api.Test;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 
+@SuppressWarnings( "null" )
 public class TstCompareStringParser {
 
     @Test
