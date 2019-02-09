@@ -24,8 +24,6 @@
 
 package de.typedcode.txt2Selenium.actions;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
@@ -35,7 +33,6 @@ import de.typedcode.txt2Selenium.util.WebUtil;
  * 
  * Usage: open http://example-url.com
  */
-@NonNullByDefault
 public class OpenAction extends AAction {
 
     public static final String IDENTIFIER = "open";

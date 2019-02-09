@@ -24,9 +24,6 @@
 
 package de.typedcode.txt2Selenium.util;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
-@NonNullByDefault
 public enum ByType {
     NAME( "name" ), ID( "id" ), XPATH( "xpath" );
 

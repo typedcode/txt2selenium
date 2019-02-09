@@ -27,15 +27,12 @@ package de.typedcode.txt2Selenium.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 
-@NonNullByDefault
 public class WebUtil {
 
     /**
@@ -51,7 +48,6 @@ public class WebUtil {
     /**
      * WebElement that has be lastly selected.
      */
-    @Nullable
     private WebElement selectedElement;
 
     /**
@@ -84,7 +80,6 @@ public class WebUtil {
      * 
      * @return Title from the currently loaded page.
      */
-    @Nullable
     public String getTitle() {
         return this.driver.getTitle();
     }
@@ -94,7 +89,6 @@ public class WebUtil {
      * 
      * @return Page Source from the currently loaded page.
      */
-    @Nullable
     public String getPageSource() {
         return this.driver.getPageSource();
     }
@@ -105,7 +99,6 @@ public class WebUtil {
      * 
      * @return Selected Element
      */
-    @Nullable
     public WebElement getSelectedElement() {
         return this.selectedElement;
     }
@@ -145,7 +138,6 @@ public class WebUtil {
      *            Key to get the selected Element from
      * @return Text that was read or null if the Element was never read.
      */
-    @Nullable
     public String getText( String key ) {
         return this.readElements.get( key );
     }

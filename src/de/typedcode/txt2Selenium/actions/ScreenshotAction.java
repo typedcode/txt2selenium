@@ -31,9 +31,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.util.WebUtil;
@@ -43,14 +40,12 @@ import de.typedcode.txt2Selenium.util.WebUtil;
  * 
  * Usage: screenshot
  */
-@NonNullByDefault
 public class ScreenshotAction extends AAction {
 
     public final static String IDENTIFIER = "screenshot";
 
     private String pathIdentifier;
 
-    @Nullable
     private Path screenshotFile;
 
     public ScreenshotAction( Txt2Selenium instance ) {
@@ -88,7 +83,6 @@ public class ScreenshotAction extends AAction {
         }
     }
 
-    @Nullable
     public Path getScreenshotFile() {
         return this.screenshotFile;
     }

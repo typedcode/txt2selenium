@@ -28,7 +28,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ById;
@@ -38,7 +37,6 @@ import org.openqa.selenium.By.ByXPath;
 import de.typedcode.txt2Selenium.util.ByInitializer;
 import de.typedcode.txt2Selenium.util.ByType;
 
-@NonNullByDefault
 public class TstByInitializer {
 
     @Test

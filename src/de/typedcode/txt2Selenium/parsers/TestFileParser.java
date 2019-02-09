@@ -30,16 +30,12 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.AAction;
 import de.typedcode.txt2Selenium.actions.ActionFactory;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 
-@NonNullByDefault
 public class TestFileParser {
 
     /**
@@ -59,7 +55,6 @@ public class TestFileParser {
      * @return The first action to execute after parsing the file
      * @throws ParseException
      */
-    @Nullable
     public static AAction parse( Txt2Selenium instance, Path testFile ) throws ParseException {
         AAction firstAction = null;
         AAction currentAction = null;

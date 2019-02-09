@@ -32,11 +32,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 
-@NonNullByDefault
 public class CompareStringParser {
 
     /**

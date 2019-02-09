@@ -24,8 +24,6 @@
 
 package de.typedcode.txt2Selenium.actions;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
@@ -39,7 +37,6 @@ import de.typedcode.txt2Selenium.util.WebUtil;
  * reference.
  */
 
-@NonNullByDefault
 public class ReadAction extends AAction {
 
     public static final String IDENTIFIER = "read";

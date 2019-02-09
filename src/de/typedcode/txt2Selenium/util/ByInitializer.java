@@ -24,10 +24,8 @@
 
 package de.typedcode.txt2Selenium.util;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openqa.selenium.By;
 
-@NonNullByDefault
 public class ByInitializer {
 
     /**

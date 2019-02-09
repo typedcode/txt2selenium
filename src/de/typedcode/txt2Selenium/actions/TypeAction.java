@@ -24,7 +24,6 @@
 
 package de.typedcode.txt2Selenium.actions;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openqa.selenium.WebElement;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
@@ -41,7 +40,6 @@ import de.typedcode.txt2Selenium.util.WebUtil;
  * overwrite. If there was text within the element, the given text will be
  * appended to the already existing text in the element.
  */
-@NonNullByDefault
 public class TypeAction extends AAction {
 
     public static final String IDENTIFIER = "type";

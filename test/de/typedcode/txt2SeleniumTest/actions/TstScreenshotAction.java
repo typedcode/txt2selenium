@@ -45,7 +45,6 @@ import de.typedcode.txt2Selenium.actions.ScreenshotAction;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
-@SuppressWarnings( "null" )
 public class TstScreenshotAction {
 
     Txt2Selenium txt2SeleniumMock;

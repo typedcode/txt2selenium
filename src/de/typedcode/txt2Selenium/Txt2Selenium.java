@@ -35,16 +35,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import de.typedcode.txt2Selenium.actions.AAction;
 import de.typedcode.txt2Selenium.exceptions.InstanceInitiationException;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 import de.typedcode.txt2Selenium.parsers.TestFileParser;
 
-@NonNullByDefault
 public class Txt2Selenium {
     public final String FILE_EXTENSION = ".t2s";
     public final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
@@ -54,7 +50,6 @@ public class Txt2Selenium {
     private Path mainDirectory;
     private Map< String, String > compareStrings;
     private Map< Path, AAction > tests;
-    @Nullable
     private Path COMPARE_STRINGS_FILE;
 
     public Txt2Selenium( Path directory ) {
@@ -82,11 +77,11 @@ public class Txt2Selenium {
         try( DirectoryStream< ? > ds = Files.newDirectoryStream( this.mainDirectory, TEST_FILE_REGEX ) ) {
             Iterator< ? > iterator = ds.iterator();
 
+            Path next;
             while( iterator.hasNext() ) {
-                Path next = ( Path ) iterator.next();
-                if( next != null ) {
-                    this.testFiles.add( next );
-                }
+                next = ( Path ) iterator.next();
+
+                this.testFiles.add( next );
             }
         } catch( IOException e ) {
             // TODO add exception Handling
@@ -105,9 +100,8 @@ public class Txt2Selenium {
     }
 
     private void parseCompareStrings() {
-        Path compFile = COMPARE_STRINGS_FILE;
-        if( compFile != null ) {
-            this.compareStrings = CompareStringParser.parse( compFile );
+        if( COMPARE_STRINGS_FILE != null ) {
+            this.compareStrings = CompareStringParser.parse( COMPARE_STRINGS_FILE );
         }
     }
 
@@ -117,6 +111,7 @@ public class Txt2Selenium {
     private void parseTestFiles() throws ParseException {
         for( Path testFile : this.testFiles ) {
             AAction firstAction = TestFileParser.parse( this, testFile );
+
             if( firstAction != null ) {
                 this.tests.put( testFile, firstAction );
             }
@@ -138,7 +133,6 @@ public class Txt2Selenium {
         return this.tests;
     }
 
-    @Nullable
     public Path getCompareStringsFile() {
         return COMPARE_STRINGS_FILE;
     }

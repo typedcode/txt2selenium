@@ -24,13 +24,10 @@
 
 package de.typedcode.txt2Selenium.actions;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
-@NonNullByDefault
 public class ClickAction extends AAction {
 
     public static final String IDENTIFIER = "click";

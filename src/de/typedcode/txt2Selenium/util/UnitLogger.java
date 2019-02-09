@@ -27,13 +27,8 @@ package de.typedcode.txt2Selenium.util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
-@NonNullByDefault
 public class UnitLogger {
 
-    @Nullable
     private static Logger INSTANCE;
 
     static {
@@ -58,7 +53,7 @@ public class UnitLogger {
      * @param throwable
      *            The throwable to log. Can be null if no throwable is to log.
      */
-    private static void log( @Nullable Level logLevel, String logMessage, @Nullable Throwable throwable ) {
+    private static void log( Level logLevel, String logMessage, Throwable throwable ) {
         Logger localInstance = INSTANCE;
 
         if( localInstance == null ) {

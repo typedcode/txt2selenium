@@ -27,13 +27,11 @@ package de.typedcode.txt2SeleniumTest.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import de.typedcode.txt2Selenium.util.ByType;
 
-@NonNullByDefault
 class TstByType {
 
     @Test

@@ -24,11 +24,8 @@
 
 package de.typedcode.txt2Selenium.methods;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import de.typedcode.txt2Selenium.actions.AAction;
 
-@NonNullByDefault
 public class Method {
 
     private AAction firstAction;

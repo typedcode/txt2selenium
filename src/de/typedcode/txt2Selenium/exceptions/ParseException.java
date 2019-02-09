@@ -24,11 +24,8 @@
 
 package de.typedcode.txt2Selenium.exceptions;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import de.typedcode.txt2Selenium.util.UnitLogger;
 
-@NonNullByDefault
 public class ParseException extends RuntimeException {
 
     private static final long serialVersionUID = 6997876310350164158L;
