@@ -49,7 +49,7 @@ public class TstTypeAction {
 
     @Test
     void elementNotSelected() {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/typeAction/typeAction.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/typeAction/typeAction.html" );
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() );
         action.execute();
 
@@ -60,7 +60,7 @@ public class TstTypeAction {
 
     @Test
     void elementNoTextElement() {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/typeAction/typeAction.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/typeAction/typeAction.html" );
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() );
         action.execute();
 
@@ -74,7 +74,7 @@ public class TstTypeAction {
 
     @Test
     void typeTextIntoEmptyElement() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/typeAction/typeAction.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/typeAction/typeAction.html" );
 
         ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idEmpty" ).execute();
@@ -95,7 +95,7 @@ public class TstTypeAction {
 
     @Test
     void typeTextIntoNonEmptyElement() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/typeAction/typeAction.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/typeAction/typeAction.html" );
 
         ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idExisting" ).execute();
@@ -116,7 +116,7 @@ public class TstTypeAction {
 
     @Test
     void typeToInputField() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/typeAction/typeAction.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/typeAction/typeAction.html" );
 
         ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idInput" ).execute();

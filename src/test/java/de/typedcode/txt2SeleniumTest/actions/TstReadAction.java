@@ -36,15 +36,15 @@ import org.mockito.Mockito;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.ClickAction;
 import de.typedcode.txt2Selenium.actions.OpenAction;
+import de.typedcode.txt2Selenium.actions.ReadAction;
 import de.typedcode.txt2Selenium.actions.SelectAction;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 @SuppressWarnings( "null" )
-public class TstClickAction {
+public class TstReadAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
@@ -54,87 +54,69 @@ public class TstClickAction {
     }
 
     @Test
-    void clickWithoudSelect() {
-        ClickAction ca = new ClickAction( this.txt2SeleniumMock );
+    void actionInitiationError() throws ActionInitiationException {
+        Throwable exception = assertThrows( ActionInitiationException.class,
+                () -> ActionFactory.createAction( txt2SeleniumMock, "read", "" ) );
 
-        Throwable exception = assertThrows( ActionExecutionException.class, () -> ca.execute() );
-
-        assertEquals( "Error execution ClickAction. No element was selected.", exception.getMessage() );
+        assertEquals( "Could not create 'ReadAction'. varIdentifier was empty. Use 'read varIdentifier'.",
+                exception.getMessage() );
     }
 
     @Test
-    void clickById() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/clickAction/beforeClick.html" );
+    void readWIthoudSelect() throws ActionInitiationException {
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myReadVar" );
+
+        Throwable exception = assertThrows( ActionExecutionException.class, () -> readAction.execute() );
+        assertEquals( "Could not execute 'read'. No Element was selected.", exception.getMessage() );
+    }
+
+    @Test
+    void readWithoudNestedElements() throws ActionInitiationException {
+        Path fileToOpen = Paths.get( "src/test/resources/actions/readAction/readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        assertEquals( "Before Click", WebUtil.WEB_UTIL.getTitle() );
-
         SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
-                "id clickActionId" );
+                "id divId" );
         selectAction.execute();
 
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, "click", "" );
-        action.execute();
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myRead" );
+        readAction.execute();
 
-        assertEquals( "After Click Id", WebUtil.WEB_UTIL.getTitle() );
+        assertEquals( "No nested", WebUtil.WEB_UTIL.getText( "myRead" ) );
     }
 
     @Test
-    void clickByName() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/clickAction/beforeClick.html" );
+    void readWithNestedElement() throws ActionInitiationException {
+        Path fileToOpen = Paths.get( "src/test/resources/actions/readAction/readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        assertEquals( "Before Click", WebUtil.WEB_UTIL.getTitle() );
-
         SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
-                "name clickActionName" );
+                "id bodyId" );
         selectAction.execute();
 
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, "click", "" );
-        action.execute();
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myRead" );
+        readAction.execute();
 
-        assertEquals( "After Click Name", WebUtil.WEB_UTIL.getTitle() );
+        assertEquals( "Before nested\nNo nested\nAfter nested", WebUtil.WEB_UTIL.getText( "myRead" ) );
     }
 
     @Test
-    void clickByXPath() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/clickAction/beforeClick.html" );
+    void readEmptyElement() throws ActionInitiationException {
+        Path fileToOpen = Paths.get( "src/test/resources/actions/readAction/readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        assertEquals( "Before Click", WebUtil.WEB_UTIL.getTitle() );
-
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
-                "xpath /html/body/div/p/a[3]" );
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select", "id pId" );
         selectAction.execute();
 
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, "click", "" );
-        action.execute();
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myRead" );
+        readAction.execute();
 
-        assertEquals( "After Click XPath", WebUtil.WEB_UTIL.getTitle() );
-    }
-
-    @Test
-    void clickByXPath2() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/clickAction/beforeClick.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
-                fileToOpen.toUri().toString() );
-        openAction.execute();
-
-        assertEquals( "Before Click", WebUtil.WEB_UTIL.getTitle() );
-
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
-                "xpath //*[contains(text(),'with spaces')]" );
-        selectAction.execute();
-
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, "click", "" );
-        action.execute();
-
-        assertEquals( "After Click XPath 2", WebUtil.WEB_UTIL.getTitle() );
+        assertEquals( "", WebUtil.WEB_UTIL.getText( "myRead" ) );
     }
 }

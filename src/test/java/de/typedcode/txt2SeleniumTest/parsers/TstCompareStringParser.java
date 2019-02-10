@@ -42,7 +42,7 @@ public class TstCompareStringParser {
     @Test
     public void emptyFile() throws ParseException {
         Map< String, String > parse = CompareStringParser
-                .parse( Paths.get( "test/testFiles/parsers/compareStrings/empty.t2s" ) );
+                .parse( Paths.get( "src/test/resources/parsers/compareStrings/empty.t2s" ) );
 
         assertEquals( 0, parse.size() );
     }
@@ -50,7 +50,7 @@ public class TstCompareStringParser {
     @Test
     public void singleEntry() throws ParseException {
         Map< String, String > parse = CompareStringParser
-                .parse( Paths.get( "test/testFiles/parsers/compareStrings/singleEntry.t2s" ) );
+                .parse( Paths.get( "src/test/resources/parsers/compareStrings/singleEntry.t2s" ) );
 
         assertEquals( 1, parse.size() );
         assertTrue( parse.containsKey( "key" ) );
@@ -60,7 +60,7 @@ public class TstCompareStringParser {
     @Test
     public void withEmptyLines() throws ParseException {
         Map< String, String > parse = CompareStringParser
-                .parse( Paths.get( "test/testFiles/parsers/compareStrings/withEmptyLines.t2s" ) );
+                .parse( Paths.get( "src/test/resources/parsers/compareStrings/withEmptyLines.t2s" ) );
 
         assertEquals( 2, parse.size() );
 
@@ -74,7 +74,7 @@ public class TstCompareStringParser {
     @Test
     public void contentWithSpaces() throws ParseException {
         Map< String, String > parse = CompareStringParser
-                .parse( Paths.get( "test/testFiles/parsers/compareStrings/contentWithSpaces.t2s" ) );
+                .parse( Paths.get( "src/test/resources/parsers/compareStrings/contentWithSpaces.t2s" ) );
 
         assertEquals( 2, parse.size() );
 
@@ -89,7 +89,7 @@ public class TstCompareStringParser {
     public void doubleKey() {
         @SuppressWarnings( "null" )
         Throwable exception = assertThrows( ParseException.class, () -> CompareStringParser
-                .parse( Paths.get( "test/testFiles/parsers/compareStrings/duplicatedKey.t2s" ) ) );
+                .parse( Paths.get( "src/test/resources/parsers/compareStrings/duplicatedKey.t2s" ) ) );
 
         assertEquals( "Comparestrings contain a doubled key entry at line 3", exception.getMessage() );
     }

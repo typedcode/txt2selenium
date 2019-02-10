@@ -50,14 +50,14 @@ public class TstTestFileParser {
     @Test
     public void emptyTestFile() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
-                Paths.get( "test/testFiles/parsers/testFileParser/emptyTestFile.t2s" ) );
+                Paths.get( "src/test/resources/parsers/testFileParser/emptyTestFile.t2s" ) );
         assertNull( action );
     }
 
     @Test
     public void multipleActions() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
-                Paths.get( "test/testFiles/parsers/testFileParser/multipleActions.t2s" ) );
+                Paths.get( "src/test/resources/parsers/testFileParser/multipleActions.t2s" ) );
         if( action == null ) {
             fail( "action is null" );
         } else {
@@ -77,7 +77,7 @@ public class TstTestFileParser {
     @Test
     public void oneAction() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
-                Paths.get( "test/testFiles/parsers/testFileParser/oneAction.t2s" ) );
+                Paths.get( "src/test/resources/parsers/testFileParser/oneAction.t2s" ) );
 
         if( action == null ) {
             fail( "action is null" );
@@ -91,7 +91,7 @@ public class TstTestFileParser {
     @Test
     public void twoActions() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
-                Paths.get( "test/testFiles/parsers/testFileParser/twoActions.t2s" ) );
+                Paths.get( "src/test/resources/parsers/testFileParser/twoActions.t2s" ) );
 
         if( action == null ) {
             fail( "action is null" );
@@ -105,7 +105,7 @@ public class TstTestFileParser {
 
     @Test
     public void initiationError() throws ParseException {
-        String testFilePath = "test/testFiles/parsers/testFileParser/initiationError.t2s";
+        String testFilePath = "src/test/resources/parsers/testFileParser/initiationError.t2s";
         Path path = Paths.get( testFilePath );
         Throwable exception = assertThrows( ParseException.class,
                 () -> TestFileParser.parse( txt2SeleniumMock, path ) );

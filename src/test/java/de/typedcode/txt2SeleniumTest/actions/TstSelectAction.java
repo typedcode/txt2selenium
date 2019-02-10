@@ -73,7 +73,7 @@ public class TstSelectAction {
 
     @Test
     void selectById() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/selectAction/selectActionTestfile.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/selectAction/selectActionTestfile.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
@@ -93,7 +93,7 @@ public class TstSelectAction {
 
     @Test
     void selectByName() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/selectAction/selectActionTestfile.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/selectAction/selectActionTestfile.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
@@ -114,7 +114,7 @@ public class TstSelectAction {
 
     @Test
     void selectByXPath() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/selectAction/selectActionTestfile.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/selectAction/selectActionTestfile.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
@@ -135,7 +135,7 @@ public class TstSelectAction {
 
     @Test
     void selectByXPath2() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "test/testFiles/actions/selectAction/selectActionTestfile.html" );
+        Path fileToOpen = Paths.get( "src/test/resources/actions/selectAction/selectActionTestfile.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();

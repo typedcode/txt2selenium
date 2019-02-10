@@ -48,9 +48,9 @@ public class TstTxt2Selenium {
     public void initiationDirectoryIsFile() {
         @SuppressWarnings( "null" )
         Throwable exception = assertThrows( RuntimeException.class, () -> new Txt2Selenium(
-                Paths.get( "test/testFiles/Txt2Selenium/initiation/files/globalOneTestfile/global.t2s" ) ) );
+                Paths.get( "src/test/resources/Txt2Selenium/initiation/files/globalOneTestfile/global.t2s" ) ) );
         assertEquals(
-                "Given Path is not a directory: test/testFiles/Txt2Selenium/initiation/files/globalOneTestfile/global.t2s",
+                "Given Path is not a directory: src/test/resources/Txt2Selenium/initiation/files/globalOneTestfile/global.t2s",
                 exception.getMessage() );
     }
 
@@ -58,8 +58,8 @@ public class TstTxt2Selenium {
     public void initiationEmptyFolder() {
         @SuppressWarnings( "null" )
         Throwable exception = assertThrows( RuntimeException.class,
-                () -> new Txt2Selenium( Paths.get( "test/testFiles/Txt2Selenium/initiation/empty" ) ) );
-        assertEquals( "Given directory does not contain any testfiles: test/testFiles/Txt2Selenium/initiation/empty",
+                () -> new Txt2Selenium( Paths.get( "src/test/resources/Txt2Selenium/initiation/empty" ) ) );
+        assertEquals( "Given directory does not contain any testfiles: src/test/resources/Txt2Selenium/initiation/empty",
                 exception.getMessage() );
     }
 }
