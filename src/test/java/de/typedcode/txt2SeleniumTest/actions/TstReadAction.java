@@ -72,7 +72,7 @@ public class TstReadAction {
 
     @Test
     void readWithoudNestedElements() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "src/test/resources/actions/readAction/readText.html" );
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
@@ -89,7 +89,7 @@ public class TstReadAction {
 
     @Test
     void readWithNestedElement() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "src/test/resources/actions/readAction/readText.html" );
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();
@@ -106,7 +106,7 @@ public class TstReadAction {
 
     @Test
     void readEmptyElement() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "src/test/resources/actions/readAction/readText.html" );
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         openAction.execute();

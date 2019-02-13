@@ -67,7 +67,7 @@ public class TstOpenAction {
 
     @Test
     void executeOpen() throws ActionInitiationException {
-        Path fileToOpen = Paths.get( "src/test/resources/actions/openAction/open.html" );
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
         OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
         action.execute();

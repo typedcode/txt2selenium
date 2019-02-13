@@ -27,6 +27,7 @@ package de.typedcode.txt2SeleniumTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
@@ -38,28 +39,32 @@ public class TstTxt2Selenium {
     @Test
     public void initiationNonExistingDirectory() {
         @SuppressWarnings( "null" )
+        Path path = Paths.get( "test", "notExisting" );
+
         Throwable exception = assertThrows( RuntimeException.class,
-                () -> new Txt2Selenium( Paths.get( "test/notExisting/" ) ) );
-        assertEquals( "Given directory does not exist: test/notExisting", exception.getMessage() );
+                () -> new Txt2Selenium( path ) );
+        assertEquals( String.format( "Given directory does not exist: %s", path.toString() ), exception.getMessage() );
 
     }
 
     @Test
     public void initiationDirectoryIsFile() {
         @SuppressWarnings( "null" )
-        Throwable exception = assertThrows( RuntimeException.class, () -> new Txt2Selenium(
-                Paths.get( "src/test/resources/Txt2Selenium/initiation/files/globalOneTestfile/global.t2s" ) ) );
+        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "files", "globalOneTestfile", "global.t2s" );
+
+        Throwable exception = assertThrows( RuntimeException.class, () -> new Txt2Selenium( path ) );
         assertEquals(
-                "Given Path is not a directory: src/test/resources/Txt2Selenium/initiation/files/globalOneTestfile/global.t2s",
-                exception.getMessage() );
+                String.format( "Given Path is not a directory: %s", path.toString() ), exception.getMessage() );
     }
 
     @Test
     public void initiationEmptyFolder() {
         @SuppressWarnings( "null" )
+        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "empty" );
+
         Throwable exception = assertThrows( RuntimeException.class,
-                () -> new Txt2Selenium( Paths.get( "src/test/resources/Txt2Selenium/initiation/empty" ) ) );
-        assertEquals( "Given directory does not contain any testfiles: src/test/resources/Txt2Selenium/initiation/empty",
+                () -> new Txt2Selenium( path ) );
+        assertEquals( String.format( "Given directory does not contain any testfiles: %s", path.toString() ),
                 exception.getMessage() );
     }
 }

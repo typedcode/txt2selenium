@@ -71,7 +71,7 @@ public class TstScreenshotAction {
     @Test
     void screenshotWithNoOpenActionBefore() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
-                .thenReturn( Paths.get( "src/test/resources/actions/screenshotAction/" ).toAbsolutePath() );
+                .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
                 "screenshot", "" );
@@ -82,7 +82,7 @@ public class TstScreenshotAction {
         String actualContent = new String( Files.readAllBytes( screenshot ) );
 
         String expectedContent = new String( Files
-                .readAllBytes( Paths.get( "src/test/resources/actions/screenshotAction/resultEmptyScreenshot.html" ) ) );
+                .readAllBytes( Paths.get( "src", "test", "resources", "actions", "screenshotAction", "resultEmptyScreenshot.html" ) ) );
 
         Files.delete( screenshot );
 
@@ -93,9 +93,9 @@ public class TstScreenshotAction {
     @Test
     void screenshotAfterOpen() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
-                .thenReturn( Paths.get( "src/test/resources/actions/screenshotAction/" ).toAbsolutePath() );
+                .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
-        Path fileToOpen = Paths.get( "src/test/resources/actions/screenshotAction/siteWithContent.html" );
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "screenshotAction", "siteWithContent.html" );
 
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
                 fileToOpen.toUri().toString() );
@@ -110,7 +110,7 @@ public class TstScreenshotAction {
         String actualContent = new String( Files.readAllBytes( screenshot ) );
 
         String expectedContent = new String(
-                Files.readAllBytes( Paths.get( "src/test/resources/actions/screenshotAction/siteWithContent.html" ) ) );
+                Files.readAllBytes( Paths.get( "src", "test", "resources", "actions", "screenshotAction", "siteWithContent.html" ) ) );
 
         Files.delete( screenshot );
 
@@ -120,7 +120,7 @@ public class TstScreenshotAction {
     @Test
     void screenshotWithIdentifier() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
-                .thenReturn( Paths.get( "src/test/resources/actions/screenshotAction/" ).toAbsolutePath() );
+                .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
                 "screenshot", "testIdentifier" );
