@@ -24,16 +24,12 @@
 
 package de.typedcode.txt2Selenium.actions;
 
-import javax.annotation.Nullable;
-
 import de.typedcode.txt2Selenium.Txt2Selenium;
 
 public abstract class AAction {
 
-    @Nullable
     public AAction previousAction;
 
-    @Nullable
     public AAction nextAction;
 
     Txt2Selenium correspondingInstance;
