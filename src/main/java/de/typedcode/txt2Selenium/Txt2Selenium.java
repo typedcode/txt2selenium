@@ -141,7 +141,7 @@ public class Txt2Selenium {
         return this.mainDirectory;
     }
 
-    public Map< String, String > getCompareStrings() {
-        return this.compareStrings;
+    public String getCompareString( String identifier ) {
+        return this.compareStrings.get( identifier );
     }
 }

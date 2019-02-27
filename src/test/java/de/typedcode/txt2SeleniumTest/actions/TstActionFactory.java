@@ -43,7 +43,7 @@ public class TstActionFactory {
 
     @BeforeEach
     public void before() {
-        WebUtil.WEB_UTIL.reset();
+        WebUtil.reset();
     }
 
     @Test

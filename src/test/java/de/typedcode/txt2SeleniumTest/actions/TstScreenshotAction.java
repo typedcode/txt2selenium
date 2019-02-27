@@ -54,7 +54,7 @@ public class TstScreenshotAction {
      */
     @BeforeEach
     void prepare() {
-        WebUtil.WEB_UTIL.reset();
+        WebUtil.reset();
         this.txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
     }
 

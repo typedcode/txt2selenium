@@ -60,7 +60,7 @@ public class ScreenshotAction extends AAction {
 
     @Override
     public void execute() {
-        String source = WebUtil.WEB_UTIL.getPageSource();
+        String source = WebUtil.getInstance().getPageSource();
 
         if( source == null ) {
             source = "";

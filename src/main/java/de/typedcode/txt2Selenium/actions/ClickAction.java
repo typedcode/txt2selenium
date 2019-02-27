@@ -45,7 +45,7 @@ public class ClickAction extends AAction {
     @Override
     public void execute() {
         try {
-            WebUtil.WEB_UTIL.click();
+            WebUtil.getInstance().click();
         } catch( NullPointerException e ) {
             throw new ActionExecutionException( "Error execution ClickAction. No element was selected." );
         }

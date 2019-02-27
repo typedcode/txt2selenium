@@ -1,4 +1,4 @@
-/**
+/*
  * MIT License
  * 
  * Copyright (c) 2018 Markus Fischer (www.typedcode.de)
@@ -53,16 +53,22 @@ public class WebUtil {
     /**
      * Instance of the WebUtil.
      */
-    public static final WebUtil WEB_UTIL = new WebUtil();
+    private static WebUtil WEB_UTIL;
 
     /**
      * Resets the WebUtil. Resets the driver, the selected element and previously
      * read text.
      */
-    public void reset() {
-        this.driver = new HtmlUnitDriver();
-        this.selectedElement = null;
-        this.readElements = new HashMap<>();
+    public static void reset() {
+        WEB_UTIL = new WebUtil();
+    }
+
+    public static WebUtil getInstance() {
+        if( WEB_UTIL == null ) {
+            reset();
+        }
+
+        return WEB_UTIL;
     }
 
     /**
@@ -105,9 +111,7 @@ public class WebUtil {
 
     /**
      * Performs the Click Action on the given <code>By</code> Element.
-     * 
-     * @param by
-     *            Element to Click
+     *
      * @throws NullPointerException
      *             if there was no Element selected.
      */
@@ -119,6 +123,16 @@ public class WebUtil {
         }
 
         element.click();
+    }
+
+    /**
+     * Returns the previously read content for the corresponding identifier or null if it was not written before
+     * @param identifier
+     *             Identifier to get the content from
+     * @return Content identified by the identifier or null if the content does not exist
+     */
+    public String getReadVar( String identifier ) {
+        return this.readElements.get( identifier );
     }
 
     /**

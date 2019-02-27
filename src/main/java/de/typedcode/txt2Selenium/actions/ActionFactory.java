@@ -66,6 +66,9 @@ public class ActionFactory {
             case TypeAction.IDENTIFIER: {
                 return new TypeAction( instance, parameters );
             }
+            case AssertEqualsAction.IDENTIFIER: {
+                return new AssertEqualsAction( instance, parameters );
+            }
             default:
                 throw new ActionInitiationException( "Action '" + action + "' is unknown." );
         }

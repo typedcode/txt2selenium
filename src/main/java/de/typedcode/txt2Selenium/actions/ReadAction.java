@@ -58,7 +58,7 @@ public class ReadAction extends AAction {
 
     @Override
     public void execute() {
-        WebUtil.WEB_UTIL.readText( this.readToName );
+        WebUtil.getInstance().readText( this.readToName );
     }
 
 }

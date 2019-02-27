@@ -72,7 +72,7 @@ public class TstOpenAction {
                 fileToOpen.toUri().toString() );
         action.execute();
 
-        assertEquals( "One", WebUtil.WEB_UTIL.getTitle() );
+        assertEquals( "One", WebUtil.getInstance().getTitle() );
     }
 
 }

@@ -52,7 +52,7 @@ public class TypeAction extends AAction {
 
     @Override
     public void execute() {
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         if( selectedElement == null ) {
             throw new ActionExecutionException( "Coulnd not Type text. No Element selected yet." );

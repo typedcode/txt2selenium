@@ -59,7 +59,7 @@ public class SelectAction extends AAction {
 
     @Override
     public void execute() {
-        WebUtil.WEB_UTIL.select( by );
+        WebUtil.getInstance().select( by );
     }
 
 }

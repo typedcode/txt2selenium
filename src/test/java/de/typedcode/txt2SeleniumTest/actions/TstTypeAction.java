@@ -79,7 +79,7 @@ public class TstTypeAction {
         ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idEmpty" ).execute();
 
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         if( selectedElement == null ) {
             fail( "Selected Element was null." );
@@ -100,7 +100,7 @@ public class TstTypeAction {
         ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idExisting" ).execute();
 
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         if( selectedElement == null ) {
             fail( "Selected Element was null." );
@@ -121,7 +121,7 @@ public class TstTypeAction {
         ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idInput" ).execute();
 
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         if( selectedElement == null ) {
             fail( "Selected Element was null." );

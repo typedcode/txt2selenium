@@ -57,7 +57,7 @@ public class OpenAction extends AAction {
      */
     @Override
     public void execute() {
-        WebUtil.WEB_UTIL.openUrl( URL );
+        WebUtil.getInstance().openUrl( URL );
     }
 
 }

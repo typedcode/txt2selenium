@@ -50,7 +50,7 @@ public class TstSelectAction {
 
     @BeforeEach
     public void before() {
-        WebUtil.WEB_UTIL.reset();
+        WebUtil.reset();
     }
 
     @Test
@@ -74,14 +74,11 @@ public class TstSelectAction {
     @Test
     void selectById() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
-                fileToOpen.toUri().toString() );
-        openAction.execute();
 
-        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select", "id selectId" );
-        action.execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, "select", "id selectId" ).execute();
 
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         assertNotNull( selectedElement );
 
@@ -102,7 +99,7 @@ public class TstSelectAction {
                 "name selectName" );
         action.execute();
 
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         assertNotNull( selectedElement );
 
@@ -123,7 +120,7 @@ public class TstSelectAction {
                 "xpath /html/body/div/p/a[3]" );
         action.execute();
 
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         assertNotNull( selectedElement );
 
@@ -144,7 +141,7 @@ public class TstSelectAction {
                 "xpath //*[contains(text(),'2')]" );
         action.execute();
 
-        WebElement selectedElement = WebUtil.WEB_UTIL.getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         assertNotNull( selectedElement );
 
