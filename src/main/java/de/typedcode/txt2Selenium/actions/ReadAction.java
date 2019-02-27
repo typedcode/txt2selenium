@@ -43,7 +43,7 @@ public class ReadAction extends AAction {
 
     private String readToName;
 
-    public ReadAction( Txt2Selenium correspondingInstance, String readToVar ) {
+    ReadAction( Txt2Selenium correspondingInstance, String readToVar ) {
         super( correspondingInstance );
 
         String varName = readToVar.trim();

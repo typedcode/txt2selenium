@@ -38,7 +38,7 @@ public class ClickAction extends AAction {
      * 
      * @param instance
      */
-    public ClickAction( Txt2Selenium instance ) {
+    ClickAction( Txt2Selenium instance ) {
         super( instance );
     }
 

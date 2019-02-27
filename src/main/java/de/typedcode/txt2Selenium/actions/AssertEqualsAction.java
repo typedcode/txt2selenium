@@ -43,7 +43,7 @@ public class AssertEqualsAction extends AAction {
      * @param instance Instance of the Txt2Selenium where this Action is registered.
      * @param parameters List of parameters for the action. Has to contain two space-seperated parameters.
      */
-     public AssertEqualsAction( Txt2Selenium instance, String parameters ) {
+     AssertEqualsAction( Txt2Selenium instance, String parameters ) {
         super( instance );
 
         String[] params = parameters.split( " " );

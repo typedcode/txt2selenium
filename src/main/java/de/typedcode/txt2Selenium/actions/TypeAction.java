@@ -45,7 +45,7 @@ public class TypeAction extends AAction {
     public static final String IDENTIFIER = "type";
     private String textToType;
 
-    public TypeAction( Txt2Selenium correspondingInstance, String textToType ) {
+    TypeAction( Txt2Selenium correspondingInstance, String textToType ) {
         super( correspondingInstance );
         this.textToType = textToType;
     }

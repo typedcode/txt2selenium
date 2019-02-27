@@ -56,7 +56,7 @@ public class TstSelectAction {
     @Test
     void selectNoParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> new SelectAction( this.txt2SeleniumMock, "" ) );
+                () -> ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "" ) );
 
         assertEquals( "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id",
                 exception.getMessage() );
@@ -65,7 +65,7 @@ public class TstSelectAction {
     @Test
     void selectOneParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> new SelectAction( this.txt2SeleniumMock, "by" ) );
+                () -> ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "by" ) );
 
         assertEquals( "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id",
                 exception.getMessage() );

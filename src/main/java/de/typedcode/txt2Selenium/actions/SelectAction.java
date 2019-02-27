@@ -41,7 +41,7 @@ public class SelectAction extends AAction {
      */
     private By by;
 
-    public SelectAction( Txt2Selenium correspondingInstance, String byParameters ) {
+    SelectAction( Txt2Selenium correspondingInstance, String byParameters ) {
         super( correspondingInstance );
 
         String[] parameters = byParameters.split( " ", 2 );

@@ -30,15 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import de.typedcode.txt2Selenium.actions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.ClickAction;
-import de.typedcode.txt2Selenium.actions.OpenAction;
-import de.typedcode.txt2Selenium.actions.SelectAction;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
@@ -55,7 +52,7 @@ public class TstClickAction {
 
     @Test
     void clickWithoudSelect() {
-        ClickAction ca = new ClickAction( this.txt2SeleniumMock );
+        AAction ca = ActionFactory.createAction( this.txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
 
         Throwable exception = assertThrows( ActionExecutionException.class, () -> ca.execute() );
 

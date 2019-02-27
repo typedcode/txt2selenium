@@ -48,12 +48,7 @@ public class ScreenshotAction extends AAction {
 
     private Path screenshotFile;
 
-    public ScreenshotAction( Txt2Selenium instance ) {
-        super( instance );
-        this.pathIdentifier = "";
-    }
-
-    public ScreenshotAction( Txt2Selenium instance, String identifier ) {
+    ScreenshotAction( Txt2Selenium instance, String identifier ) {
         super( instance );
         this.pathIdentifier = identifier + "_";
     }

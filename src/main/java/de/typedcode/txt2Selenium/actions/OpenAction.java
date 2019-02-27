@@ -39,7 +39,7 @@ public class OpenAction extends AAction {
 
     public final String URL;
 
-    public OpenAction( Txt2Selenium instance, String url ) throws ActionInitiationException {
+    OpenAction( Txt2Selenium instance, String url ) throws ActionInitiationException {
         super( instance );
 
         String trimUrl = url.trim();

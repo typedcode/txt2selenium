@@ -36,7 +36,7 @@ public abstract class AAction {
     @Nullable
     public AAction nextAction;
 
-    protected Txt2Selenium correspondingInstance;
+    Txt2Selenium correspondingInstance;
 
     public AAction( Txt2Selenium correspondingInstance ) {
         this.correspondingInstance = correspondingInstance;
