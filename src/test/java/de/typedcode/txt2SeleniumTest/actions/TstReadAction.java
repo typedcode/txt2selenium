@@ -56,7 +56,7 @@ public class TstReadAction {
     @Test
     void actionInitiationError() throws ActionInitiationException {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( txt2SeleniumMock, "read", "" ) );
+                () -> ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "" ) );
 
         assertEquals( "Could not create 'ReadAction'. varIdentifier was empty. Use 'read varIdentifier'.",
                 exception.getMessage() );
@@ -64,7 +64,7 @@ public class TstReadAction {
 
     @Test
     void readWIthoudSelect() throws ActionInitiationException {
-        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myReadVar" );
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myReadVar" );
 
         Throwable exception = assertThrows( ActionExecutionException.class, () -> readAction.execute() );
         assertEquals( "Could not execute 'read'. No Element was selected.", exception.getMessage() );
@@ -73,15 +73,15 @@ public class TstReadAction {
     @Test
     void readWithoudNestedElements() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
                 "id divId" );
         selectAction.execute();
 
-        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myRead" );
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
         readAction.execute();
 
         assertEquals( "No nested", WebUtil.getInstance().getText( "myRead" ) );
@@ -90,15 +90,15 @@ public class TstReadAction {
     @Test
     void readWithNestedElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
                 "id bodyId" );
         selectAction.execute();
 
-        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myRead" );
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
         readAction.execute();
 
         assertEquals( "Before nested\nNo nested\nAfter nested", WebUtil.getInstance().getText( "myRead" ) );
@@ -107,14 +107,14 @@ public class TstReadAction {
     @Test
     void readEmptyElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select", "id pId" );
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER, "id pId" );
         selectAction.execute();
 
-        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, "read", "myRead" );
+        ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
         readAction.execute();
 
         assertEquals( "", WebUtil.getInstance().getText( "myRead" ) );

@@ -64,7 +64,7 @@ public class TstScreenshotAction {
     @Test
     void nullResultWhenNotExecuted() throws ActionInitiationException {
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
-                "screenshot", "" );
+                ScreenshotAction.IDENTIFIER, "" );
         assertNull( screenshotAction.getScreenshotFile() );
     }
 
@@ -74,7 +74,7 @@ public class TstScreenshotAction {
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
-                "screenshot", "" );
+                ScreenshotAction.IDENTIFIER, "" );
         screenshotAction.execute();
 
         Path screenshot = screenshotAction.getScreenshotFile();
@@ -97,12 +97,12 @@ public class TstScreenshotAction {
 
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "screenshotAction", "siteWithContent.html" );
 
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
-                "screenshot", "" );
+                ScreenshotAction.IDENTIFIER, "" );
         screenshotAction.execute();
 
         Path screenshot = screenshotAction.getScreenshotFile();
@@ -123,7 +123,7 @@ public class TstScreenshotAction {
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
-                "screenshot", "testIdentifier" );
+                ScreenshotAction.IDENTIFIER, "testIdentifier" );
         screenshotAction.execute();
 
         Path screenshotFile = screenshotAction.getScreenshotFile();

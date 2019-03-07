@@ -31,13 +31,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import de.typedcode.txt2Selenium.actions.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.AAction;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
@@ -50,25 +49,25 @@ public class TstTypeAction {
     @Test
     void elementNotSelected() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
-        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() );
+        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() );
         action.execute();
 
         Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> ActionFactory.createAction( this.txt2SeleniumMock, "type", "Text to type" ).execute() );
+                () -> ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" ).execute() );
         assertEquals( "Coulnd not Type text. No Element selected yet.", exception.getMessage() );
     }
 
     @Test
     void elementNoTextElement() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
-        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() );
+        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() );
         action.execute();
 
-        action = ActionFactory.createAction( this.txt2SeleniumMock, "select", "id notTypeable" );
+        action = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id notTypeable" );
         action.execute();
 
         Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> ActionFactory.createAction( this.txt2SeleniumMock, "type", "Text to type" ).execute() );
+                () -> ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" ).execute() );
         assertEquals( "Selected element is no Text element to type text to.", exception.getMessage() );
     }
 
@@ -76,8 +75,8 @@ public class TstTypeAction {
     void typeTextIntoEmptyElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
-        ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idEmpty" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id idEmpty" ).execute();
 
         WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
@@ -88,7 +87,7 @@ public class TstTypeAction {
 
         assertEquals( "", selectedElement.getText() );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, "type", "Text to type" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" ).execute();
 
         assertEquals( "Text to type", selectedElement.getAttribute( "value" ) );
     }
@@ -97,8 +96,8 @@ public class TstTypeAction {
     void typeTextIntoNonEmptyElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
-        ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idExisting" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id idExisting" ).execute();
 
         WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
@@ -109,7 +108,7 @@ public class TstTypeAction {
 
         assertEquals( "Already Existing!", selectedElement.getAttribute( "value" ) );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, "type", "Text to type" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" ).execute();
 
         assertEquals( "Already Existing!Text to type", selectedElement.getAttribute( "value" ) );
     }
@@ -118,8 +117,8 @@ public class TstTypeAction {
     void typeToInputField() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
-        ActionFactory.createAction( this.txt2SeleniumMock, "select", "id idInput" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id idInput" ).execute();
 
         WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
@@ -130,7 +129,7 @@ public class TstTypeAction {
 
         assertEquals( "", selectedElement.getText() );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, "type", "Text to type" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" ).execute();
 
         assertEquals( "Text to type", selectedElement.getAttribute( "value" ) );
     }

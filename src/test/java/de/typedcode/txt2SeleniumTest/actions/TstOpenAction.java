@@ -47,28 +47,28 @@ public class TstOpenAction {
     @Test
     void emptyUrl() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( txt2SeleniumMock, "open", "" ) );
+                () -> ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, "" ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
     void spaceParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( txt2SeleniumMock, "open", "  " ) );
+                () -> ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, "  " ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
     void successfullInitiation() throws ActionInitiationException {
         String url = "http://www.typedcode.de";
-        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open", url );
+        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, url );
         assertEquals( url, action.URL );
     }
 
     @Test
     void executeOpen() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
-        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         action.execute();
 

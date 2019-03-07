@@ -75,8 +75,8 @@ public class TstSelectAction {
     void selectById() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, "open", fileToOpen.toUri().toString() ).execute();
-        ActionFactory.createAction( this.txt2SeleniumMock, "select", "id selectId" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id selectId" ).execute();
 
         WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
@@ -91,11 +91,11 @@ public class TstSelectAction {
     @Test
     void selectByName() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
+        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
                 "name selectName" );
         action.execute();
 
@@ -112,11 +112,11 @@ public class TstSelectAction {
     @Test
     void selectByXPath() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
+        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
                 "xpath /html/body/div/p/a[3]" );
         action.execute();
 
@@ -133,11 +133,11 @@ public class TstSelectAction {
     @Test
     void selectByXPath2() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, "open",
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, "select",
+        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
                 "xpath //*[contains(text(),'2')]" );
         action.execute();
 
