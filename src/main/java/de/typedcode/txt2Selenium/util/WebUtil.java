@@ -51,6 +51,11 @@ public class WebUtil {
     private WebElement selectedElement;
 
     /**
+     * Identifier by which the selectedElement was selected. If no element was found, it will contain the last By element used.
+     */
+    private By selectedBy;
+
+    /**
      * Instance of the WebUtil.
      */
     private static WebUtil WEB_UTIL;
@@ -143,6 +148,11 @@ public class WebUtil {
      */
     public void select( By by ) {
         this.selectedElement = driver.findElement( by );
+        this.selectedBy = by;
+    }
+
+    public By getSelectedBy() {
+        return this.selectedBy;
     }
 
     /**
