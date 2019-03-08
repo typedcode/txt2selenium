@@ -74,7 +74,7 @@ public class TstAssertEqualsAction {
     @Test
     void actionInitiationErrorToManyParameters() throws ActionInitiationException {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "par1 par2 par3" ) );
+                () -> ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "par1 par2 par3 par4" ) );
 
         assertEquals( "Could not create 'AssertEqualsAction'. Wrong number of parameters. Use 'assertEquals expectedIdentifier actualIdentifier'.",
                 exception.getMessage() );
@@ -126,5 +126,55 @@ public class TstAssertEqualsAction {
         Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
 
         assertAction.execute();
+    }
+
+    @Test
+    void threeParamsTrueEvaluationSuccessfull() {
+        AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
+
+        Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+
+        assertAction.execute();
+    }
+
+    @Test
+    void threeParamsTrueEvaluationNoMatch() throws ActionExecutionException {
+        AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
+
+        Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+
+        Throwable exception = assertThrows( ActionExecutionException.class,
+                () -> assertAction.execute() );
+
+        assertEquals( "Execution Error. Parameters did not match. Expected (first): value / Actual (second): actual",
+                exception.getMessage() );
+    }
+
+    @Test
+    void threeParamsFalseEvaluationSuccessfull() {
+        //Check that evaluation is successfull if the evaluationIndicator Parameter is false and the values do not match
+        AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
+
+        Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+
+        assertAction.execute();
+    }
+
+    @Test
+    void threeParamsFalseEvaluationNoMatch() throws ActionExecutionException {
+        //Check that evaluation is not successfull if the evaluationIndicator Parameter is false and the values do match
+        AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
+
+        Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+
+        Throwable exception = assertThrows( ActionExecutionException.class,
+                () -> assertAction.execute() );
+
+        assertEquals( "Execution Error. Parameters did not match. Expected (first): actual / Actual (second): actual",
+                exception.getMessage() );
     }
 }

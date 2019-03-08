@@ -35,6 +35,7 @@ public class AssertEqualsAction extends AAction {
 
     private final String expectedIdentifier;
     private final String actualIdentifier;
+    private final boolean evaluationIndicator;
 
     /**
      * Creating the AssertEqualsAction. To run the AssertEqualsAction the {@link ReadAction} has
@@ -48,12 +49,23 @@ public class AssertEqualsAction extends AAction {
 
         String[] params = parameters.split( " " );
 
-        if( params.length != 2 ) {
+
+
+        if( params.length == 2 ) {
+            this.evaluationIndicator = true;
+            this.expectedIdentifier = params[ 0 ];
+            this.actualIdentifier = params[ 1 ];
+        }
+        else if( params.length == 3 ) {
+            this.evaluationIndicator = Boolean.parseBoolean( params[ 0 ] );
+            this.expectedIdentifier = params[ 1 ];
+            this.actualIdentifier = params[ 2 ];
+        }
+        else {
             throw new ActionInitiationException( "Could not create 'AssertEqualsAction'. Wrong number of parameters. Use 'assertEquals expectedIdentifier actualIdentifier'." );
         }
 
-        this.expectedIdentifier = params[ 0 ];
-        this.actualIdentifier = params[ 1 ];
+
     }
 
     @Override
@@ -69,7 +81,7 @@ public class AssertEqualsAction extends AAction {
             throw new ActionExecutionException(String.format( "Execution Error. Could not find actualIdentifier '%s'.", this.actualIdentifier ) );
         }
 
-        if( !actual.equals( expected ) ) {
+        if( ( !actual.equals( expected ) && this.evaluationIndicator ) || ( actual.equals( expected ) && !this.evaluationIndicator ) ) {
             throw new ActionExecutionException( String.format( "Execution Error. Parameters did not match. Expected (%s): %s / Actual (%s): %s", this.expectedIdentifier, expected, this.actualIdentifier, actual ) );
         }
     }
