@@ -60,4 +60,8 @@ public class OpenAction extends AAction {
         WebUtil.getInstance().openUrl( URL );
     }
 
+    @Override
+    public String getCommand() {
+        return String.format( "%s %s", IDENTIFIER, this.URL);
+    }
 }

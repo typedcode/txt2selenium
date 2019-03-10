@@ -24,11 +24,10 @@
 
 package de.typedcode.txt2Selenium.actions;
 
-import org.openqa.selenium.WebElement;
-
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.util.WebUtil;
+import org.openqa.selenium.WebElement;
 
 /**
  * Action will type Text into an previously selected input type="text" element
@@ -71,4 +70,8 @@ public class TypeAction extends AAction {
 
     }
 
+    @Override
+    public String getCommand() {
+        return String.format( "%s %s", IDENTIFIER, this.textToType );
+    }
 }

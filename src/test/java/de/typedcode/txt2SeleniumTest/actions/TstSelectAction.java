@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import de.typedcode.txt2Selenium.actions.AAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -149,5 +150,13 @@ public class TstSelectAction {
             assertEquals( "XPath2", selectedElement.getText() );
             assertEquals( "a", selectedElement.getTagName() );
         }
+    }
+
+    @Test
+    void getCommand() {
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+                "xpath /html/body/div/p/a[3]" );
+
+        assertEquals(String.format( "%s xpath /html/body/div/p/a[3]", SelectAction.IDENTIFIER ), action.getCommand() );
     }
 }

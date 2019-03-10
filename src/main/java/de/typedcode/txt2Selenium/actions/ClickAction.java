@@ -36,7 +36,7 @@ public class ClickAction extends AAction {
      * Creating the ClickAction. To run the ClickAction the {@link SelectAction} has
      * to be performed before.
      * 
-     * @param instance
+     * @param instance Instance of the Txt2Selenium where this Action is registered.
      */
     ClickAction( Txt2Selenium instance ) {
         super( instance );
@@ -51,4 +51,8 @@ public class ClickAction extends AAction {
         }
     }
 
+    @Override
+    public String getCommand() {
+        return IDENTIFIER;
+    }
 }

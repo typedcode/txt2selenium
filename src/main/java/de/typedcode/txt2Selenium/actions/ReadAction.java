@@ -61,4 +61,8 @@ public class ReadAction extends AAction {
         WebUtil.getInstance().readText( this.readToName );
     }
 
+    @Override
+    public String getCommand() {
+        return String.format( "%s %s", IDENTIFIER, this.readToName );
+    }
 }

@@ -86,4 +86,8 @@ public class AssertEqualsAction extends AAction {
         }
     }
 
+    @Override
+    public String getCommand() {
+        return String.format( "%s %s %s %s", IDENTIFIER, this.evaluationIndicator, this.expectedIdentifier, this.actualIdentifier );
+    }
 }

@@ -65,7 +65,7 @@ public class AssertCheckedAction extends AAction {
 
              if( actualState != this.expectedState ) {
                  By selectedBy = WebUtil.getInstance().getSelectedBy();
-                 throw new ActionExecutionException( String.format( "Evaluation Error. Element '%s' is %s but should be %s", selectedBy.toString(), actualState.toString().toUpperCase(), this.expectedState.toString().toUpperCase() ) );
+                 throw new ActionExecutionException( String.format( "Evaluation Error. Element '%s' is %s but should be %s", selectedBy.toString(), actualState, this.expectedState ) );
              }
          }
          catch( UnsupportedOperationException e ) {
@@ -74,4 +74,8 @@ public class AssertCheckedAction extends AAction {
          }
     }
 
+    @Override
+    public String getCommand() {
+        return String.format("%s %s", IDENTIFIER, this.expectedState);
+    }
 }

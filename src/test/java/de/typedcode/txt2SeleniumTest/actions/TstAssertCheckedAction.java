@@ -88,7 +88,7 @@ public class TstAssertCheckedAction {
         Throwable exception = assertThrows( ActionExecutionException.class,
                 () -> action.execute() );
 
-        assertEquals( "Evaluation Error. Element 'By.id: checkedElement' is TRUE but should be FALSE",
+        assertEquals( "Evaluation Error. Element 'By.id: checkedElement' is true but should be false",
                 exception.getMessage() );
     }
 
@@ -101,7 +101,7 @@ public class TstAssertCheckedAction {
         Throwable exception = assertThrows( ActionExecutionException.class,
                 () -> action.execute() );
 
-        assertEquals( "Evaluation Error. Element 'By.id: uncheckedElement' is FALSE but should be TRUE",
+        assertEquals( "Evaluation Error. Element 'By.id: uncheckedElement' is false but should be true",
                 exception.getMessage() );
     }
 
@@ -124,6 +124,20 @@ public class TstAssertCheckedAction {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
 
         ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" ).execute();
+    }
+
+    @Test
+    void getCommandTrue() {
+        AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true");
+
+        assertEquals( String.format( "%s true", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
+    }
+
+    @Test
+    void getCommandFalse() {
+        AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false");
+
+        assertEquals( String.format( "%s false", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
     }
 
 }

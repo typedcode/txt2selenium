@@ -134,4 +134,11 @@ public class TstClickAction {
 
         assertEquals( "After Click XPath 2", WebUtil.getInstance().getTitle() );
     }
+
+    @Test
+    void getCommand() {
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
+
+        assertEquals( ClickAction.IDENTIFIER, action.getCommand() );
+    }
 }

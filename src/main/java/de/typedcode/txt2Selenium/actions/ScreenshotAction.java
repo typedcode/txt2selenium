@@ -50,7 +50,7 @@ public class ScreenshotAction extends AAction {
 
     ScreenshotAction( Txt2Selenium instance, String identifier ) {
         super( instance );
-        this.pathIdentifier = identifier + "_";
+        this.pathIdentifier = identifier;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ScreenshotAction extends AAction {
         SimpleDateFormat format = new SimpleDateFormat( "yyyyMMddHHmmss" );
         String date = format.format( cal.getTime() );
 
-        String fileName = "screenshot_" + this.pathIdentifier + date + ".html";
+        String fileName = String.format( "screenshot_%s_%s.html", this.pathIdentifier, date );
 
         try {
             this.screenshotFile = Paths.get( this.correspondingInstance.getMainDirectory().toString(), fileName );
@@ -82,4 +82,12 @@ public class ScreenshotAction extends AAction {
         return this.screenshotFile;
     }
 
+    @Override
+    public String getCommand() {
+        if( this.pathIdentifier.length() > 0 ) {
+            return String.format( "%s %s", IDENTIFIER, this.pathIdentifier );
+        }
+
+        return IDENTIFIER;
+    }
 }

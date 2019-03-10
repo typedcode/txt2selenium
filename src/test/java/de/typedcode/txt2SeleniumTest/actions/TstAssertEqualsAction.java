@@ -177,4 +177,25 @@ public class TstAssertEqualsAction {
         assertEquals( "Execution Error. Parameters did not match. Expected (first): actual / Actual (second): actual",
                 exception.getMessage() );
     }
+
+    @Test
+    void getCommandTwoParameters() {
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
+
+        assertEquals( String.format( "%s true first second", AssertEqualsAction.IDENTIFIER ), action.getCommand() );
+    }
+
+    @Test
+    void getCommandThreeParametersTrue() {
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
+
+        assertEquals( String.format( "%s true first second", AssertEqualsAction.IDENTIFIER ), action.getCommand() );
+    }
+
+    @Test
+    void getCommandThreeParametersFalse() {
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
+
+        assertEquals( String.format( "%s false first second", AssertEqualsAction.IDENTIFIER ), action.getCommand() );
+    }
 }

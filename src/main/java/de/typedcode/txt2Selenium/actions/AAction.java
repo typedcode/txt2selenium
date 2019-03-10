@@ -28,15 +28,33 @@ import de.typedcode.txt2Selenium.Txt2Selenium;
 
 public abstract class AAction {
 
+    /**
+     * The Action that was performed before this action is to be run. Can be null. Will only be null if this action is the first one to perform
+     */
     public AAction previousAction;
 
+    /**
+     * The action to perform after this action was run. Can be null. Will onlny be null if this action is the last to perform.
+     */
     public AAction nextAction;
 
+    /**
+     * Instance of Txt2Selenium where this AAction will run in.
+     */
     Txt2Selenium correspondingInstance;
 
     public AAction( Txt2Selenium correspondingInstance ) {
         this.correspondingInstance = correspondingInstance;
     }
 
+    /**
+     * Executes the command.
+     */
     public abstract void execute();
+
+    /**
+     * Returns the String of the Command that is represented.
+     * @return Command String
+     */
+    public abstract String getCommand();
 }

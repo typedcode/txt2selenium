@@ -25,6 +25,7 @@
 package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
@@ -34,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import de.typedcode.txt2Selenium.actions.AAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -135,5 +137,19 @@ public class TstScreenshotAction {
             // (yyyyMMddHHmmss)
             assertTrue( screenshotFileName.matches( "screenshot_testIdentifier_[0-9]{14}\\.html" ) );
         }
+    }
+
+    @Test
+    void getCommandWithoudIdentifier() {
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "" );
+
+        assertEquals( ScreenshotAction.IDENTIFIER, action.getCommand() );
+    }
+
+    @Test
+    void getCommandWithIdentifier() {
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "testIdentifier" );
+
+        assertEquals( String.format( "%s testIdentifier", ScreenshotAction.IDENTIFIER ), action.getCommand() );
     }
 }

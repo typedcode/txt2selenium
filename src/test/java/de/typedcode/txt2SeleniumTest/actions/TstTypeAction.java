@@ -133,4 +133,11 @@ public class TstTypeAction {
 
         assertEquals( "Text to type", selectedElement.getAttribute( "value" ) );
     }
+
+    @Test
+    void getCommand() {
+        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" );
+
+        assertEquals( String.format( "%s Text to type", TypeAction.IDENTIFIER ), action.getCommand() );
+    }
 }

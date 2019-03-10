@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import de.typedcode.txt2Selenium.actions.AAction;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -73,6 +74,15 @@ public class TstOpenAction {
         action.execute();
 
         assertEquals( "One", WebUtil.getInstance().getTitle() );
+    }
+
+    @Test
+    void getCommand() {
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
+        AAction action = ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+                fileToOpen.toUri().toString() );
+
+        assertEquals( String.format( "%s %s", OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ), action.getCommand() );
     }
 
 }

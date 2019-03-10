@@ -41,6 +41,10 @@ public class SelectAction extends AAction {
      */
     private By by;
 
+    private String paramBy;
+
+    private String paramValue;
+
     SelectAction( Txt2Selenium correspondingInstance, String byParameters ) {
         super( correspondingInstance );
 
@@ -51,10 +55,10 @@ public class SelectAction extends AAction {
                     "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id" );
         }
 
-        String param1 = parameters[ 0 ];
-        String param2 = parameters[ 1 ];
+        this.paramBy = parameters[ 0 ];
+        this.paramValue = parameters[ 1 ];
 
-        this.by = ByInitializer.initialize( ByType.getType( param1 ), param2 );
+        this.by = ByInitializer.initialize( ByType.getType( this.paramBy ), this.paramValue );
     }
 
     @Override
@@ -62,4 +66,8 @@ public class SelectAction extends AAction {
         WebUtil.getInstance().select( by );
     }
 
+    @Override
+    public String getCommand() {
+        return String.format( "%s %s %s", IDENTIFIER, this.paramBy, this.paramValue );
+    }
 }
