@@ -38,6 +38,7 @@ import java.util.Map;
 import de.typedcode.txt2Selenium.actions.AAction;
 import de.typedcode.txt2Selenium.exceptions.InstanceInitiationException;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
+import de.typedcode.txt2Selenium.methods.Method;
 import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 import de.typedcode.txt2Selenium.parsers.TestFileParser;
 
@@ -143,5 +144,15 @@ public class Txt2Selenium {
 
     public String getCompareString( String identifier ) {
         return this.compareStrings.get( identifier );
+    }
+
+    /**
+     * Returns the Method represented by the methodName. Will return null if the Method was not found.
+     *
+     * @param methodName Name of the Method to return
+     * @return Method represented by methodName or null if the Method was not found
+     */
+    public Method getMethod(String methodName ) {
+        return null;
     }
 }

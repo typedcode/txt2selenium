@@ -49,7 +49,17 @@ public class Method {
     }
 
     public void addAction( AAction nextAction ) {
+        this.lastAction.nextAction = nextAction;
         nextAction.previousAction = this.lastAction;
         this.lastAction = nextAction;
+    }
+
+    /**
+     * Returns the Name of the Method
+     *
+     * @return Name of the Method
+     */
+    public String getName() {
+        return this.methodName;
     }
 }

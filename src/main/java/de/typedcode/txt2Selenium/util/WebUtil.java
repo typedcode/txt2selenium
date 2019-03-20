@@ -27,6 +27,8 @@ package de.typedcode.txt2Selenium.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.typedcode.txt2Selenium.methods.Method;
+import org.mockito.stubbing.OngoingStubbing;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -153,17 +155,6 @@ public class WebUtil {
 
     public By getSelectedBy() {
         return this.selectedBy;
-    }
-
-    /**
-     * Returns the previously read text identified by the key.
-     * 
-     * @param key
-     *            Key to get the selected Element from
-     * @return Text that was read or null if the Element was never read.
-     */
-    public String getText( String key ) {
-        return this.readElements.get( key );
     }
 
     /**

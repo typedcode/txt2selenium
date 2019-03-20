@@ -10,12 +10,6 @@ A simple tool to run headless html unit tests that are described in simple text-
 
 Checks if a previous selected elements status is the same as true|false.
 
-### Click
-
-```click```
-
-This action will Click on an previous selected element.
-
 ### Assert Equals
 
 ```assertEquals expectedIdentifier actualIdentifier```
@@ -23,6 +17,18 @@ This action will Click on an previous selected element.
 
 Checks if the previous read variable identified by actualIdentifier is equal to the element contained in the Compare Strings.
 If the true|false flag is set to false, this check can be used to check that the elements do not match.
+
+### Click
+
+```click```
+
+This action will Click on an previous selected element.
+
+### Method
+
+```method methodName```
+
+Will run a given Method that can contain multiple Actions.
 
 ### Open
 
