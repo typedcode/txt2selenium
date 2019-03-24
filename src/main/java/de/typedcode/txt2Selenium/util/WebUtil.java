@@ -27,8 +27,6 @@ package de.typedcode.txt2Selenium.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.typedcode.txt2Selenium.methods.Method;
-import org.mockito.stubbing.OngoingStubbing;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;

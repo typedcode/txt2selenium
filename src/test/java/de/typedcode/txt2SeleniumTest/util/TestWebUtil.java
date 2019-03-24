@@ -26,30 +26,20 @@ package de.typedcode.txt2SeleniumTest.util;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.OpenAction;
 import de.typedcode.txt2Selenium.actions.ReadAction;
 import de.typedcode.txt2Selenium.actions.SelectAction;
-import de.typedcode.txt2Selenium.util.ByInitializer;
-import de.typedcode.txt2Selenium.util.ByType;
 import de.typedcode.txt2Selenium.util.WebUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openqa.selenium.By;
-import org.openqa.selenium.By.ById;
-import org.openqa.selenium.By.ByName;
-import org.openqa.selenium.By.ByXPath;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TstWebUtil {
+public class TestWebUtil {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
@@ -84,7 +74,7 @@ public class TstWebUtil {
     }
 
     @Test
-    public void resetTest() {
+    public void testReset() {
         assertNull( WebUtil.getInstance().getReadVar( "myRead" ) );
         assertNull( WebUtil.getInstance().getSelectedElement() );
         assertNull( WebUtil.getInstance().getSelectedBy() );

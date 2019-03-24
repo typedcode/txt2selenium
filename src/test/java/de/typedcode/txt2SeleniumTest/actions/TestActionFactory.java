@@ -37,7 +37,7 @@ import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 @SuppressWarnings( "null" )
-public class TstActionFactory {
+public class TestActionFactory {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
@@ -47,7 +47,7 @@ public class TstActionFactory {
     }
 
     @Test
-    void unknownAction() throws ActionInitiationException {
+    public void testUnknownAction() {
 
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( this.txt2SeleniumMock, "unknownAction", "" ) );

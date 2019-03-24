@@ -41,10 +41,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings( "null" )
-public class TstAssertCheckedAction {
+public class TestAssertCheckedAction {
 
     private Txt2Selenium txt2SeleniumMock;
-    private WebUtil webUtil = WebUtil.getInstance();
 
     @BeforeEach
     public void before() {
@@ -52,11 +51,11 @@ public class TstAssertCheckedAction {
         WebUtil.reset();
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "assertCheckedAction", "assert.html" );
 
-        ActionFactory.createAction(txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
     }
 
     @Test
-    void noSelection() {
+    public void testNoSelection() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "" );
 
         Throwable exception = assertThrows( ActionExecutionException.class,
@@ -67,7 +66,7 @@ public class TstAssertCheckedAction {
     }
 
     @Test
-    void notCheckableElementSelected() {
+    public void testNotCheckableElementSelected() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id notCheckable").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" );
@@ -80,7 +79,7 @@ public class TstAssertCheckedAction {
     }
 
     @Test
-    void elementTrueButShouldBeFalse() {
+    public void testElementTrueButShouldBeFalse() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" );
@@ -93,7 +92,9 @@ public class TstAssertCheckedAction {
     }
 
     @Test
-    void elementFalseButShouldBeTrue() {
+    public void testElementFalseButShouldBeTrue() {
+        before();
+
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" );
@@ -106,38 +107,37 @@ public class TstAssertCheckedAction {
     }
 
     @Test
-    void evaluationTrueIgnoreCase() {
+    public void testEvaluationTrueIgnoreCase() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
         ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "tRuE" ).execute();
     }
 
     @Test
-    void evaluationTrueSuccess() {
+    public void testEvaluationTrueSuccess() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
         ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" ).execute();
     }
 
     @Test
-    void evaluationFalseSuccess() {
+    public void testEvaluationFalseSuccess() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
 
         ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" ).execute();
     }
 
     @Test
-    void getCommandTrue() {
+    public void testGetCommandTrue() {
         AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true");
 
         assertEquals( String.format( "%s true", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
     }
 
     @Test
-    void getCommandFalse() {
+    public void testGetCommandFalse() {
         AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false");
 
         assertEquals( String.format( "%s false", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
     }
-
 }

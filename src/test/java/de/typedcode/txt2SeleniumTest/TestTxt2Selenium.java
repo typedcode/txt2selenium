@@ -34,10 +34,10 @@ import org.junit.jupiter.api.Test;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 
-public class TstTxt2Selenium {
+public class TestTxt2Selenium {
 
     @Test
-    public void initiationNonExistingDirectory() {
+    public void testInitiationNonExistingDirectory() {
         @SuppressWarnings( "null" )
         Path path = Paths.get( "test", "notExisting" );
 
@@ -48,7 +48,7 @@ public class TstTxt2Selenium {
     }
 
     @Test
-    public void initiationDirectoryIsFile() {
+    public void testInitiationDirectoryIsFile() {
         @SuppressWarnings( "null" )
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "files", "globalOneTestfile", "global.t2s" );
 
@@ -58,7 +58,7 @@ public class TstTxt2Selenium {
     }
 
     @Test
-    public void initiationEmptyFolder() {
+    public void testInitiationEmptyFolder() {
         @SuppressWarnings( "null" )
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "empty" );
 

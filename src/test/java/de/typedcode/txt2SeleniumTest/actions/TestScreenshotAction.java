@@ -47,7 +47,7 @@ import de.typedcode.txt2Selenium.actions.ScreenshotAction;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
-public class TstScreenshotAction {
+public class TestScreenshotAction {
 
     Txt2Selenium txt2SeleniumMock;
 
@@ -55,7 +55,7 @@ public class TstScreenshotAction {
      * Resetting the WebUtil and creating a new Txt2Selenium Mock
      */
     @BeforeEach
-    void prepare() {
+    public void prepare() {
         WebUtil.reset();
         this.txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
     }
@@ -64,14 +64,14 @@ public class TstScreenshotAction {
      * When the Action was not yet performed, the screenshot file has to be null.
      */
     @Test
-    void nullResultWhenNotExecuted() throws ActionInitiationException {
+    public void testNullResultWhenNotExecuted() throws ActionInitiationException {
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
                 ScreenshotAction.IDENTIFIER, "" );
         assertNull( screenshotAction.getScreenshotFile() );
     }
 
     @Test
-    void screenshotWithNoOpenActionBefore() throws IOException, ActionInitiationException {
+    public void testScreenshotWithNoOpenActionBefore() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
@@ -93,7 +93,7 @@ public class TstScreenshotAction {
     }
 
     @Test
-    void screenshotAfterOpen() throws IOException, ActionInitiationException {
+    public void testScreenshotAfterOpen() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
@@ -120,7 +120,7 @@ public class TstScreenshotAction {
     }
 
     @Test
-    void screenshotWithIdentifier() throws IOException, ActionInitiationException {
+    public void testScreenshotWithIdentifier() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
@@ -140,14 +140,14 @@ public class TstScreenshotAction {
     }
 
     @Test
-    void getCommandWithoudIdentifier() {
+    public void testGetCommandWithoudIdentifier() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "" );
 
         assertEquals( ScreenshotAction.IDENTIFIER, action.getCommand() );
     }
 
     @Test
-    void getCommandWithIdentifier() {
+    public void testGetCommandWithIdentifier() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "testIdentifier" );
 
         assertEquals( String.format( "%s testIdentifier", ScreenshotAction.IDENTIFIER ), action.getCommand() );

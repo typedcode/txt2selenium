@@ -41,7 +41,7 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings( "null" )
-public class TstMethodAction {
+public class TestMethodAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
     private WebUtil webUtil;
@@ -58,7 +58,7 @@ public class TstMethodAction {
     void afterEach() { WebUtil.reset(); }
 
     @Test
-    void getCommand() {
+    public void testGetCommand() {
 
 
         Method dummyMethod = new Method( "myMethod", null );
@@ -72,14 +72,14 @@ public class TstMethodAction {
     }
 
     @Test
-    void emptyParameter() {
+    public void testEmptyParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "" ) );
 
         assertEquals( "Could not initiate Method Action. The name for the Method to call was empty. Usage: method methodName", exception.getMessage() );
     }
 
     @Test
-    void methodNotFound() {
+    public void testMethodNotFound() {
         Mockito.when( this.txt2SeleniumMock.getMethod( "unknownMethod" ) ).thenReturn( null );
 
         Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "unknownMethod" ) );
@@ -88,7 +88,7 @@ public class TstMethodAction {
     }
 
     @Test
-    void runMethod() {
+    public void testRunMethod() {
         //Use a non mocked instance
         WebUtil.reset();
 

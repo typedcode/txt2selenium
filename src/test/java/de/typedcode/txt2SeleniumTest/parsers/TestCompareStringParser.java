@@ -37,10 +37,10 @@ import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 
 @SuppressWarnings( "null" )
-public class TstCompareStringParser {
+public class TestCompareStringParser {
 
     @Test
-    public void emptyFile() throws ParseException {
+    public void testEmptyFile() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "empty.t2s" ) );
 
@@ -48,7 +48,7 @@ public class TstCompareStringParser {
     }
 
     @Test
-    public void singleEntry() throws ParseException {
+    public void testSingleEntry() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "singleEntry.t2s" ) );
 
@@ -58,7 +58,7 @@ public class TstCompareStringParser {
     }
 
     @Test
-    public void withEmptyLines() throws ParseException {
+    public void testWithEmptyLines() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "withEmptyLines.t2s" ) );
 
@@ -72,7 +72,7 @@ public class TstCompareStringParser {
     }
 
     @Test
-    public void contentWithSpaces() throws ParseException {
+    public void testContentWithSpaces() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "contentWithSpaces.t2s" ) );
 
@@ -86,7 +86,7 @@ public class TstCompareStringParser {
     }
 
     @Test
-    public void doubleKey() {
+    public void testDoubleKey() {
         @SuppressWarnings( "null" )
         Throwable exception = assertThrows( ParseException.class, () -> CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "duplicatedKey.t2s" ) ) );
