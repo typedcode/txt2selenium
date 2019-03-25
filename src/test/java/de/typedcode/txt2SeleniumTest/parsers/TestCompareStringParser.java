@@ -36,7 +36,6 @@ import org.junit.jupiter.api.Test;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 
-@SuppressWarnings( "null" )
 public class TestCompareStringParser {
 
     @Test
@@ -87,7 +86,6 @@ public class TestCompareStringParser {
 
     @Test
     public void testDoubleKey() {
-        @SuppressWarnings( "null" )
         Throwable exception = assertThrows( ParseException.class, () -> CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "duplicatedKey.t2s" ) ) );
 

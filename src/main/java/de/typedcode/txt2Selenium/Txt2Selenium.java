@@ -45,7 +45,7 @@ import de.typedcode.txt2Selenium.parsers.TestFileParser;
 public class Txt2Selenium {
     public final String FILE_EXTENSION = ".t2s";
     public final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
-    public final String TEST_FILE_REGEX = "^(?!(global\\.t2s))(?!(compareStrings\\.t2s)).*\\.t2s";
+    public final String TEST_FILE_FOLDER = "tests";
 
     private List< Path > testFiles = new ArrayList< Path >();
     private Path mainDirectory;
@@ -75,7 +75,9 @@ public class Txt2Selenium {
         }
 
         // Getting the Testfiles
-        try( DirectoryStream< ? > ds = Files.newDirectoryStream( this.mainDirectory, TEST_FILE_REGEX ) ) {
+        Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.TEST_FILE_FOLDER );
+
+        try( DirectoryStream< ? > ds = Files.newDirectoryStream( testFileDirectory, "*" + this.FILE_EXTENSION ) ) {
             Iterator< ? > iterator = ds.iterator();
 
             Path next;
@@ -126,22 +128,27 @@ public class Txt2Selenium {
 
     }
 
-    public List< Path > getTestFiles() {
-        return this.testFiles;
-    }
-
+    /**
+     * Returnes the parsed Tests. AAction is the first Action for the Test.
+     * @return Map of parsed Tests with the filename as the key and the first Action of the test as the value.
+     */
     public Map< Path, AAction > getParsedTests() {
         return this.tests;
     }
 
-    public Path getCompareStringsFile() {
-        return COMPARE_STRINGS_FILE;
-    }
-
+    /**
+     * Returns the Main-Directory where the application was launched.
+     * @return Path where the Application was launched.
+     */
     public Path getMainDirectory() {
         return this.mainDirectory;
     }
 
+    /**
+     * Returns the the string which was described by the identifier. Null if the Identifier does not exist
+     * @param identifier Identifier for the String to return.
+     * @return
+     */
     public String getCompareString( String identifier ) {
         return this.compareStrings.get( identifier );
     }

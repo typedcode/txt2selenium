@@ -26,6 +26,7 @@ package de.typedcode.txt2SeleniumTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +39,6 @@ public class TestTxt2Selenium {
 
     @Test
     public void testInitiationNonExistingDirectory() {
-        @SuppressWarnings( "null" )
         Path path = Paths.get( "test", "notExisting" );
 
         Throwable exception = assertThrows( RuntimeException.class,
@@ -49,7 +49,6 @@ public class TestTxt2Selenium {
 
     @Test
     public void testInitiationDirectoryIsFile() {
-        @SuppressWarnings( "null" )
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "files", "globalOneTestfile", "global.t2s" );
 
         Throwable exception = assertThrows( RuntimeException.class, () -> new Txt2Selenium( path ) );
@@ -59,12 +58,24 @@ public class TestTxt2Selenium {
 
     @Test
     public void testInitiationEmptyFolder() {
-        @SuppressWarnings( "null" )
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "empty" );
 
         Throwable exception = assertThrows( RuntimeException.class,
                 () -> new Txt2Selenium( path ) );
         assertEquals( String.format( "Given directory does not contain any testfiles: %s", path.toString() ),
                 exception.getMessage() );
+    }
+
+    @Test
+    public void testResolvingTestFiles() {
+        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
+        Path first = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving", "tests", "first.t2s" );
+        Path second = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving", "tests", "second.t2s" );
+
+        Txt2Selenium instance = new Txt2Selenium( path );
+
+        assertEquals(2, instance.getParsedTests().size() );
+        assertTrue( instance.getParsedTests().containsKey( first ) );
+        assertTrue( instance.getParsedTests().containsKey( second ) );
     }
 }

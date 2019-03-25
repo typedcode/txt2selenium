@@ -24,11 +24,6 @@
 
 package de.typedcode.txt2SeleniumTest.parsers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -42,7 +37,8 @@ import de.typedcode.txt2Selenium.actions.ScreenshotAction;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.TestFileParser;
 
-@SuppressWarnings( "null" )
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestTestFileParser {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
@@ -58,20 +54,17 @@ public class TestTestFileParser {
     public void testMultipleActions() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "multipleActions.t2s" ) );
-        if( action == null ) {
-            fail( "action is null" );
-        } else {
-            assertEquals( OpenAction.class, action.getClass() );
-            assertEquals( "http://www.markus-fischer.net", ( ( OpenAction ) action ).URL );
-            action = action.nextAction;
-            assertEquals( ScreenshotAction.class, action.getClass() );
-            action = action.nextAction;
-            assertEquals( OpenAction.class, action.getClass() );
-            assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).URL );
-            action = action.nextAction;
-            assertEquals( ScreenshotAction.class, action.getClass() );
-            assertNull( action.nextAction );
-        }
+
+        assertEquals( OpenAction.class, action.getClass() );
+        assertEquals( "http://www.markus-fischer.net", ( ( OpenAction ) action ).URL );
+        action = action.nextAction;
+        assertEquals( ScreenshotAction.class, action.getClass() );
+        action = action.nextAction;
+        assertEquals( OpenAction.class, action.getClass() );
+        assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).URL );
+        action = action.nextAction;
+        assertEquals( ScreenshotAction.class, action.getClass() );
+        assertNull( action.nextAction );
     }
 
     @Test
@@ -79,13 +72,9 @@ public class TestTestFileParser {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "oneAction.t2s" ) );
 
-        if( action == null ) {
-            fail( "action is null" );
-        } else {
-            assertEquals( OpenAction.class, action.getClass() );
-            assertNull( action.nextAction );
-            assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).URL );
-        }
+        assertEquals( OpenAction.class, action.getClass() );
+        assertNull( action.nextAction );
+        assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).URL );
     }
 
     @Test
@@ -93,14 +82,10 @@ public class TestTestFileParser {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "twoActions.t2s" ) );
 
-        if( action == null ) {
-            fail( "action is null" );
-        } else {
-            assertEquals( OpenAction.class, action.getClass() );
-            action = action.nextAction;
-            assertEquals( ScreenshotAction.class, action.getClass() );
-            assertNull( action.nextAction );
-        }
+        assertEquals( OpenAction.class, action.getClass() );
+        action = action.nextAction;
+        assertEquals( ScreenshotAction.class, action.getClass() );
+        assertNull( action.nextAction );
     }
 
     @Test
