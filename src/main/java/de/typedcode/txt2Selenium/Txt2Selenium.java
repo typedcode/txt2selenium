@@ -46,17 +46,19 @@ public class Txt2Selenium {
     public final String FILE_EXTENSION = ".t2s";
     public final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
     public final String TEST_FILE_FOLDER = "tests";
+    public final String METHOD_FILE_FOLDER = "methods";
 
-    private List< Path > testFiles = new ArrayList< Path >();
     private Path mainDirectory;
     private Map< String, String > compareStrings;
     private Map< Path, AAction > tests;
+    private Map< String, Method > methods;
     private Path COMPARE_STRINGS_FILE;
 
     public Txt2Selenium( Path directory ) {
         this.mainDirectory = directory;
         this.compareStrings = new HashMap<>();
         this.tests = new HashMap<>();
+        this.methods = new HashMap<>();
 
         if( !Files.exists( this.mainDirectory ) ) {
             throw new InstanceInitiationException( "Given directory does not exist: " + this.mainDirectory );
@@ -74,28 +76,9 @@ public class Txt2Selenium {
             parseCompareStrings();
         }
 
-        // Getting the Testfiles
-        Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.TEST_FILE_FOLDER );
-
-        try( DirectoryStream< ? > ds = Files.newDirectoryStream( testFileDirectory, "*" + this.FILE_EXTENSION ) ) {
-            Iterator< ? > iterator = ds.iterator();
-
-            Path next;
-            while( iterator.hasNext() ) {
-                next = ( Path ) iterator.next();
-
-                this.testFiles.add( next );
-            }
-        } catch( IOException e ) {
-            // TODO add exception Handling
-        }
-        if( testFiles.size() == 0 ) {
-            throw new InstanceInitiationException(
-                    "Given directory does not contain any testfiles: " + this.mainDirectory );
-        }
-
         try {
             parseCompareStrings();
+            parseMethodFiles();
             parseTestFiles();
         } catch( ParseException pe ) {
 
@@ -109,16 +92,73 @@ public class Txt2Selenium {
     }
 
     /**
-     * Parses the given Testfiles.
+     * Searches and parses the method-files
      */
-    private void parseTestFiles() throws ParseException {
-        for( Path testFile : this.testFiles ) {
+    private void parseMethodFiles() {
+        //Getting the methodfiles
+        Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.METHOD_FILE_FOLDER );
+
+        List<Path> methodFiles = getFiles( testFileDirectory );
+
+        for( Path methodFile : methodFiles ) {
+            AAction firstAction = TestFileParser.parse( this, methodFile );
+
+            if( firstAction != null ) {
+                String methodName = methodFile.getFileName().toString();
+                methodName = methodName.substring( 0, methodName.length() - this.FILE_EXTENSION.length() );
+
+                Method method = new Method( methodName, firstAction );
+
+                this.methods.put( method.getName(), method );
+            }
+        }
+    }
+
+    /**
+     * Searches for and parses the testfiles.
+     */
+    private void parseTestFiles() {
+        //Getting the testfiles
+        Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.TEST_FILE_FOLDER );
+
+        List<Path > testFiles = getFiles( testFileDirectory );
+
+        if( testFiles.size() == 0 ) {
+            throw new InstanceInitiationException(
+                    "Given directory does not contain any testfiles: " + this.mainDirectory );
+        }
+
+        for( Path testFile : testFiles ) {
             AAction firstAction = TestFileParser.parse( this, testFile );
 
             if( firstAction != null ) {
                 this.tests.put( testFile, firstAction );
             }
         }
+    }
+
+    /**
+     * Searches the given Path for test-files and returns them.
+     * @param path Path to search for test-files
+     * @return List of Paths containing tests.
+     */
+    private List<Path > getFiles( Path path ) {
+        List<Path > files = new ArrayList<>();
+
+        try( DirectoryStream< ? > ds = Files.newDirectoryStream( path, "*" + this.FILE_EXTENSION ) ) {
+            Iterator< ? > iterator = ds.iterator();
+
+            Path next;
+            while( iterator.hasNext() ) {
+                next = ( Path ) iterator.next();
+
+                files.add( next );
+            }
+        } catch( IOException e ) {
+            //TODO add exception Handling
+        }
+
+        return files;
     }
 
     /**
@@ -160,6 +200,6 @@ public class Txt2Selenium {
      * @return Method represented by methodName or null if the Method was not found
      */
     public Method getMethod(String methodName ) {
-        return null;
+        return this.methods.get( methodName );
     }
 }

@@ -24,16 +24,14 @@
 
 package de.typedcode.txt2SeleniumTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTxt2Selenium {
 
@@ -77,5 +75,16 @@ public class TestTxt2Selenium {
         assertEquals(2, instance.getParsedTests().size() );
         assertTrue( instance.getParsedTests().containsKey( first ) );
         assertTrue( instance.getParsedTests().containsKey( second ) );
+    }
+
+    @Test
+    public void testResolvingMethodsFiles() {
+        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
+
+        Txt2Selenium instance = new Txt2Selenium( path );
+
+        assertNotNull( instance.getMethod( "firstMethod" ) );
+        assertNotNull( instance.getMethod( "secondMethod" ) );
+        assertNull( instance.getMethod( "someUnknownMethod" ) );
     }
 }
