@@ -25,6 +25,7 @@
 package de.typedcode.txt2Selenium.methods;
 
 import de.typedcode.txt2Selenium.actions.AAction;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 
 public class Method {
 
@@ -40,12 +41,16 @@ public class Method {
     }
 
     public void execute() {
+        UnitLogger.logInfo( String.format( "Entering Method: %s", this.methodName ) );
+
         AAction currentAction = this.firstAction;
 
         while( currentAction != null ) {
             currentAction.execute();
             currentAction = currentAction.nextAction;
         }
+
+        UnitLogger.logInfo( String.format( "Exiting Method: %s", this.methodName ) );
     }
 
     public void addAction( AAction nextAction ) {

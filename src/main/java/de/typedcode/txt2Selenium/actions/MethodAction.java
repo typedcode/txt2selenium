@@ -27,6 +27,7 @@ package de.typedcode.txt2Selenium.actions;
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.methods.Method;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 /**
@@ -62,6 +63,7 @@ public class MethodAction extends AAction {
      */
     @Override
     public void execute() {
+        UnitLogger.logInfo( getCommand() );
         this.METHOD.execute();
     }
 

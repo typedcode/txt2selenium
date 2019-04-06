@@ -26,6 +26,7 @@ package de.typedcode.txt2Selenium.actions;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 /**
@@ -58,7 +59,11 @@ public class ReadAction extends AAction {
 
     @Override
     public void execute() {
-        WebUtil.getInstance().readText( this.readToName );
+        UnitLogger.logInfo( getCommand() );
+
+        String text = WebUtil.getInstance().readText( this.readToName );
+
+        UnitLogger.logInfo( String.format( "%s = %s", this.readToName, WebUtil.getInstance().getReadVar( this.readToName ) ) );
     }
 
     @Override

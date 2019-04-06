@@ -24,6 +24,7 @@
 
 package de.typedcode.txt2Selenium.actions;
 
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import org.openqa.selenium.By;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
@@ -31,6 +32,7 @@ import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.ByInitializer;
 import de.typedcode.txt2Selenium.util.ByType;
 import de.typedcode.txt2Selenium.util.WebUtil;
+import org.openqa.selenium.NoSuchElementException;
 
 public class SelectAction extends AAction {
 
@@ -63,7 +65,14 @@ public class SelectAction extends AAction {
 
     @Override
     public void execute() {
-        WebUtil.getInstance().select( by );
+        UnitLogger.logInfo( getCommand() );
+
+        try {
+            WebUtil.getInstance().select( this.by );
+        }
+        catch( NoSuchElementException e ) {
+            UnitLogger.logSevere( String.format( "No Element found that could be identified by: %s", this.by.toString() ) );
+        }
     }
 
     @Override

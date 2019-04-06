@@ -27,6 +27,7 @@ package de.typedcode.txt2Selenium.actions;
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -49,29 +50,35 @@ public class AssertCheckedAction extends AAction {
      AssertCheckedAction(Txt2Selenium instance, String parameters ) {
         super( instance );
 
-        this.expectedState = Boolean.parseBoolean( parameters );
+        //If there is no parameter given, the check should evaluate to true
+        if( parameters != null && !parameters.isEmpty() ) {
+            this.expectedState = Boolean.parseBoolean(parameters);
+        }
+        else {
+            this.expectedState = true;
+        }
     }
 
     @Override
     public void execute() {
-         WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        UnitLogger.logInfo( getCommand() );
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
-         if( selectedElement == null ) {
-             throw new ActionExecutionException( "Execution Error. No Element selected for assertCheck." );
-         }
+        if( selectedElement == null ) {
+            UnitLogger.logSevere( "Error: No Element selected to check for selection status." );
+            return;
+        }
 
-         try {
-             Boolean actualState = selectedElement.isSelected();
+        try {
+            Boolean actualState = selectedElement.isSelected();
 
-             if( actualState != this.expectedState ) {
-                 By selectedBy = WebUtil.getInstance().getSelectedBy();
-                 throw new ActionExecutionException( String.format( "Evaluation Error. Element '%s' is %s but should be %s", selectedBy.toString(), actualState, this.expectedState ) );
-             }
-         }
-         catch( UnsupportedOperationException e ) {
-             By selectedBy = WebUtil.getInstance().getSelectedBy();
-             throw new ActionExecutionException( String.format( "Execution Error. Selected Element '%s' can not evaluated for checked status.", selectedBy.toString() ) );
-         }
+            if( actualState != this.expectedState ) {
+                UnitLogger.logSevere( String.format( "Evaluation Error. Element '%s' is %s but should be %s", selectedElement.toString(), actualState, this.expectedState ) ) ;
+            }
+        }
+        catch( UnsupportedOperationException e ) {
+            UnitLogger.logSevere( String.format( "Execution Error. Selected Element '%s' can not be evaluated for checked status.", selectedElement.toString() ) );
+        }
     }
 
     @Override

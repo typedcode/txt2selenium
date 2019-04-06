@@ -28,11 +28,17 @@ import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.*;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -83,11 +89,21 @@ public class TestAssertEqualsAction {
     @Test
     public void testActionInitiationErrorExpectedNotExisting() throws ActionInitiationException {
         AssertEqualsAction action = ( AssertEqualsAction ) ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> action.execute() );
 
-        assertEquals( "Execution Error. Could not find expectedIdentifier 'first'.",
-                exception.getMessage() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals(Level.INFO, logRecords.get( 0 ).getLevel());
+        assertEquals( String.format( "%s %s first second", AssertEqualsAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals(Level.SEVERE, logRecords.get( 1 ).getLevel());
+        assertEquals( "Execution Error. Could not find expectedIdentifier 'first'.", logRecords.get( 1 ).getMessage());
     }
 
     @Test
@@ -97,11 +113,20 @@ public class TestAssertEqualsAction {
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
         Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( null );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> assertAction.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Execution Error. Could not find actualIdentifier 'second'.",
-                exception.getMessage() );
+        assertAction.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals(Level.INFO, logRecords.get( 0 ).getLevel());
+        assertEquals( String.format( "%s %s first second", AssertEqualsAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals(Level.SEVERE, logRecords.get( 1 ).getLevel());
+        assertEquals( "Execution Error. Could not find actualIdentifier 'second'.", logRecords.get( 1 ).getMessage());
     }
 
     @Test
@@ -111,11 +136,20 @@ public class TestAssertEqualsAction {
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
         Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> assertAction.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Execution Error. Parameters did not match. Expected (first): value / Actual (second): actual",
-                exception.getMessage() );
+        assertAction.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals(Level.INFO, logRecords.get( 0 ).getLevel());
+        assertEquals( String.format( "%s %s first second", AssertEqualsAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals(Level.SEVERE, logRecords.get( 1 ).getLevel());
+        assertEquals( "Execution Error. Parameters did not match. Expected (first): value / Actual (second): actual", logRecords.get( 1 ).getMessage());
     }
 
     @Test
@@ -139,17 +173,26 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testThreeParamsTrueEvaluationNoMatch() throws ActionExecutionException {
+    public void testThreeParamsTrueEvaluationNoMatchLog() throws ActionExecutionException {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
         Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> assertAction.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Execution Error. Parameters did not match. Expected (first): value / Actual (second): actual",
-                exception.getMessage() );
+        assertAction.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals(Level.INFO, logRecords.get( 0 ).getLevel());
+        assertEquals( String.format("%s %s first second", AssertEqualsAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals(Level.SEVERE, logRecords.get( 1 ).getLevel());
+        assertEquals( "Execution Error. Parameters did not match. Expected (first): value / Actual (second): actual", logRecords.get( 1 ).getMessage());
     }
 
     @Test
@@ -171,11 +214,20 @@ public class TestAssertEqualsAction {
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
         Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> assertAction.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Execution Error. Parameters did not match. Expected (first): actual / Actual (second): actual",
-                exception.getMessage() );
+        assertAction.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals(Level.INFO, logRecords.get( 0 ).getLevel());
+        assertEquals( String.format( "%s %s first second", AssertEqualsAction.IDENTIFIER, Boolean.FALSE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals(Level.SEVERE, logRecords.get( 1 ).getLevel());
+        assertEquals( "Execution Error. Parameters did not match. Expected (first): actual / Actual (second): actual", logRecords.get( 1 ).getMessage());
     }
 
     @Test

@@ -30,8 +30,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import de.typedcode.txt2Selenium.actions.*;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -51,18 +56,31 @@ public class TestTypeAction {
     public void before() { WebUtil.reset(); }
 
     @Test
-    public void testElementNotSelected() {
+    public void testElementNotSelectedLog() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() );
         action.execute();
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" ).execute() );
-        assertEquals( "Coulnd not Type text. No Element selected yet.", exception.getMessage() );
+        action = ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" );
+
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals(Level.INFO, logRecords.get( 0 ).getLevel());
+        assertEquals( String.format( "%s Text to type", TypeAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals(Level.SEVERE, logRecords.get( 1 ).getLevel());
+        assertEquals( "Coulnd not Type text. No Element selected yet.", logRecords.get( 1 ).getMessage());
     }
 
     @Test
-    public void testElementNoTextElement() {
+    public void testElementNoTextElementLog() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() );
         action.execute();
@@ -70,9 +88,22 @@ public class TestTypeAction {
         action = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id notTypeable" );
         action.execute();
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" ).execute() );
-        assertEquals( "Selected element is no Text element to type text to.", exception.getMessage() );
+        action = ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" );
+
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals(Level.INFO, logRecords.get( 0 ).getLevel());
+        assertEquals( String.format( "%s Text to type", TypeAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals(Level.SEVERE, logRecords.get( 1 ).getLevel());
+        assertEquals( "Selected element is no Text element to type text to.", logRecords.get( 1 ).getMessage());
     }
 
     @Test

@@ -29,8 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import de.typedcode.txt2Selenium.actions.AAction;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -85,4 +90,18 @@ public class TestOpenAction {
         assertEquals( String.format( "%s %s", OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ), action.getCommand() );
     }
 
+    @Test
+    public void testLogging() {
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
+        ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+
+        List<LogRecord> records = handler.getLogRecords();
+
+        assertEquals( 1, records.size() );
+        assertEquals( Level.INFO, records.get( 0 ).getLevel() );
+        assertEquals( String.format( "%s %s", OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ), records.get( 0 ).getMessage() );
+    }
 }

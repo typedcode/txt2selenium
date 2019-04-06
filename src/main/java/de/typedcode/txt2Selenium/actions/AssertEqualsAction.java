@@ -27,6 +27,7 @@ package de.typedcode.txt2Selenium.actions;
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 public class AssertEqualsAction extends AAction {
@@ -70,19 +71,23 @@ public class AssertEqualsAction extends AAction {
 
     @Override
     public void execute() {
+        UnitLogger.logInfo( getCommand() );
+
         String expected = this.correspondingInstance.getCompareString( this.expectedIdentifier );
         String actual = WebUtil.getInstance().getReadVar( this.actualIdentifier );
 
         if( expected == null ) {
-            throw new ActionExecutionException(String.format( "Execution Error. Could not find expectedIdentifier '%s'.", this.expectedIdentifier ) );
+            UnitLogger.logSevere(String.format( "Execution Error. Could not find expectedIdentifier '%s'.", this.expectedIdentifier ) );
+            return;
         }
 
         if( actual == null ) {
-            throw new ActionExecutionException(String.format( "Execution Error. Could not find actualIdentifier '%s'.", this.actualIdentifier ) );
+            UnitLogger.logSevere( String.format( "Execution Error. Could not find actualIdentifier '%s'.", this.actualIdentifier ) );
+            return;
         }
 
         if( ( !actual.equals( expected ) && this.evaluationIndicator ) || ( actual.equals( expected ) && !this.evaluationIndicator ) ) {
-            throw new ActionExecutionException( String.format( "Execution Error. Parameters did not match. Expected (%s): %s / Actual (%s): %s", this.expectedIdentifier, expected, this.actualIdentifier, actual ) );
+            UnitLogger.logSevere( String.format( "Execution Error. Parameters did not match. Expected (%s): %s / Actual (%s): %s", this.expectedIdentifier, expected, this.actualIdentifier, actual ) );
         }
     }
 

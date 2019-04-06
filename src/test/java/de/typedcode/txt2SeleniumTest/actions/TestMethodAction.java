@@ -28,7 +28,9 @@ import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.*;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.methods.Method;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,9 @@ import org.mockito.Mockito;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,5 +120,26 @@ public class TestMethodAction {
 
         assertEquals( "content", WebUtil.getInstance().getReadVar( "myRead" ) );
         assertEquals( "Run Method Title", WebUtil.getInstance().getTitle() );
+    }
+
+    @Test
+    public void testLogging() {
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        Method method = new Method( "myMethod", null );
+        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( method );
+
+        ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "myMethod" ).execute();
+
+        List< LogRecord > records = handler.getLogRecords();
+
+        assertEquals( 3, records.size() );
+        assertEquals( Level.INFO, records.get( 0 ).getLevel() );
+        assertEquals( Level.INFO, records.get( 1 ).getLevel() );
+        assertEquals( Level.INFO, records.get( 2 ).getLevel() );
+        assertEquals( String.format( "%s myMethod", MethodAction.IDENTIFIER ), records.get( 0 ).getMessage() );
+        assertEquals( "Entering Method: myMethod", records.get( 1 ).getMessage() );
+        assertEquals( "Exiting Method: myMethod", records.get( 2 ).getMessage() );
     }
 }

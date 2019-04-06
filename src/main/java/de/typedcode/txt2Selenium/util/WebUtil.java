@@ -161,7 +161,7 @@ public class WebUtil {
      * @param readToName
      *            Internal variable to assign the current text to.
      */
-    public void readText( String readToName ) {
+    public String readText( String readToName ) {
         WebElement currentElement = this.selectedElement;
 
         if( currentElement == null ) {
@@ -175,5 +175,7 @@ public class WebUtil {
         }
 
         this.readElements.put( readToName, text );
+
+        return text;
     }
 }

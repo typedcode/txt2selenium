@@ -25,17 +25,21 @@
 package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Screen;
 import de.typedcode.txt2Selenium.actions.AAction;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -130,13 +134,33 @@ public class TestScreenshotAction {
 
         Path screenshotFile = screenshotAction.getScreenshotFile();
 
-        if( screenshotFile != null ) {
-            String screenshotFileName = screenshotFile.getFileName().toString();
-            Files.delete( screenshotFile );
-            // [0-9]{14} => 14 because there is a timestamp at the end of the Filename
-            // (yyyyMMddHHmmss)
-            assertTrue( screenshotFileName.matches( "screenshot_testIdentifier_[0-9]{14}\\.html" ) );
-        }
+        assertNotNull( screenshotFile );
+
+        String screenshotFileName = screenshotFile.getFileName().toString();
+        Files.delete( screenshotFile );
+        // [0-9]{14} => 14 because there is a timestamp at the end of the Filename
+        // (yyyyMMddHHmmss)
+        assertTrue( screenshotFileName.matches( "screenshot_testIdentifier_[0-9]{14}\\.html" ) );
+    }
+
+    @Test
+    public void testScreenshotWithoutIdentifier() throws IOException, ActionInitiationException {
+        Mockito.when( txt2SeleniumMock.getMainDirectory() )
+                .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
+
+        ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
+                ScreenshotAction.IDENTIFIER, "" );
+        screenshotAction.execute();
+
+        Path screenshotFile = screenshotAction.getScreenshotFile();
+
+        assertNotNull( screenshotFile );
+
+        String screenshotFileName = screenshotFile.getFileName().toString();
+        Files.delete( screenshotFile );
+        // [0-9]{14} => 14 because there is a timestamp at the end of the Filename
+        // (yyyyMMddHHmmss)
+        assertTrue( screenshotFileName.matches( "screenshot_[0-9]{14}\\.html" ) );
     }
 
     @Test
@@ -151,5 +175,28 @@ public class TestScreenshotAction {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "testIdentifier" );
 
         assertEquals( String.format( "%s testIdentifier", ScreenshotAction.IDENTIFIER ), action.getCommand() );
+    }
+
+    @Test
+    public void testScreenshotLogging() throws IOException {
+        Mockito.when( txt2SeleniumMock.getMainDirectory() )
+                .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
+
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        ScreenshotAction action = ( ScreenshotAction )ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "" );
+        action.execute();
+
+        Path file = action.getScreenshotFile();
+        Files.delete( file );
+
+        List<LogRecord > records = handler.getLogRecords();
+
+        assertEquals( 2, records.size() );
+        assertEquals( Level.INFO, records.get( 0 ).getLevel() );
+        assertEquals( Level.INFO, records.get( 1 ).getLevel() );
+        assertEquals( ScreenshotAction.IDENTIFIER, records.get( 0 ).getMessage() );
+        assertTrue( records.get( 1 ).getMessage().matches( "Saved screenshot to screenshot_[0-9]{14}\\.html" ) );
     }
 }

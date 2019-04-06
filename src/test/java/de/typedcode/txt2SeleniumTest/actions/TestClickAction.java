@@ -26,11 +26,17 @@ package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import de.typedcode.txt2Selenium.actions.*;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -51,7 +57,7 @@ public class TestClickAction {
     }
 
     @Test
-    public void testClickWithoudSelect() {
+    public void testClickWithoutselect() {
         AAction ca = ActionFactory.createAction( this.txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
 
         Throwable exception = assertThrows( ActionExecutionException.class, () -> ca.execute() );
@@ -140,5 +146,24 @@ public class TestClickAction {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
 
         assertEquals( ClickAction.IDENTIFIER, action.getCommand() );
+    }
+
+    @Test
+    public void testLogging() {
+        Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/logging.html" );
+
+        ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER, "id clickElement" ).execute();
+
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" ).execute();
+
+        List<LogRecord > logRecords = handler.getLogRecords();
+
+        assertEquals( 1, logRecords.size() );
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( ClickAction.IDENTIFIER, logRecords.get( 0 ).getMessage() );
     }
 }

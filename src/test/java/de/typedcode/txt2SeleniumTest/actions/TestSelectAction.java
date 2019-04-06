@@ -24,14 +24,15 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import de.typedcode.txt2Selenium.actions.AAction;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,6 +44,8 @@ import de.typedcode.txt2Selenium.actions.OpenAction;
 import de.typedcode.txt2Selenium.actions.SelectAction;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings( "null" )
 public class TestSelectAction {
@@ -83,10 +86,8 @@ public class TestSelectAction {
 
         assertNotNull( selectedElement );
 
-        if( selectedElement != null ) {
-            assertEquals( "ID", selectedElement.getText() );
-            assertEquals( "p", selectedElement.getTagName() );
-        }
+        assertEquals( "ID", selectedElement.getText() );
+        assertEquals( "p", selectedElement.getTagName() );
     }
 
     @Test
@@ -104,10 +105,8 @@ public class TestSelectAction {
 
         assertNotNull( selectedElement );
 
-        if( selectedElement != null ) {
-            assertEquals( "Name", selectedElement.getText() );
-            assertEquals( "div", selectedElement.getTagName() );
-        }
+        assertEquals( "Name", selectedElement.getText() );
+        assertEquals( "div", selectedElement.getTagName() );
     }
 
     @Test
@@ -125,10 +124,8 @@ public class TestSelectAction {
 
         assertNotNull( selectedElement );
 
-        if( selectedElement != null ) {
-            assertEquals( "XPath", selectedElement.getText() );
-            assertEquals( "a", selectedElement.getTagName() );
-        }
+        assertEquals( "XPath", selectedElement.getText() );
+        assertEquals( "a", selectedElement.getTagName() );
     }
 
     @Test
@@ -146,10 +143,50 @@ public class TestSelectAction {
 
         assertNotNull( selectedElement );
 
-        if( selectedElement != null ) {
-            assertEquals( "XPath2", selectedElement.getText() );
-            assertEquals( "a", selectedElement.getTagName() );
-        }
+        assertEquals( "XPath2", selectedElement.getText() );
+        assertEquals( "a", selectedElement.getTagName() );
+    }
+
+    @Test
+    public void testElementNotFoundLog() {
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
+
+        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id unknownId" );
+
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( String.format( "%s id unknownId", SelectAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals( Level.SEVERE, logRecords.get( 1 ).getLevel() );
+        assertEquals( "No Element found that could be identified by: By.id: unknownId", logRecords.get( 1 ).getMessage() );
+    }
+
+    @Test void testLog() {
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
+
+        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id selectId" );
+
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 1, logRecords.size() );
+
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( String.format( "%s id selectId", SelectAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
     }
 
     @Test

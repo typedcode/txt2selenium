@@ -28,7 +28,9 @@ import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.*;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,6 +38,9 @@ import org.mockito.Mockito;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,55 +60,90 @@ public class TestAssertCheckedAction {
     }
 
     @Test
-    public void testNoSelection() {
+    public void testNoSelectionLog() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> action.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Execution Error. No Element selected for assertCheck.",
-                exception.getMessage() );
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( String.format( "%s %s", AssertCheckedAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals( Level.SEVERE, logRecords.get( 1 ).getLevel() );
+        assertEquals( String.format( "Error: No Element selected to check for selection status.", AssertCheckedAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 1 ).getMessage() );
     }
 
     @Test
-    public void testNotCheckableElementSelected() {
+    public void testNotCheckableElementSelectedLog() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id notCheckable").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> action.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Execution Error. Selected Element 'By.id: notCheckable' can not evaluated for checked status.",
-                exception.getMessage() );
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( String.format( "%s %s", AssertCheckedAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals( Level.SEVERE, logRecords.get( 1 ).getLevel() );
+        assertEquals( "Execution Error. Selected Element '<p id=\"notCheckable\">' can not be evaluated for checked status.", logRecords.get( 1 ).getMessage() );
     }
 
     @Test
-    public void testElementTrueButShouldBeFalse() {
+    public void testElementTrueButShouldBeFalseLog() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> action.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Evaluation Error. Element 'By.id: checkedElement' is true but should be false",
-                exception.getMessage() );
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( String.format( "%s %s", AssertCheckedAction.IDENTIFIER, Boolean.FALSE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals( Level.SEVERE, logRecords.get( 1 ).getLevel() );
+        assertEquals( String.format( "Evaluation Error. Element '<input type=\"checkbox\" id=\"checkedElement\" checked=\"\" value=\"on\" />' is %s but should be %s", Boolean.TRUE.toString(), Boolean.FALSE.toString() ), logRecords.get( 1 ).getMessage() );
     }
 
     @Test
-    public void testElementFalseButShouldBeTrue() {
+    public void testElementFalseButShouldBeTrueLog() {
         before();
 
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class,
-                () -> action.execute() );
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
 
-        assertEquals( "Evaluation Error. Element 'By.id: uncheckedElement' is false but should be true",
-                exception.getMessage() );
+        action.execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( String.format( "%s %s", AssertCheckedAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
+
+        assertEquals( Level.SEVERE, logRecords.get( 1 ).getLevel() );
+        assertEquals( String.format( "Evaluation Error. Element '<input type=\"checkbox\" id=\"uncheckedElement\" value=\"on\" />' is %s but should be %s", Boolean.FALSE.toString(), Boolean.TRUE.toString() ), logRecords.get( 1 ).getMessage() );
     }
 
     @Test

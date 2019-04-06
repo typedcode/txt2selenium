@@ -26,6 +26,7 @@ package de.typedcode.txt2Selenium.actions;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 /**
@@ -57,6 +58,8 @@ public class OpenAction extends AAction {
      */
     @Override
     public void execute() {
+        UnitLogger.logInfo( getCommand() );
+
         WebUtil.getInstance().openUrl( URL );
     }
 

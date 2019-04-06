@@ -24,6 +24,7 @@
 
 package de.typedcode.txt2Selenium.util;
 
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,5 +110,23 @@ public class UnitLogger {
      */
     public static void logInfo( String logMessage, Throwable exception ) {
         log( Level.INFO, logMessage, exception );
+    }
+
+    /**
+     * Adding a handler to the Logger.
+     *
+     * @param handler Handler to add.
+     */
+    public static void addHandler( Handler handler ) {
+        INSTANCE.addHandler( handler );
+    }
+
+    /**
+     * Removes a handler from the logger.
+     *
+     * @param handler Handler to remove.
+     */
+    public static void removeHandler( Handler handler ) {
+        INSTANCE.removeHandler( handler );
     }
 }

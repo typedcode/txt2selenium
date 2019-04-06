@@ -33,6 +33,7 @@ import java.util.Calendar;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 /**
@@ -55,6 +56,8 @@ public class ScreenshotAction extends AAction {
 
     @Override
     public void execute() {
+        UnitLogger.logInfo( getCommand() );
+
         String source = WebUtil.getInstance().getPageSource();
 
         if( source == null ) {
@@ -65,7 +68,14 @@ public class ScreenshotAction extends AAction {
         SimpleDateFormat format = new SimpleDateFormat( "yyyyMMddHHmmss" );
         String date = format.format( cal.getTime() );
 
-        String fileName = String.format( "screenshot_%s_%s.html", this.pathIdentifier, date );
+        String fileName;
+
+        if( this.pathIdentifier.isEmpty() ) {
+            fileName = String.format( "screenshot_%s.html", date );
+        }
+        else {
+            fileName = String.format( "screenshot_%s_%s.html", this.pathIdentifier, date );
+        }
 
         try {
             this.screenshotFile = Paths.get( this.correspondingInstance.getMainDirectory().toString(), fileName );
@@ -73,6 +83,8 @@ public class ScreenshotAction extends AAction {
             Files.createFile( this.screenshotFile );
 
             Files.write( this.screenshotFile, source.getBytes() );
+
+            UnitLogger.logInfo( String.format( "Saved screenshot to %s", fileName ) );
         } catch( IOException e ) {
             throw new ActionExecutionException( "Could not write File.", e );
         }
@@ -84,7 +96,7 @@ public class ScreenshotAction extends AAction {
 
     @Override
     public String getCommand() {
-        if( this.pathIdentifier.length() > 0 ) {
+        if( !this.pathIdentifier.isEmpty() ) {
             return String.format( "%s %s", IDENTIFIER, this.pathIdentifier );
         }
 

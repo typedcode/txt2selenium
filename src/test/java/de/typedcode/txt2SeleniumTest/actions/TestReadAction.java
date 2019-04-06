@@ -29,8 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import de.typedcode.txt2Selenium.actions.*;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -122,5 +127,26 @@ public class TestReadAction {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
 
         assertEquals( String.format( "%s myRead", ReadAction.IDENTIFIER ), action.getCommand() );
+    }
+
+    @Test
+    public void testLogging() {
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "logging.html" );
+
+        ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER, "id divId" ).execute();
+
+        TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+
+        ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" ).execute();
+
+        List<LogRecord> logRecords = handler.getLogRecords();
+
+        assertEquals( 2, logRecords.size() );
+        assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
+        assertEquals( Level.INFO, logRecords.get( 1 ).getLevel() );
+        assertEquals( String.format( "%s myRead", ReadAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
+        assertEquals( String.format( "myRead = Read Logging", ReadAction.IDENTIFIER ), logRecords.get( 1 ).getMessage() );
     }
 }

@@ -26,6 +26,7 @@ package de.typedcode.txt2Selenium.actions;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 import org.openqa.selenium.WebElement;
 
@@ -51,10 +52,13 @@ public class TypeAction extends AAction {
 
     @Override
     public void execute() {
+        UnitLogger.logInfo( getCommand() );
+
         WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
 
         if( selectedElement == null ) {
-            throw new ActionExecutionException( "Coulnd not Type text. No Element selected yet." );
+            UnitLogger.logSevere("Coulnd not Type text. No Element selected yet." );
+            return;
         }
 
         // Check that the element is textarea or input with type text
@@ -65,7 +69,7 @@ public class TypeAction extends AAction {
             selectedElement.sendKeys( this.textToType );
         } else {
             // No suitable Element to input text
-            throw new ActionExecutionException( "Selected element is no Text element to type text to." );
+            UnitLogger.logSevere("Selected element is no Text element to type text to." );
         }
 
     }
