@@ -45,6 +45,15 @@ public class UnitLogger {
     }
 
     /**
+     * Sets the Log level
+     *
+     * @param level Level to log.
+     */
+    public static void setLogLevel( Level level ) {
+        INSTANCE.setLevel( level );
+    }
+
+    /**
      * Logs a message with the given level to the logger.
      * 
      * @param logLevel
@@ -101,15 +110,13 @@ public class UnitLogger {
     }
 
     /**
-     * Logs an Info message and the given Throwable
-     * 
+     * Logs a Fine message.
+     *
      * @param logMessage
      *            Message to log.
-     * @param exception
-     *            Throwable to log.
      */
-    public static void logInfo( String logMessage, Throwable exception ) {
-        log( Level.INFO, logMessage, exception );
+    public static void logFine( String logMessage ) {
+        log( Level.FINE, logMessage, null );
     }
 
     /**

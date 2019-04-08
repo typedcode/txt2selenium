@@ -137,6 +137,7 @@ public class TestReadAction {
         ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER, "id divId" ).execute();
 
         TestLoggingHandler handler = new TestLoggingHandler();
+        UnitLogger.setLogLevel( Level.FINE );
         UnitLogger.addHandler( handler );
 
         ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" ).execute();
@@ -145,7 +146,7 @@ public class TestReadAction {
 
         assertEquals( 2, logRecords.size() );
         assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
-        assertEquals( Level.INFO, logRecords.get( 1 ).getLevel() );
+        assertEquals( Level.FINE, logRecords.get( 1 ).getLevel() );
         assertEquals( String.format( "%s myRead", ReadAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
         assertEquals( String.format( "myRead = Read Logging", ReadAction.IDENTIFIER ), logRecords.get( 1 ).getMessage() );
     }

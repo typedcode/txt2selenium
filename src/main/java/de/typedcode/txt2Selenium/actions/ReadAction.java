@@ -63,7 +63,7 @@ public class ReadAction extends AAction {
 
         String text = WebUtil.getInstance().readText( this.readToName );
 
-        UnitLogger.logInfo( String.format( "%s = %s", this.readToName, WebUtil.getInstance().getReadVar( this.readToName ) ) );
+        UnitLogger.logFine( String.format( "%s = %s", this.readToName, text ) );
     }
 
     @Override
