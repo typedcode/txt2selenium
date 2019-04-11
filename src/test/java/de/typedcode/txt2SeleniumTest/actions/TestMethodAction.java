@@ -45,27 +45,23 @@ import java.util.logging.LogRecord;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SuppressWarnings( "null" )
-public class TestMethodAction {
+class TestMethodAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
-    private WebUtil webUtil;
 
     @BeforeEach
-    public void before() throws NoSuchFieldException, IllegalAccessException  {
-        this.webUtil = Mockito.mock( WebUtil.class );
+    void before() throws NoSuchFieldException, IllegalAccessException  {
+        WebUtil webUtil = Mockito.mock( WebUtil.class );
         Field instance = WebUtil.class.getDeclaredField("WEB_UTIL" );
         instance.setAccessible( true );
-        instance.set( instance, this.webUtil );
+        instance.set( instance, webUtil );
     }
 
     @AfterEach
     void afterEach() { WebUtil.reset(); }
 
     @Test
-    public void testGetCommand() {
-
-
+    void testGetCommand() {
         Method dummyMethod = new Method( "myMethod", null );
         Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( dummyMethod );
 
@@ -77,14 +73,14 @@ public class TestMethodAction {
     }
 
     @Test
-    public void testEmptyParameter() {
+    void testEmptyParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "" ) );
 
         assertEquals( "Could not initiate Method Action. The name for the Method to call was empty. Usage: method methodName", exception.getMessage() );
     }
 
     @Test
-    public void testMethodNotFound() {
+    void testMethodNotFound() {
         Mockito.when( this.txt2SeleniumMock.getMethod( "unknownMethod" ) ).thenReturn( null );
 
         Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "unknownMethod" ) );
@@ -93,7 +89,7 @@ public class TestMethodAction {
     }
 
     @Test
-    public void testRunMethod() {
+    void testRunMethod() {
         //Use a non mocked instance
         WebUtil.reset();
 
@@ -123,7 +119,7 @@ public class TestMethodAction {
     }
 
     @Test
-    public void testLogging() {
+    void testLogging() {
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
 

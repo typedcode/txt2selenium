@@ -24,8 +24,16 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.actions.*;
+import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
+import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,30 +41,20 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import de.typedcode.txt2Selenium.actions.*;
-import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.WebUtil;
-
-@SuppressWarnings( "null" )
-public class TestReadAction {
+class TestReadAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @BeforeEach
-    public void before() {
+    void before() {
         WebUtil.reset();
     }
 
     @Test
-    public void testActionInitiationError() throws ActionInitiationException {
+    void testActionInitiationError() throws ActionInitiationException {
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "" ) );
 
@@ -65,15 +63,15 @@ public class TestReadAction {
     }
 
     @Test
-    public void testReadWIthoudSelect() throws ActionInitiationException {
+    void testReadWIthoudSelect() throws ActionInitiationException {
         ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myReadVar" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class, () -> readAction.execute() );
+        Throwable exception = assertThrows( ActionExecutionException.class, readAction::execute );
         assertEquals( "Could not execute 'read'. No Element was selected.", exception.getMessage() );
     }
 
     @Test
-    public void testReadWithoudNestedElements() throws ActionInitiationException {
+    void testReadWithoudNestedElements() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -90,7 +88,7 @@ public class TestReadAction {
     }
 
     @Test
-    public void testReadWithNestedElement() throws ActionInitiationException {
+    void testReadWithNestedElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -107,7 +105,7 @@ public class TestReadAction {
     }
 
     @Test
-    public void testReadEmptyElement() throws ActionInitiationException {
+    void testReadEmptyElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "readText.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -123,14 +121,14 @@ public class TestReadAction {
     }
 
     @Test
-    public void testGetCommand() {
+    void testGetCommand() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
 
         assertEquals( String.format( "%s myRead", ReadAction.IDENTIFIER ), action.getCommand() );
     }
 
     @Test
-    public void testLogging() {
+    void testLogging() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "readAction", "logging.html" );
 
         ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
@@ -148,6 +146,6 @@ public class TestReadAction {
         assertEquals( Level.INFO, logRecords.get( 0 ).getLevel() );
         assertEquals( Level.FINE, logRecords.get( 1 ).getLevel() );
         assertEquals( String.format( "%s myRead", ReadAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
-        assertEquals( String.format( "myRead = Read Logging", ReadAction.IDENTIFIER ), logRecords.get( 1 ).getMessage() );
+        assertEquals( "myRead = Read Logging", logRecords.get( 1 ).getMessage() );
     }
 }

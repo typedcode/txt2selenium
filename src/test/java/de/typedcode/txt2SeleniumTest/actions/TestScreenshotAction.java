@@ -24,9 +24,18 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.actions.AAction;
+import de.typedcode.txt2Selenium.actions.ActionFactory;
+import de.typedcode.txt2Selenium.actions.OpenAction;
+import de.typedcode.txt2Selenium.actions.ScreenshotAction;
+import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,22 +45,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Screen;
-import de.typedcode.txt2Selenium.actions.AAction;
-import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.OpenAction;
-import de.typedcode.txt2Selenium.actions.ScreenshotAction;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.WebUtil;
-
-public class TestScreenshotAction {
+class TestScreenshotAction {
 
     Txt2Selenium txt2SeleniumMock;
 
@@ -59,7 +57,7 @@ public class TestScreenshotAction {
      * Resetting the WebUtil and creating a new Txt2Selenium Mock
      */
     @BeforeEach
-    public void prepare() {
+    void prepare() {
         WebUtil.reset();
         this.txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
     }
@@ -68,14 +66,14 @@ public class TestScreenshotAction {
      * When the Action was not yet performed, the screenshot file has to be null.
      */
     @Test
-    public void testNullResultWhenNotExecuted() throws ActionInitiationException {
+    void testNullResultWhenNotExecuted() throws ActionInitiationException {
         ScreenshotAction screenshotAction = ( ScreenshotAction ) ActionFactory.createAction( txt2SeleniumMock,
                 ScreenshotAction.IDENTIFIER, "" );
         assertNull( screenshotAction.getScreenshotFile() );
     }
 
     @Test
-    public void testScreenshotWithNoOpenActionBefore() throws IOException, ActionInitiationException {
+    void testScreenshotWithNoOpenActionBefore() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
@@ -97,7 +95,7 @@ public class TestScreenshotAction {
     }
 
     @Test
-    public void testScreenshotAfterOpen() throws IOException, ActionInitiationException {
+    void testScreenshotAfterOpen() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
@@ -124,7 +122,7 @@ public class TestScreenshotAction {
     }
 
     @Test
-    public void testScreenshotWithIdentifier() throws IOException, ActionInitiationException {
+    void testScreenshotWithIdentifier() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
@@ -144,7 +142,7 @@ public class TestScreenshotAction {
     }
 
     @Test
-    public void testScreenshotWithoutIdentifier() throws IOException, ActionInitiationException {
+    void testScreenshotWithoutIdentifier() throws IOException, ActionInitiationException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 
@@ -164,21 +162,21 @@ public class TestScreenshotAction {
     }
 
     @Test
-    public void testGetCommandWithoudIdentifier() {
+    void testGetCommandWithoudIdentifier() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "" );
 
         assertEquals( ScreenshotAction.IDENTIFIER, action.getCommand() );
     }
 
     @Test
-    public void testGetCommandWithIdentifier() {
+    void testGetCommandWithIdentifier() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ScreenshotAction.IDENTIFIER, "testIdentifier" );
 
         assertEquals( String.format( "%s testIdentifier", ScreenshotAction.IDENTIFIER ), action.getCommand() );
     }
 
     @Test
-    public void testScreenshotLogging() throws IOException {
+    void testScreenshotLogging() throws IOException {
         Mockito.when( txt2SeleniumMock.getMainDirectory() )
                 .thenReturn( Paths.get( "src", "test", "resources", "actions", "screenshotAction" ).toAbsolutePath() );
 

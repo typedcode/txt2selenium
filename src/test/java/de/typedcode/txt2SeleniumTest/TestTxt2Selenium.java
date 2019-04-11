@@ -33,10 +33,10 @@ import de.typedcode.txt2Selenium.Txt2Selenium;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTxt2Selenium {
+class TestTxt2Selenium {
 
     @Test
-    public void testInitiationNonExistingDirectory() {
+    void testInitiationNonExistingDirectory() {
         Path path = Paths.get( "test", "notExisting" );
 
         Throwable exception = assertThrows( RuntimeException.class,
@@ -46,7 +46,7 @@ public class TestTxt2Selenium {
     }
 
     @Test
-    public void testInitiationDirectoryIsFile() {
+    void testInitiationDirectoryIsFile() {
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "files", "globalOneTestfile", "global.t2s" );
 
         Throwable exception = assertThrows( RuntimeException.class, () -> new Txt2Selenium( path ) );
@@ -55,7 +55,7 @@ public class TestTxt2Selenium {
     }
 
     @Test
-    public void testInitiationEmptyFolder() {
+    void testInitiationEmptyFolder() {
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "empty" );
 
         Throwable exception = assertThrows( RuntimeException.class,
@@ -65,7 +65,7 @@ public class TestTxt2Selenium {
     }
 
     @Test
-    public void testResolvingTestFiles() {
+    void testResolvingTestFiles() {
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
         Path first = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving", "tests", "first.t2s" );
         Path second = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving", "tests", "second.t2s" );
@@ -78,7 +78,7 @@ public class TestTxt2Selenium {
     }
 
     @Test
-    public void testResolvingMethodsFiles() {
+    void testResolvingMethodsFiles() {
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
 
         Txt2Selenium instance = new Txt2Selenium( path );

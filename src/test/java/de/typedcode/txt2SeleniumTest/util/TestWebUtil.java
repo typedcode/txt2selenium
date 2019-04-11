@@ -39,19 +39,19 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestWebUtil {
+class TestWebUtil {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @BeforeEach
-    public void before() {
+    void before() {
         WebUtil.reset();
         Path path = Paths.get( "src", "test", "resources", "util", "webUtil", "webUtil.html" );
         WebUtil.getInstance().openUrl( path.toUri().toString() );
     }
 
     @Test
-    public void testSelect() {
+    void testSelect() {
         assertNull( WebUtil.getInstance().getSelectedElement() );
         assertNull( WebUtil.getInstance().getSelectedBy() );
 
@@ -64,7 +64,7 @@ public class TestWebUtil {
     }
 
     @Test
-    public void testRead() {
+    void testRead() {
         assertNull( WebUtil.getInstance().getReadVar( "myVar" ) );
 
         WebUtil.getInstance().select( By.id( "utilContent" ) );
@@ -74,7 +74,7 @@ public class TestWebUtil {
     }
 
     @Test
-    public void testReset() {
+    void testReset() {
         assertNull( WebUtil.getInstance().getReadVar( "myRead" ) );
         assertNull( WebUtil.getInstance().getSelectedElement() );
         assertNull( WebUtil.getInstance().getSelectedBy() );

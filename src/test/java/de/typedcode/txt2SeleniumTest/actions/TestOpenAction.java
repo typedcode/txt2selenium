@@ -45,34 +45,33 @@ import de.typedcode.txt2Selenium.actions.OpenAction;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
-@SuppressWarnings( "null" )
-public class TestOpenAction {
+class TestOpenAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @Test
-    public void testEmptyUrl() {
+    void testEmptyUrl() {
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, "" ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
-    public void testSpaceParameter() {
+    void testSpaceParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, "  " ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
-    public void testSuccessfullInitiation() throws ActionInitiationException {
+    void testSuccessfullInitiation() throws ActionInitiationException {
         String url = "http://www.typedcode.de";
         OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, url );
         assertEquals( url, action.URL );
     }
 
     @Test
-    public void testExecuteOpen() throws ActionInitiationException {
+    void testExecuteOpen() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
         OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -82,7 +81,7 @@ public class TestOpenAction {
     }
 
     @Test
-    public void testGetCommand() {
+    void testGetCommand() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
         AAction action = ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -91,7 +90,7 @@ public class TestOpenAction {
     }
 
     @Test
-    public void testLogging() {
+    void testLogging() {
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
 

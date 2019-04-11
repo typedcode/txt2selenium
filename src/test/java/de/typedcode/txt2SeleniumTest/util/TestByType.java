@@ -32,37 +32,35 @@ import org.junit.jupiter.api.function.Executable;
 
 import de.typedcode.txt2Selenium.util.ByType;
 
-public class TestByType {
+class TestByType {
 
     @Test
-    public void testGetByTypeId() {
+    void testGetByTypeId() {
         ByType type = ByType.getType( "id" );
         assertEquals( ByType.ID, type );
     }
 
     @Test
-    public void testGetByTypeName() {
+    void testGetByTypeName() {
         ByType type = ByType.getType( "name" );
         assertEquals( ByType.NAME, type );
     }
 
     @Test
-    public void testGetByTypeNameCaseInsensitive() {
+    void testGetByTypeNameCaseInsensitive() {
         ByType type = ByType.getType( "nAmE" );
         assertEquals( ByType.NAME, type );
     }
 
     @Test
-    public void testGetByTypeXPath() {
+    void testGetByTypeXPath() {
         ByType type = ByType.getType( "xpath" );
         assertEquals( ByType.XPATH, type );
     }
 
     @Test
-    public void testGetByTypeUnknown() {
-        Executable executable = () -> {
-            ByType.getType( "unknown" );
-        };
+    void testGetByTypeUnknown() {
+        Executable executable = () -> ByType.getType( "unknown" );
 
         assertThrows( RuntimeException.class, executable );
     }

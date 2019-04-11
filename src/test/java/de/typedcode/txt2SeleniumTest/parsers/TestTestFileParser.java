@@ -39,19 +39,19 @@ import de.typedcode.txt2Selenium.parsers.TestFileParser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTestFileParser {
+class TestTestFileParser {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @Test
-    public void testEmptyTestFile() throws ParseException {
+    void testEmptyTestFile() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "emptyTestFile.t2s" ) );
         assertNull( action );
     }
 
     @Test
-    public void testMultipleActions() throws ParseException {
+    void testMultipleActions() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "multipleActions.t2s" ) );
 
@@ -68,7 +68,7 @@ public class TestTestFileParser {
     }
 
     @Test
-    public void testOneAction() throws ParseException {
+    void testOneAction() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "oneAction.t2s" ) );
 
@@ -78,7 +78,7 @@ public class TestTestFileParser {
     }
 
     @Test
-    public void testTwoActions() throws ParseException {
+    void testTwoActions() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "twoActions.t2s" ) );
 
@@ -89,7 +89,7 @@ public class TestTestFileParser {
     }
 
     @Test
-    public void testInitiationError() throws ParseException {
+    void testInitiationError() throws ParseException {
         Path path = Paths.get( "src", "test", "resources", "parsers", "testFileParser", "initiationError.t2s");
         Throwable exception = assertThrows( ParseException.class,
                 () -> TestFileParser.parse( txt2SeleniumMock, path ) );

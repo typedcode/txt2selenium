@@ -25,7 +25,6 @@
 package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.file.Path;
@@ -43,20 +42,19 @@ import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
 @SuppressWarnings( "null" )
-public class TestTypeAction {
+class TestTypeAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @BeforeEach
-    public void before() { WebUtil.reset(); }
+    void before() { WebUtil.reset(); }
 
     @Test
-    public void testElementNotSelectedLog() {
+    void testElementNotSelectedLog() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() );
         action.execute();
@@ -80,7 +78,7 @@ public class TestTypeAction {
     }
 
     @Test
-    public void testElementNoTextElementLog() {
+    void testElementNoTextElementLog() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() );
         action.execute();
@@ -107,7 +105,7 @@ public class TestTypeAction {
     }
 
     @Test
-    public void testTypeTextIntoEmptyElement() throws ActionInitiationException {
+    void testTypeTextIntoEmptyElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
 
         ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
@@ -128,7 +126,7 @@ public class TestTypeAction {
     }
 
     @Test
-    public void testTypeTextIntoNonEmptyElement() throws ActionInitiationException {
+    void testTypeTextIntoNonEmptyElement() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
 
         ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
@@ -149,7 +147,7 @@ public class TestTypeAction {
     }
 
     @Test
-    public void testTypeToInputField() throws ActionInitiationException {
+    void testTypeToInputField() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
 
         ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
@@ -170,7 +168,7 @@ public class TestTypeAction {
     }
 
     @Test
-    public void testGetCommand() {
+    void testGetCommand() {
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, TypeAction.IDENTIFIER, "Text to type" );
 
         assertEquals( String.format( "%s Text to type", TypeAction.IDENTIFIER ), action.getCommand() );

@@ -25,7 +25,9 @@
 package de.typedcode.txt2SeleniumTest.actions;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.*;
+import de.typedcode.txt2Selenium.actions.AAction;
+import de.typedcode.txt2Selenium.actions.ActionFactory;
+import de.typedcode.txt2Selenium.actions.AssertEqualsAction;
 import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.UnitLogger;
@@ -34,23 +36,22 @@ import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SuppressWarnings( "null" )
-public class TestAssertEqualsAction {
+class TestAssertEqualsAction {
 
     private Txt2Selenium txt2SeleniumMock;
     private WebUtil webUtil;
 
     @BeforeEach
-    public void before() throws NoSuchFieldException, IllegalAccessException {
+    void before() throws NoSuchFieldException, IllegalAccessException {
         this.txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
         this.webUtil = Mockito.mock( WebUtil.class );
 
@@ -60,7 +61,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testActionInitiationErrorNoPrameter() throws ActionInitiationException {
+    void testActionInitiationErrorNoPrameter() throws ActionInitiationException {
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "" ) );
 
@@ -69,7 +70,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testActionInitiationErrorWrongParameterCount() throws ActionInitiationException {
+    void testActionInitiationErrorWrongParameterCount() throws ActionInitiationException {
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "oneParameter" ) );
 
@@ -78,7 +79,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testActionInitiationErrorToManyParameters() throws ActionInitiationException {
+    void testActionInitiationErrorToManyParameters() throws ActionInitiationException {
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "par1 par2 par3 par4" ) );
 
@@ -87,7 +88,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testActionInitiationErrorExpectedNotExisting() throws ActionInitiationException {
+    void testActionInitiationErrorExpectedNotExisting() throws ActionInitiationException {
         AssertEqualsAction action = ( AssertEqualsAction ) ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
@@ -107,7 +108,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testActionExecutionParamNotRead() throws ActionExecutionException {
+    void testActionExecutionParamNotRead() throws ActionExecutionException {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
@@ -130,7 +131,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testActionExecutionNoMatch() throws ActionExecutionException {
+    void testActionExecutionNoMatch() throws ActionExecutionException {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
@@ -153,7 +154,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testActionExecutionSuccessfull() {
+    void testActionExecutionSuccessfull() {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
@@ -163,7 +164,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testThreeParamsTrueEvaluationSuccessfull() {
+    void testThreeParamsTrueEvaluationSuccessfull() {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
@@ -173,7 +174,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testThreeParamsTrueEvaluationNoMatchLog() throws ActionExecutionException {
+    void testThreeParamsTrueEvaluationNoMatchLog() throws ActionExecutionException {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
@@ -196,7 +197,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testThreeParamsFalseEvaluationSuccessfull() {
+    void testThreeParamsFalseEvaluationSuccessfull() {
         //Check that evaluation is successfull if the evaluationIndicator Parameter is false and the values do not match
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
 
@@ -207,7 +208,7 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testThreeParamsFalseEvaluationNoMatch() throws ActionExecutionException {
+    void testThreeParamsFalseEvaluationNoMatch() throws ActionExecutionException {
         //Check that evaluation is not successfull if the evaluationIndicator Parameter is false and the values do match
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
 
@@ -231,21 +232,21 @@ public class TestAssertEqualsAction {
     }
 
     @Test
-    public void testGetCommandTwoParameters() {
+    void testGetCommandTwoParameters() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         assertEquals( String.format( "%s true first second", AssertEqualsAction.IDENTIFIER ), action.getCommand() );
     }
 
     @Test
-    public void testGetCommandThreeParametersTrue() {
+    void testGetCommandThreeParametersTrue() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
 
         assertEquals( String.format( "%s true first second", AssertEqualsAction.IDENTIFIER ), action.getCommand() );
     }
 
     @Test
-    public void testGetCommandThreeParametersFalse() {
+    void testGetCommandThreeParametersFalse() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
 
         assertEquals( String.format( "%s false first second", AssertEqualsAction.IDENTIFIER ), action.getCommand() );

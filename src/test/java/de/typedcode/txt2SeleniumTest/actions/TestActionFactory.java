@@ -36,18 +36,17 @@ import de.typedcode.txt2Selenium.actions.ActionFactory;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
-@SuppressWarnings( "null" )
-public class TestActionFactory {
+class TestActionFactory {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @BeforeEach
-    public void before() {
+    void before() {
         WebUtil.reset();
     }
 
     @Test
-    public void testUnknownAction() {
+    void testUnknownAction() {
 
         Throwable exception = assertThrows( ActionInitiationException.class,
                 () -> ActionFactory.createAction( this.txt2SeleniumMock, "unknownAction", "" ) );

@@ -24,9 +24,16 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.actions.*;
+import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
+import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,39 +41,29 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import de.typedcode.txt2Selenium.actions.*;
-import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.WebUtil;
-
-@SuppressWarnings( "null" )
-public class TestClickAction {
+class TestClickAction {
 
     private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
 
     @BeforeEach
-    public void before() {
+    void before() {
         WebUtil.reset();
     }
 
     @Test
-    public void testClickWithoutselect() {
+    void testClickWithoutselect() {
         AAction ca = ActionFactory.createAction( this.txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
 
-        Throwable exception = assertThrows( ActionExecutionException.class, () -> ca.execute() );
+        Throwable exception = assertThrows( ActionExecutionException.class, ca::execute );
 
         assertEquals( "Error execution ClickAction. No element was selected.", exception.getMessage() );
     }
 
     @Test
-    public void testClickById() throws ActionInitiationException {
+    void testClickById() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -85,7 +82,7 @@ public class TestClickAction {
     }
 
     @Test
-    public void testClickByName() throws ActionInitiationException {
+    void testClickByName() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -104,7 +101,7 @@ public class TestClickAction {
     }
 
     @Test
-    public void testClickByXPath() throws ActionInitiationException {
+    void testClickByXPath() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -123,7 +120,7 @@ public class TestClickAction {
     }
 
     @Test
-    public void testClickByXPath2() throws ActionInitiationException {
+    void testClickByXPath2() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
         OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
@@ -142,14 +139,14 @@ public class TestClickAction {
     }
 
     @Test
-    public void testGetCommand() {
+    void testGetCommand() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
 
         assertEquals( ClickAction.IDENTIFIER, action.getCommand() );
     }
 
     @Test
-    public void testLogging() {
+    void testLogging() {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/logging.html" );
 
         ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();

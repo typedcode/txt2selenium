@@ -37,10 +37,10 @@ import org.openqa.selenium.By.ByXPath;
 import de.typedcode.txt2Selenium.util.ByInitializer;
 import de.typedcode.txt2Selenium.util.ByType;
 
-public class TestByInitializer {
+class TestByInitializer {
 
     @Test
-    public void testInitializeWithId() {
+    void testInitializeWithId() {
         String id = "MyId";
 
         By initialize = ByInitializer.initialize( ByType.ID, id );
@@ -53,7 +53,7 @@ public class TestByInitializer {
     }
 
     @Test
-    public void testInitializeWithName() {
+    void testInitializeWithName() {
         String name = "MyName";
 
         By initialize = ByInitializer.initialize( ByType.NAME, name );
@@ -66,7 +66,7 @@ public class TestByInitializer {
     }
 
     @Test
-    public void testInitializeWithXpath() {
+    void testInitializeWithXpath() {
         String xpath = "MyName";
 
         By initialize = ByInitializer.initialize( ByType.XPATH, xpath );

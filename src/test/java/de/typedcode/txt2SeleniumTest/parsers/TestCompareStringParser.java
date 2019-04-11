@@ -36,10 +36,10 @@ import org.junit.jupiter.api.Test;
 import de.typedcode.txt2Selenium.exceptions.ParseException;
 import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 
-public class TestCompareStringParser {
+class TestCompareStringParser {
 
     @Test
-    public void testEmptyFile() throws ParseException {
+    void testEmptyFile() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "empty.t2s" ) );
 
@@ -47,7 +47,7 @@ public class TestCompareStringParser {
     }
 
     @Test
-    public void testSingleEntry() throws ParseException {
+    void testSingleEntry() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "singleEntry.t2s" ) );
 
@@ -57,7 +57,7 @@ public class TestCompareStringParser {
     }
 
     @Test
-    public void testWithEmptyLines() throws ParseException {
+    void testWithEmptyLines() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "withEmptyLines.t2s" ) );
 
@@ -71,7 +71,7 @@ public class TestCompareStringParser {
     }
 
     @Test
-    public void testContentWithSpaces() throws ParseException {
+    void testContentWithSpaces() throws ParseException {
         Map< String, String > parse = CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "contentWithSpaces.t2s" ) );
 
@@ -85,7 +85,7 @@ public class TestCompareStringParser {
     }
 
     @Test
-    public void testDoubleKey() {
+    void testDoubleKey() {
         Throwable exception = assertThrows( ParseException.class, () -> CompareStringParser
                 .parse( Paths.get( "src", "test", "resources", "parsers", "compareStrings", "duplicatedKey.t2s" ) ) );
 

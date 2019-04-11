@@ -26,8 +26,6 @@ package de.typedcode.txt2SeleniumTest.actions;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.*;
-import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
@@ -35,7 +33,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -43,15 +40,13 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SuppressWarnings( "null" )
-public class TestAssertCheckedAction {
+class TestAssertCheckedAction {
 
     private Txt2Selenium txt2SeleniumMock;
 
     @BeforeEach
-    public void before() {
+    void before() {
         this.txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
         WebUtil.reset();
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "assertCheckedAction", "assert.html" );
@@ -60,7 +55,7 @@ public class TestAssertCheckedAction {
     }
 
     @Test
-    public void testNoSelectionLog() {
+    void testNoSelectionLog() {
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
@@ -75,11 +70,11 @@ public class TestAssertCheckedAction {
         assertEquals( String.format( "%s %s", AssertCheckedAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 0 ).getMessage() );
 
         assertEquals( Level.SEVERE, logRecords.get( 1 ).getLevel() );
-        assertEquals( String.format( "Error: No Element selected to check for selection status.", AssertCheckedAction.IDENTIFIER, Boolean.TRUE.toString() ), logRecords.get( 1 ).getMessage() );
+        assertEquals( "Error: No Element selected to check for selection status.", logRecords.get( 1 ).getMessage() );
     }
 
     @Test
-    public void testNotCheckableElementSelectedLog() {
+    void testNotCheckableElementSelectedLog() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id notCheckable").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" );
@@ -101,7 +96,7 @@ public class TestAssertCheckedAction {
     }
 
     @Test
-    public void testElementTrueButShouldBeFalseLog() {
+    void testElementTrueButShouldBeFalseLog() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
         AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" );
@@ -123,7 +118,7 @@ public class TestAssertCheckedAction {
     }
 
     @Test
-    public void testElementFalseButShouldBeTrueLog() {
+    void testElementFalseButShouldBeTrueLog() {
         before();
 
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
@@ -147,35 +142,35 @@ public class TestAssertCheckedAction {
     }
 
     @Test
-    public void testEvaluationTrueIgnoreCase() {
+    void testEvaluationTrueIgnoreCase() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
         ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "tRuE" ).execute();
     }
 
     @Test
-    public void testEvaluationTrueSuccess() {
+    void testEvaluationTrueSuccess() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
         ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" ).execute();
     }
 
     @Test
-    public void testEvaluationFalseSuccess() {
+    void testEvaluationFalseSuccess() {
         ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
 
         ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" ).execute();
     }
 
     @Test
-    public void testGetCommandTrue() {
+    void testGetCommandTrue() {
         AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true");
 
         assertEquals( String.format( "%s true", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
     }
 
     @Test
-    public void testGetCommandFalse() {
+    void testGetCommandFalse() {
         AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false");
 
         assertEquals( String.format( "%s false", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
