@@ -29,7 +29,7 @@ public enum ByType {
 
     private final String type;
 
-    private ByType( String type ) {
+    ByType( String type ) {
         this.type = type;
     }
 

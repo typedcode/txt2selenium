@@ -100,7 +100,7 @@ public class Txt2Selenium {
 
         List<Path> methodFiles = getFiles( testFileDirectory );
 
-        for( Path methodFile : methodFiles ) {
+        methodFiles.forEach( methodFile -> {
             AAction firstAction = TestFileParser.parse( this, methodFile );
 
             if( firstAction != null ) {
@@ -111,7 +111,7 @@ public class Txt2Selenium {
 
                 this.methods.put( method.getName(), method );
             }
-        }
+        } );
     }
 
     /**
@@ -128,13 +128,13 @@ public class Txt2Selenium {
                     "Given directory does not contain any testfiles: " + this.mainDirectory );
         }
 
-        for( Path testFile : testFiles ) {
-            AAction firstAction = TestFileParser.parse( this, testFile );
+        testFiles.forEach( o -> {
+            AAction firstAction = TestFileParser.parse( this, o );
 
             if( firstAction != null ) {
-                this.tests.put( testFile, firstAction );
+                this.tests.put( o, firstAction );
             }
-        }
+        } );
     }
 
     /**
@@ -146,14 +146,7 @@ public class Txt2Selenium {
         List<Path > files = new ArrayList<>();
 
         try( DirectoryStream< ? > ds = Files.newDirectoryStream( path, "*" + this.FILE_EXTENSION ) ) {
-            Iterator< ? > iterator = ds.iterator();
-
-            Path next;
-            while( iterator.hasNext() ) {
-                next = ( Path ) iterator.next();
-
-                files.add( next );
-            }
+            ds.forEach( o -> files.add( ( Path ) o ) );
         } catch( IOException e ) {
             //TODO add exception Handling
         }
