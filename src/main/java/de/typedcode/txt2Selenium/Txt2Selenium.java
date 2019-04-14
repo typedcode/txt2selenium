@@ -43,7 +43,7 @@ import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 import de.typedcode.txt2Selenium.parsers.TestFileParser;
 
 public class Txt2Selenium {
-    public final String FILE_EXTENSION = ".t2s";
+    public static final String FILE_EXTENSION = ".t2s";
     public final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
     public final String TEST_FILE_FOLDER = "tests";
     public final String METHOD_FILE_FOLDER = "methods";
