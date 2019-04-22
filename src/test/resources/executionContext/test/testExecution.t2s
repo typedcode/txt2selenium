@@ -1,0 +1,4 @@
+select id clickableId
+click
+select id readId
+read myRead

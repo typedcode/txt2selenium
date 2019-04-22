@@ -27,7 +27,7 @@ package de.typedcode.txt2SeleniumTest.actions;
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.actions.*;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.methods.Method;
+import de.typedcode.txt2Selenium.executionContext.Method;
 import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
@@ -62,12 +62,12 @@ class TestMethodAction {
 
     @Test
     void testGetCommand() {
-        Method dummyMethod = new Method( "myMethod", null );
+        Method dummyMethod = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
         Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( dummyMethod );
 
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "myMethod" );
 
-        assertEquals( "method myMethod", action.getCommand() );
+        assertEquals( "method testLoggingEmptyMethod", action.getCommand() );
 
         WebUtil.reset();
     }
@@ -99,14 +99,15 @@ class TestMethodAction {
 
         //Preparing the Actions to run in the Method
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "methodAction", "page.html" );
-        AAction openAction = ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() );
+
+        //Open before Using the method. Because of the Path this test would not run on Windows and Linux systems
+        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+
         AAction selectAction = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id toSelect" );
         AAction readAction = ActionFactory.createAction( this.txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
 
         //Preparing the Method to run
-        Method method = new Method( "myMethod", openAction );
-        method.addAction( selectAction );
-        method.addAction( readAction );
+        Method method = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testRunMethod.t2s" ) );
 
         Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( method );
 
@@ -119,23 +120,24 @@ class TestMethodAction {
     }
 
     @Test
-    void testLogging() {
+    void testLoggingEmptyMethod() {
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
 
-        Method method = new Method( "myMethod", null );
-        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( method );
+        Method method = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
+        Mockito.when( this.txt2SeleniumMock.getMethod( "testLoggingEmptyMethod" ) ).thenReturn( method );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "myMethod" ).execute();
+        ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "testLoggingEmptyMethod" ).execute();
 
-        List< LogRecord > records = handler.getLogRecords();
+        List<LogRecord> records = handler.getLogRecords();
 
-        assertEquals( 3, records.size() );
-        assertEquals( Level.INFO, records.get( 0 ).getLevel() );
-        assertEquals( Level.INFO, records.get( 1 ).getLevel() );
-        assertEquals( Level.INFO, records.get( 2 ).getLevel() );
-        assertEquals( String.format( "%s myMethod", MethodAction.IDENTIFIER ), records.get( 0 ).getMessage() );
-        assertEquals( "Entering Method: myMethod", records.get( 1 ).getMessage() );
-        assertEquals( "Exiting Method: myMethod", records.get( 2 ).getMessage() );
+        assertEquals( 4, records.size() );
+
+        records.forEach( o -> assertEquals( Level.INFO, o.getLevel()) );
+
+        assertEquals( String.format( "%s testLoggingEmptyMethod", MethodAction.IDENTIFIER ), records.get( 0 ).getMessage() );
+        assertEquals( "Starting Method: testLoggingEmptyMethod", records.get( 1 ).getMessage() );
+        assertEquals( "Method empty", records.get( 2 ).getMessage() );
+        assertEquals( "Ending Method: testLoggingEmptyMethod", records.get( 3 ).getMessage() );
     }
 }

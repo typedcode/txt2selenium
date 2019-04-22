@@ -1,18 +1,18 @@
 /*
  * MIT License
- * 
+ *
  * Copyright (c) 2018 Markus Fischer (www.typedcode.de)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,40 +24,35 @@
 
 package de.typedcode.txt2Selenium;
 
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
+import de.typedcode.txt2Selenium.exceptions.InstanceInitiationException;
+import de.typedcode.txt2Selenium.executionContext.Method;
+import de.typedcode.txt2Selenium.executionContext.TestScenario;
+import de.typedcode.txt2Selenium.parsers.CompareStringParser;
+import de.typedcode.txt2Selenium.util.FileUtil;
+import de.typedcode.txt2Selenium.util.UnitLogger;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import de.typedcode.txt2Selenium.actions.AAction;
-import de.typedcode.txt2Selenium.exceptions.InstanceInitiationException;
-import de.typedcode.txt2Selenium.exceptions.ParseException;
-import de.typedcode.txt2Selenium.methods.Method;
-import de.typedcode.txt2Selenium.parsers.CompareStringParser;
-import de.typedcode.txt2Selenium.parsers.TestFileParser;
-
 public class Txt2Selenium {
     public static final String FILE_EXTENSION = ".t2s";
-    public final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
-    public final String TEST_FILE_FOLDER = "tests";
-    public final String METHOD_FILE_FOLDER = "methods";
+    private final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
+    private final String TEST_FILE_FOLDER = "tests";
+    private final String METHOD_FILE_FOLDER = "methods";
 
     private Path mainDirectory;
     private Map< String, String > compareStrings;
-    private Map< Path, AAction > tests;
-    private Map< String, Method > methods;
+    private TestScenario defaultTestScenario;
+    private Map<String, Method> methods;
     private Path COMPARE_STRINGS_FILE;
 
     public Txt2Selenium( Path directory ) {
         this.mainDirectory = directory;
         this.compareStrings = new HashMap<>();
-        this.tests = new HashMap<>();
         this.methods = new HashMap<>();
 
         if( !Files.exists( this.mainDirectory ) ) {
@@ -76,13 +71,9 @@ public class Txt2Selenium {
             parseCompareStrings();
         }
 
-        try {
-            parseCompareStrings();
-            parseMethodFiles();
-            parseTestFiles();
-        } catch( ParseException pe ) {
-
-        }
+        parseCompareStrings();
+        parseMethodFiles();
+        prepareScenarios();
     }
 
     private void parseCompareStrings() {
@@ -98,75 +89,37 @@ public class Txt2Selenium {
         //Getting the methodfiles
         Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.METHOD_FILE_FOLDER );
 
-        List<Path> methodFiles = getFiles( testFileDirectory );
+        List<Path> methodFiles = FileUtil.getTestFiles( testFileDirectory );
 
         methodFiles.forEach( methodFile -> {
-            AAction firstAction = TestFileParser.parse( this, methodFile );
-
-            if( firstAction != null ) {
-                String methodName = methodFile.getFileName().toString();
-                methodName = methodName.substring( 0, methodName.length() - this.FILE_EXTENSION.length() );
-
-                Method method = new Method( methodName, firstAction );
-
-                this.methods.put( method.getName(), method );
-            }
+            Method method = new Method(this, methodFile);
+            this.methods.put( method.getName(), method );
         } );
     }
 
     /**
      * Searches for and parses the testfiles.
      */
-    private void parseTestFiles() {
+    private void prepareScenarios() {
         //Getting the testfiles
         Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.TEST_FILE_FOLDER );
+        this.defaultTestScenario = new TestScenario( this, testFileDirectory );
 
-        List<Path > testFiles = getFiles( testFileDirectory );
-
-        if( testFiles.size() == 0 ) {
+        if( !TestScenario.TESTS_EXIST ) {
             throw new InstanceInitiationException(
-                    "Given directory does not contain any testfiles: " + this.mainDirectory );
+                    "Given test-direcotry does not contain any testfiles: " + testFileDirectory );
         }
-
-        testFiles.forEach( o -> {
-            AAction firstAction = TestFileParser.parse( this, o );
-
-            if( firstAction != null ) {
-                this.tests.put( o, firstAction );
-            }
-        } );
-    }
-
-    /**
-     * Searches the given Path for test-files and returns them.
-     * @param path Path to search for test-files
-     * @return List of Paths containing tests.
-     */
-    private List<Path > getFiles( Path path ) {
-        List<Path > files = new ArrayList<>();
-
-        try( DirectoryStream< ? > ds = Files.newDirectoryStream( path, "*" + this.FILE_EXTENSION ) ) {
-            ds.forEach( o -> files.add( ( Path ) o ) );
-        } catch( IOException e ) {
-            //TODO add exception Handling
-        }
-
-        return files;
     }
 
     /**
      * Runs the Tests contained in <code>this.testFiles</code>
      */
-    public void runTests() {
+    public void execute() {
+        UnitLogger.logInfo( "Starting Test Execution" );
 
-    }
+        this.defaultTestScenario.execute();
 
-    /**
-     * Returnes the parsed Tests. AAction is the first Action for the Test.
-     * @return Map of parsed Tests with the filename as the key and the first Action of the test as the value.
-     */
-    public Map< Path, AAction > getParsedTests() {
-        return this.tests;
+        UnitLogger.logInfo( "Test Execution Finished" );
     }
 
     /**
@@ -180,7 +133,7 @@ public class Txt2Selenium {
     /**
      * Returns the the string which was described by the identifier. Null if the Identifier does not exist
      * @param identifier Identifier for the String to return.
-     * @return
+     * @return Returns the Compare String identified by identifier
      */
     public String getCompareString( String identifier ) {
         return this.compareStrings.get( identifier );
@@ -192,7 +145,11 @@ public class Txt2Selenium {
      * @param methodName Name of the Method to return
      * @return Method represented by methodName or null if the Method was not found
      */
-    public Method getMethod(String methodName ) {
+    public Method getMethod( String methodName ) {
         return this.methods.get( methodName );
+    }
+
+    public TestScenario getDefaultTestScenario() {
+        return this.defaultTestScenario;
     }
 }

@@ -26,7 +26,10 @@ package de.typedcode.txt2SeleniumTest;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
+import de.typedcode.txt2Selenium.executionContext.TestScenario;
 import org.junit.jupiter.api.Test;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
@@ -55,26 +58,22 @@ class TestTxt2Selenium {
     }
 
     @Test
-    void testInitiationEmptyFolder() {
-        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "empty" );
-
-        Throwable exception = assertThrows( RuntimeException.class,
-                () -> new Txt2Selenium( path ) );
-        assertEquals( String.format( "Given directory does not contain any testfiles: %s", path.toString() ),
-                exception.getMessage() );
-    }
-
-    @Test
     void testResolvingTestFiles() {
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
         Path first = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving", "tests", "first.t2s" );
         Path second = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving", "tests", "second.t2s" );
 
+        List<Path> wanted = new ArrayList<>();
+        wanted.add( first );
+        wanted.add( second );
+
         Txt2Selenium instance = new Txt2Selenium( path );
 
-        assertEquals(2, instance.getParsedTests().size() );
-        assertTrue( instance.getParsedTests().containsKey( first ) );
-        assertTrue( instance.getParsedTests().containsKey( second ) );
+        TestScenario defaultTestScenario = instance.getDefaultTestScenario();
+        List<de.typedcode.txt2Selenium.executionContext.Test> tests = defaultTestScenario.getTests();
+
+        assertEquals(2, tests.size() );
+        tests.forEach( o -> assertTrue( wanted.contains( o.PATH ) ) );
     }
 
     @Test

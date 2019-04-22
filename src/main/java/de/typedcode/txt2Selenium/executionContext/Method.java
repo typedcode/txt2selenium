@@ -22,49 +22,34 @@
  * SOFTWARE.
  */
 
-package de.typedcode.txt2Selenium.methods;
+package de.typedcode.txt2Selenium.executionContext;
 
-import de.typedcode.txt2Selenium.actions.AAction;
-import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2Selenium.Txt2Selenium;
 
-public class Method {
+import java.nio.file.Path;
 
-    private AAction firstAction;
-    private AAction lastAction;
-    public final String methodName;
-
-    public Method( String methodName, AAction firstAction ) {
-        this.methodName = methodName;
-
-        this.firstAction = firstAction;
-        this.lastAction = firstAction;
-    }
-
-    public void execute() {
-        UnitLogger.logInfo( String.format( "Entering Method: %s", this.methodName ) );
-
-        AAction currentAction = this.firstAction;
-
-        while( currentAction != null ) {
-            currentAction.execute();
-            currentAction = currentAction.nextAction;
-        }
-
-        UnitLogger.logInfo( String.format( "Exiting Method: %s", this.methodName ) );
-    }
-
-    public void addAction( AAction nextAction ) {
-        this.lastAction.nextAction = nextAction;
-        nextAction.previousAction = this.lastAction;
-        this.lastAction = nextAction;
-    }
+public class Method extends Test {
 
     /**
-     * Returns the Name of the Method
-     *
-     * @return Name of the Method
+     * @param instance Instance where this ExecutionContext will run in.
+     * @param path     path can be a folder or a test-file.
      */
-    public String getName() {
-        return this.methodName;
+    public Method(Txt2Selenium instance, Path path) {
+        super(instance, path);
+    }
+
+    @Override
+    String getExecuteStartMessage() {
+        return String.format( "Starting Method: %s", this.name);
+    }
+
+    @Override
+    String getExecuteFinishMessage() {
+        return String.format( "Ending Method: %s", this.name);
+    }
+
+    @Override
+    String getEmptyMessage() {
+        return "Method empty";
     }
 }

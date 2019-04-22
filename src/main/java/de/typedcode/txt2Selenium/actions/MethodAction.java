@@ -26,9 +26,10 @@ package de.typedcode.txt2Selenium.actions;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
 import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.methods.Method;
+import de.typedcode.txt2Selenium.executionContext.Method;
 import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2Selenium.util.WebUtil;
+
+import java.nio.file.Path;
 
 /**
  * Runs a specified method

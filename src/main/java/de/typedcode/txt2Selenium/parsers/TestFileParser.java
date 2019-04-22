@@ -57,7 +57,7 @@ public class TestFileParser {
      */
     public static AAction parse( Txt2Selenium instance, Path testFile ) throws ParseException {
         AAction firstAction = null;
-        AAction currentAction = null;
+        AAction currentAction;
         AAction lastAction = null;
 
         try( Stream< ? > stream = Files.lines( testFile ) ) {

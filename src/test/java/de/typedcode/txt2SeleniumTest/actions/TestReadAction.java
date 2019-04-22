@@ -147,5 +147,8 @@ class TestReadAction {
         assertEquals( Level.FINE, logRecords.get( 1 ).getLevel() );
         assertEquals( String.format( "%s myRead", ReadAction.IDENTIFIER ), logRecords.get( 0 ).getMessage() );
         assertEquals( "myRead = Read Logging", logRecords.get( 1 ).getMessage() );
+
+        //Reset LogLevel for further tests
+        UnitLogger.setLogLevel( Level.INFO );
     }
 }
