@@ -30,6 +30,8 @@ import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 import org.openqa.selenium.WebElement;
 
+import java.util.Optional;
+
 /**
  * Action will type Text into an previously selected input type="text" element
  * or textarea.
@@ -54,14 +56,16 @@ public class TypeAction extends AAction {
     public void execute() {
         UnitLogger.logInfo( getCommand() );
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        Optional<WebElement> optionalSelectedElement = WebUtil.getInstance().getSelectedElement();
 
-        if( selectedElement == null ) {
+        if( optionalSelectedElement.isEmpty() ) {
             UnitLogger.logSevere("Coulnd not Type text. No Element selected yet." );
             return;
         }
 
         // Check that the element is textarea or input with type text
+        WebElement selectedElement = optionalSelectedElement.get();
+
         String tagName = selectedElement.getTagName();
 
         if( "textarea".equals( tagName )

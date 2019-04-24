@@ -29,7 +29,7 @@ import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.executionContext.Method;
 import de.typedcode.txt2Selenium.util.UnitLogger;
 
-import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * Runs a specified method
@@ -40,7 +40,7 @@ public class MethodAction extends AAction {
 
     public static final String IDENTIFIER = "method";
 
-    public final Method METHOD;
+    private final Method METHOD;
 
     MethodAction(Txt2Selenium instance, String methodName ) throws ActionInitiationException {
         super( instance );
@@ -51,9 +51,12 @@ public class MethodAction extends AAction {
             throw new ActionInitiationException( "Could not initiate Method Action. The name for the Method to call was empty. Usage: method methodName" );
         }
 
-        this.METHOD = this.correspondingInstance.getMethod( trimMethodName );
+        Optional<Method> optionalMethod = this.correspondingInstance.getMethod(trimMethodName);
 
-        if( this.METHOD == null ) {
+        if( optionalMethod.isPresent() ) {
+            this.METHOD = optionalMethod.get();
+        }
+        else {
             throw new ActionInitiationException( String.format( "Could not initiate Method Action. Method '%s' was not found.", trimMethodName ) );
         }
     }

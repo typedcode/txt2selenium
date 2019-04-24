@@ -84,7 +84,7 @@ class TestReadAction {
         ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
         readAction.execute();
 
-        assertEquals( "No nested", WebUtil.getInstance().getReadVar( "myRead" ) );
+        assertEquals( "No nested", WebUtil.getInstance().getReadVar( "myRead" ).get() );
     }
 
     @Test
@@ -101,7 +101,7 @@ class TestReadAction {
         ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
         readAction.execute();
 
-        assertEquals( "Before nested\nNo nested\nAfter nested", WebUtil.getInstance().getReadVar( "myRead" ) );
+        assertEquals( "Before nested\nNo nested\nAfter nested", WebUtil.getInstance().getReadVar( "myRead" ).get() );
     }
 
     @Test
@@ -117,7 +117,7 @@ class TestReadAction {
         ReadAction readAction = ( ReadAction ) ActionFactory.createAction( txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
         readAction.execute();
 
-        assertEquals( "", WebUtil.getInstance().getReadVar( "myRead" ) );
+        assertEquals( "", WebUtil.getInstance().getReadVar( "myRead" ).get() );
     }
 
     @Test

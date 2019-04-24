@@ -26,6 +26,7 @@ package de.typedcode.txt2Selenium.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -110,8 +111,8 @@ public class WebUtil {
      * 
      * @return Selected Element
      */
-    public WebElement getSelectedElement() {
-        return this.selectedElement;
+    public Optional<WebElement> getSelectedElement() {
+        return Optional.ofNullable( this.selectedElement );
     }
 
     /**
@@ -121,13 +122,13 @@ public class WebUtil {
      *             if there was no Element selected.
      */
     public void click() throws NullPointerException {
-        WebElement element = this.selectedElement;
-
-        if( element == null ) {
+        if( this.selectedElement != null ) {
+            this.selectedElement.click();
+        }
+        else {
             throw new NullPointerException( "No Element Selected." );
         }
 
-        element.click();
     }
 
     /**
@@ -136,8 +137,8 @@ public class WebUtil {
      *             Identifier to get the content from
      * @return Content identified by the identifier or null if the content does not exist
      */
-    public String getReadVar( String identifier ) {
-        return this.readElements.get( identifier );
+    public Optional<String> getReadVar( String identifier ) {
+        return Optional.ofNullable( this.readElements.get( identifier ) );
     }
 
     /**
@@ -151,8 +152,8 @@ public class WebUtil {
         this.selectedBy = by;
     }
 
-    public By getSelectedBy() {
-        return this.selectedBy;
+    public Optional<By> getSelectedBy() {
+        return Optional.ofNullable( this.selectedBy );
     }
 
     /**
@@ -162,13 +163,12 @@ public class WebUtil {
      *            Internal variable to assign the current text to.
      */
     public String readText( String readToName ) {
-        WebElement currentElement = this.selectedElement;
 
-        if( currentElement == null ) {
+        if( this.selectedElement == null ) {
             throw new ActionExecutionException( "Could not execute 'read'. No Element was selected." );
         }
 
-        String text = currentElement.getText();
+        String text = this.selectedElement.getText();
 
         if( text == null ) {
             throw new ActionExecutionException( "Reading the Text from selected Element returned null" );

@@ -39,6 +39,7 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
@@ -112,7 +113,7 @@ class TestAssertEqualsAction {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
-        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( null );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( Optional.empty() );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -135,7 +136,7 @@ class TestAssertEqualsAction {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
-        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( Optional.of( "actual" ) );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -158,7 +159,7 @@ class TestAssertEqualsAction {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
-        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( Optional.of( "actual" ) );
 
         assertAction.execute();
     }
@@ -168,7 +169,7 @@ class TestAssertEqualsAction {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
-        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( Optional.of( "actual" ) );
 
         assertAction.execute();
     }
@@ -178,7 +179,7 @@ class TestAssertEqualsAction {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "true first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
-        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( Optional.of( "actual" ) );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -202,7 +203,7 @@ class TestAssertEqualsAction {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "value" );
-        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( Optional.of( "actual" ) );
 
         assertAction.execute();
     }
@@ -213,7 +214,7 @@ class TestAssertEqualsAction {
         AssertEqualsAction assertAction = ( AssertEqualsAction )ActionFactory.createAction( txt2SeleniumMock, AssertEqualsAction.IDENTIFIER, "false first second" );
 
         Mockito.when( this.txt2SeleniumMock.getCompareString( "first" ) ).thenReturn( "actual" );
-        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( "actual" );
+        Mockito.when( this.webUtil.getReadVar( "second" ) ).thenReturn( Optional.of( "actual" ) );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );

@@ -18,6 +18,7 @@ import java.util.logging.LogRecord;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestTest {
 
@@ -36,12 +37,12 @@ class TestTest {
 
         de.typedcode.txt2Selenium.executionContext.Test tst = new de.typedcode.txt2Selenium.executionContext.Test( this.txt2SeleniumMock, testPath );
 
-        assertNull( WebUtil.getInstance().getReadVar( "myRead" ));
+        assertTrue( WebUtil.getInstance().getReadVar( "myRead" ).isEmpty() );
         assertEquals( "Title Test Execution", WebUtil.getInstance().getTitle() );
 
         tst.execute();
 
-        assertEquals( "Reading Content", WebUtil.getInstance().getReadVar( "myRead" ));
+        assertEquals( "Reading Content", WebUtil.getInstance().getReadVar( "myRead" ).get());
         assertEquals( "Title Test Execution", WebUtil.getInstance().getTitle() );
     }
 

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
@@ -55,7 +56,7 @@ public class TestFileParser {
      * @return The first action to execute after parsing the file
      * @throws ParseException
      */
-    public static AAction parse( Txt2Selenium instance, Path testFile ) throws ParseException {
+    public static Optional< AAction > parse(Txt2Selenium instance, Path testFile ) throws ParseException {
         AAction firstAction = null;
         AAction currentAction;
         AAction lastAction = null;
@@ -88,10 +89,6 @@ public class TestFileParser {
 
                         if( split.length == 2 && split[ 1 ] != null ) {
                             aParam = split[ 1 ];
-                        }
-
-                        if( aParam == null ) {
-                            aParam = "";
                         }
 
                         if( aName != null ) {
@@ -127,6 +124,6 @@ public class TestFileParser {
             throw new ParseException( "Error reading File.", e );
         }
 
-        return firstAction;
+        return Optional.ofNullable( firstAction );
     }
 }

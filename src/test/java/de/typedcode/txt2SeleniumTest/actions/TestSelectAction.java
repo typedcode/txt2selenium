@@ -82,7 +82,7 @@ class TestSelectAction {
         ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id selectId" ).execute();
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
         assertNotNull( selectedElement );
 
@@ -101,7 +101,7 @@ class TestSelectAction {
                 "name selectName" );
         action.execute();
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
         assertNotNull( selectedElement );
 
@@ -120,7 +120,7 @@ class TestSelectAction {
                 "xpath /html/body/div/p/a[3]" );
         action.execute();
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
         assertNotNull( selectedElement );
 
@@ -139,7 +139,7 @@ class TestSelectAction {
                 "xpath //*[contains(text(),'2')]" );
         action.execute();
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
         assertNotNull( selectedElement );
 

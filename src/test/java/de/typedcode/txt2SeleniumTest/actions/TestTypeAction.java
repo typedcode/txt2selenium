@@ -25,6 +25,7 @@
 package de.typedcode.txt2SeleniumTest.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.file.Path;
@@ -111,12 +112,9 @@ class TestTypeAction {
         ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id idEmpty" ).execute();
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
-        if( selectedElement == null ) {
-            fail( "Selected Element was null." );
-            return;
-        }
+        assertNotNull( selectedElement );
 
         assertEquals( "", selectedElement.getText() );
 
@@ -132,12 +130,9 @@ class TestTypeAction {
         ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id idExisting" ).execute();
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
-        if( selectedElement == null ) {
-            fail( "Selected Element was null." );
-            return;
-        }
+        assertNotNull( selectedElement );
 
         assertEquals( "Already Existing!", selectedElement.getAttribute( "value" ) );
 
@@ -153,12 +148,9 @@ class TestTypeAction {
         ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id idInput" ).execute();
 
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
-        if( selectedElement == null ) {
-            fail( "Selected Element was null." );
-            return;
-        }
+        assertNotNull( selectedElement );
 
         assertEquals( "", selectedElement.getText() );
 

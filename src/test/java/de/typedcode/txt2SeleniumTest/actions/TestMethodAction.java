@@ -40,6 +40,7 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
@@ -63,7 +64,8 @@ class TestMethodAction {
     @Test
     void testGetCommand() {
         Method dummyMethod = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
-        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( dummyMethod );
+
+        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( Optional.of( dummyMethod ) );
 
         AAction action = ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "myMethod" );
 
@@ -81,7 +83,7 @@ class TestMethodAction {
 
     @Test
     void testMethodNotFound() {
-        Mockito.when( this.txt2SeleniumMock.getMethod( "unknownMethod" ) ).thenReturn( null );
+        Mockito.when( this.txt2SeleniumMock.getMethod( "unknownMethod" ) ).thenReturn( Optional.empty() );
 
         Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "unknownMethod" ) );
 
@@ -94,7 +96,7 @@ class TestMethodAction {
         WebUtil.reset();
 
         //Check that what should be there after running the Method is not there before
-        assertNull(WebUtil.getInstance().getReadVar( "myRead" ) );
+        assertTrue( WebUtil.getInstance().getReadVar( "myRead" ).isEmpty() );
         assertEquals( "", WebUtil.getInstance().getTitle() );
 
         //Preparing the Actions to run in the Method
@@ -109,13 +111,13 @@ class TestMethodAction {
         //Preparing the Method to run
         Method method = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testRunMethod.t2s" ) );
 
-        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( method );
+        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( Optional.of( method ) );
 
         AAction methodAction = ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "myMethod" );
 
         methodAction.execute();
 
-        assertEquals( "content", WebUtil.getInstance().getReadVar( "myRead" ) );
+        assertEquals( "content", WebUtil.getInstance().getReadVar( "myRead" ).get() );
         assertEquals( "Run Method Title", WebUtil.getInstance().getTitle() );
     }
 
@@ -125,7 +127,7 @@ class TestMethodAction {
         UnitLogger.addHandler( handler );
 
         Method method = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
-        Mockito.when( this.txt2SeleniumMock.getMethod( "testLoggingEmptyMethod" ) ).thenReturn( method );
+        Mockito.when( this.txt2SeleniumMock.getMethod( "testLoggingEmptyMethod" ) ).thenReturn( Optional.of( method ) );
 
         ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "testLoggingEmptyMethod" ).execute();
 

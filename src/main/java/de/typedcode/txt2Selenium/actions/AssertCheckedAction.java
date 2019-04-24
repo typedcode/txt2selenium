@@ -33,6 +33,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import javax.swing.*;
+import java.util.Optional;
 
 public class AssertCheckedAction extends AAction {
 
@@ -62,12 +63,14 @@ public class AssertCheckedAction extends AAction {
     @Override
     public void execute() {
         UnitLogger.logInfo( getCommand() );
-        WebElement selectedElement = WebUtil.getInstance().getSelectedElement();
+        Optional<WebElement> optionalSelectedElement = WebUtil.getInstance().getSelectedElement();
 
-        if( selectedElement == null ) {
+        if( ((Optional) optionalSelectedElement).isEmpty() ) {
             UnitLogger.logSevere( "Error: No Element selected to check for selection status." );
             return;
         }
+
+        WebElement selectedElement = optionalSelectedElement.get();
 
         try {
             Boolean actualState = selectedElement.isSelected();

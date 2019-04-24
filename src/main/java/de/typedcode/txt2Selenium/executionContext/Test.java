@@ -31,6 +31,7 @@ import de.typedcode.txt2Selenium.parsers.TestFileParser;
 import de.typedcode.txt2Selenium.util.UnitLogger;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 public class Test extends ExecutionContext {
 
@@ -88,6 +89,14 @@ public class Test extends ExecutionContext {
 
     @Override
     void processPath() {
-        this.firstAction = TestFileParser.parse( this.txt2Selenium, this.PATH );
+
+        Optional<AAction> optionalAction = TestFileParser.parse(this.txt2Selenium, this.PATH);
+
+        if( optionalAction.isEmpty() ) {
+            this.firstAction = null;
+        }
+        else {
+            this.firstAction = optionalAction.get();
+        }
     }
 }

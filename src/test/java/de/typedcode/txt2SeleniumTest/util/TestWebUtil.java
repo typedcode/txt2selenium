@@ -52,44 +52,44 @@ class TestWebUtil {
 
     @Test
     void testSelect() {
-        assertNull( WebUtil.getInstance().getSelectedElement() );
-        assertNull( WebUtil.getInstance().getSelectedBy() );
+        assertTrue( WebUtil.getInstance().getSelectedElement().isEmpty() );
+        assertTrue( WebUtil.getInstance().getSelectedBy().isEmpty() );
 
         By selectBy = By.id( "utilContent" );
 
         WebUtil.getInstance().select( selectBy );
 
-        assertEquals( selectBy, WebUtil.getInstance().getSelectedBy() );
-        assertEquals( "<p id=\"utilContent\">", WebUtil.getInstance().getSelectedElement().toString() );
+        assertEquals( selectBy, WebUtil.getInstance().getSelectedBy().get() );
+        assertEquals( "<p id=\"utilContent\">", WebUtil.getInstance().getSelectedElement().get().toString() );
     }
 
     @Test
     void testRead() {
-        assertNull( WebUtil.getInstance().getReadVar( "myVar" ) );
+        assertTrue( WebUtil.getInstance().getReadVar( "myVar" ).isEmpty() );
 
         WebUtil.getInstance().select( By.id( "utilContent" ) );
         WebUtil.getInstance().readText( "myVar" );
 
-        assertEquals( "Content", WebUtil.getInstance().getReadVar( "myVar" ) );
+        assertEquals( "Content", WebUtil.getInstance().getReadVar( "myVar" ).get() );
     }
 
     @Test
     void testReset() {
-        assertNull( WebUtil.getInstance().getReadVar( "myRead" ) );
-        assertNull( WebUtil.getInstance().getSelectedElement() );
-        assertNull( WebUtil.getInstance().getSelectedBy() );
+        assertTrue( WebUtil.getInstance().getReadVar( "myRead" ).isEmpty() );
+        assertTrue( WebUtil.getInstance().getSelectedElement() .isEmpty() );
+        assertTrue( WebUtil.getInstance().getSelectedBy().isEmpty() );
 
         ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id utilContent" ).execute();
         ActionFactory.createAction( this.txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" ).execute();
 
-        assertNotNull( WebUtil.getInstance().getReadVar( "myRead" ) );
-        assertNotNull( WebUtil.getInstance().getSelectedElement() );
-        assertNotNull( WebUtil.getInstance().getSelectedBy() );
+        assertTrue( WebUtil.getInstance().getReadVar( "myRead" ).isPresent() );
+        assertTrue( WebUtil.getInstance().getSelectedElement().isPresent() );
+        assertTrue( WebUtil.getInstance().getSelectedBy().isPresent() );
 
         WebUtil.reset();
 
-        assertNull( WebUtil.getInstance().getReadVar( "myRead" ) );
-        assertNull( WebUtil.getInstance().getSelectedElement() );
-        assertNull( WebUtil.getInstance().getSelectedBy() );
+        assertTrue( WebUtil.getInstance().getReadVar( "myRead" ).isEmpty() );
+        assertTrue( WebUtil.getInstance().getSelectedElement().isEmpty() );
+        assertTrue( WebUtil.getInstance().getSelectedBy().isEmpty() );
     }
 }

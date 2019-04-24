@@ -37,6 +37,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Txt2Selenium {
     public static final String FILE_EXTENSION = ".t2s";
@@ -140,13 +141,13 @@ public class Txt2Selenium {
     }
 
     /**
-     * Returns the Method represented by the methodName. Will return null if the Method was not found.
+     * Returns the Method represented by the methodName. Will return am Empty Optional if the Method was not found.
      *
      * @param methodName Name of the Method to return
      * @return Method represented by methodName or null if the Method was not found
      */
-    public Method getMethod( String methodName ) {
-        return this.methods.get( methodName );
+    public Optional<Method> getMethod(String methodName ) {
+        return Optional.ofNullable( this.methods.get(methodName) );
     }
 
     public TestScenario getDefaultTestScenario() {

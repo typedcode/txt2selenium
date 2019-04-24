@@ -26,6 +26,7 @@ package de.typedcode.txt2SeleniumTest.parsers;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -45,15 +46,15 @@ class TestTestFileParser {
 
     @Test
     void testEmptyTestFile() throws ParseException {
-        AAction action = TestFileParser.parse( txt2SeleniumMock,
+        Optional< AAction > action = TestFileParser.parse( txt2SeleniumMock,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "emptyTestFile.t2s" ) );
-        assertNull( action );
+        assertTrue( action.isEmpty() );
     }
 
     @Test
     void testMultipleActions() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
-                Paths.get( "src", "test", "resources", "parsers", "testFileParser", "multipleActions.t2s" ) );
+                Paths.get( "src", "test", "resources", "parsers", "testFileParser", "multipleActions.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
         assertEquals( "http://www.markus-fischer.net", ( ( OpenAction ) action ).URL );
@@ -70,7 +71,7 @@ class TestTestFileParser {
     @Test
     void testOneAction() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
-                Paths.get( "src", "test", "resources", "parsers", "testFileParser", "oneAction.t2s" ) );
+                Paths.get( "src", "test", "resources", "parsers", "testFileParser", "oneAction.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
         assertNull( action.nextAction );
@@ -80,7 +81,7 @@ class TestTestFileParser {
     @Test
     void testTwoActions() throws ParseException {
         AAction action = TestFileParser.parse( txt2SeleniumMock,
-                Paths.get( "src", "test", "resources", "parsers", "testFileParser", "twoActions.t2s" ) );
+                Paths.get( "src", "test", "resources", "parsers", "testFileParser", "twoActions.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
         action = action.nextAction;

@@ -84,6 +84,6 @@ class TestTxt2Selenium {
 
         assertNotNull( instance.getMethod( "firstMethod" ) );
         assertNotNull( instance.getMethod( "secondMethod" ) );
-        assertNull( instance.getMethod( "someUnknownMethod" ) );
+        assertTrue( instance.getMethod( "someUnknownMethod" ).isEmpty() );
     }
 }

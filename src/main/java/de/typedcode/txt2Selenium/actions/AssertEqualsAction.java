@@ -30,6 +30,8 @@ import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
 import de.typedcode.txt2Selenium.util.UnitLogger;
 import de.typedcode.txt2Selenium.util.WebUtil;
 
+import java.util.Optional;
+
 public class AssertEqualsAction extends AAction {
 
     public static final String IDENTIFIER = "assertEquals";
@@ -74,17 +76,19 @@ public class AssertEqualsAction extends AAction {
         UnitLogger.logInfo( getCommand() );
 
         String expected = this.correspondingInstance.getCompareString( this.expectedIdentifier );
-        String actual = WebUtil.getInstance().getReadVar( this.actualIdentifier );
+        Optional<String> optionalActual = WebUtil.getInstance().getReadVar( this.actualIdentifier );
 
         if( expected == null ) {
             UnitLogger.logSevere(String.format( "Execution Error. Could not find expectedIdentifier '%s'.", this.expectedIdentifier ) );
             return;
         }
 
-        if( actual == null ) {
+        if( optionalActual.isEmpty() ) {
             UnitLogger.logSevere( String.format( "Execution Error. Could not find actualIdentifier '%s'.", this.actualIdentifier ) );
             return;
         }
+
+        String actual = optionalActual.get();
 
         if( ( !actual.equals( expected ) && this.evaluationIndicator ) || ( actual.equals( expected ) && !this.evaluationIndicator ) ) {
             UnitLogger.logSevere( String.format( "Execution Error. Parameters did not match. Expected (%s): %s / Actual (%s): %s", this.expectedIdentifier, expected, this.actualIdentifier, actual ) );
