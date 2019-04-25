@@ -25,12 +25,14 @@
 package de.typedcode.txt2Selenium.executionContext;
 
 import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2Selenium.parsers.CompareStringParser;
 import de.typedcode.txt2Selenium.util.FileUtil;
 import de.typedcode.txt2Selenium.util.UnitLogger;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class TestScenario extends ExecutionContext {
 
@@ -40,9 +42,19 @@ public class TestScenario extends ExecutionContext {
     public static boolean TESTS_EXIST = false;
     private List<Test> tests;
     private List<TestScenario> subScenarios;
+    private TestScenario parentScenario;
+    private Map< String, String > compareStrings;
 
     public TestScenario( Txt2Selenium instance, Path path ) {
+        this( instance, null, path ) ;
+    }
+
+    public TestScenario( Txt2Selenium instance, TestScenario parentScenario, Path path ) {
         super( instance, path );
+        this.parentScenario = parentScenario;
+        this.compareStrings = new HashMap<>();
+
+        computeCompareStrings();
     }
 
     @Override
@@ -100,7 +112,7 @@ public class TestScenario extends ExecutionContext {
             TESTS_EXIST = true;
         }
 
-        directories.forEach( o -> this.subScenarios.add( new TestScenario( this.txt2Selenium, o ) ) );
+        directories.forEach( o -> this.subScenarios.add( new TestScenario( this.txt2Selenium, this, o ) ) );
     }
 
     public List<Test> getTests() {
@@ -119,6 +131,37 @@ public class TestScenario extends ExecutionContext {
             TESTS_EXIST = true;
         }
 
-        testFiles.forEach( o -> this.tests.add( new Test( this.txt2Selenium, o ) ) );
+        testFiles.stream()
+                .filter( o -> !Txt2Selenium.COMPARE_STRINGS_FILE_NAME.equals( o.getFileName().toString() ) )
+                .forEach( o -> this.tests.add( new Test( this.txt2Selenium, o ) ) );
+    }
+
+    /**
+     * Computes the compare Strings for this Scenario
+     */
+    private void computeCompareStrings() {
+        Path path = Paths.get(this.PATH.toString(), Txt2Selenium.COMPARE_STRINGS_FILE_NAME);
+
+        if( Files.exists( path) ) {
+            this.compareStrings = CompareStringParser.parse( path );
+        }
+
+    }
+
+    public Optional< String > getCompareString( String key ) {
+        String compareString = this.compareStrings.get( key );
+
+        if(compareString != null) {
+            return Optional.of( compareString );
+        }
+        else if( this.parentScenario != null ) {
+            return (this.parentScenario.getCompareString( key ) );
+        }
+
+        return Optional.empty();
+    }
+
+    public Map< String, String > getCompareStrings() {
+         return this.compareStrings;
     }
 }

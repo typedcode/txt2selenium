@@ -41,7 +41,7 @@ import java.util.Optional;
 
 public class Txt2Selenium {
     public static final String FILE_EXTENSION = ".t2s";
-    private final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
+    public static final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
     private final String TEST_FILE_FOLDER = "tests";
     private final String METHOD_FILE_FOLDER = "methods";
 

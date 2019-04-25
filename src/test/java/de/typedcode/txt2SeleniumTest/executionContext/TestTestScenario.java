@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
@@ -30,7 +31,7 @@ class TestTestScenario {
         Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "testsOnly" );
         Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
 
-        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
+        TestScenario tsc = new TestScenario( this.txt2SeleniumMock,scenarioPath );
 
         assertTrue( tsc.getSubScenarios().isEmpty() );
         assertEquals( 3, tsc.getTests().size() );
@@ -114,5 +115,49 @@ class TestTestScenario {
         assertEquals(Level.INFO, records.get( 0 ).getLevel() );
         assertEquals( "Scenario 'emptyScenario' does not contain any tests or sub-scenarios.", records.get( 0 ).getMessage() );
         assertEquals( 1, records.size() );
+    }
+
+    @Test
+    void testNoCompareStrings() {
+        Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "emptyScenario" );
+
+        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
+        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
+
+        assertTrue( tsc.getCompareStrings().isEmpty() );
+    }
+
+    @Test
+    void testCompareStringsScenarioOnly() {
+        Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "scenarioOnly" );
+
+        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
+        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
+
+        assertEquals( "one",  tsc.getCompareString( "first" ).get() );
+        assertEquals( "two", tsc.getCompareString( "second" ).get() );
+        assertEquals( "three", tsc.getCompareString( "third" ).get() );
+        assertEquals( 3, tsc.getCompareStrings().size() );
+    }
+
+    @Test
+    void testAdditionalCompareStrings() {
+        Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "additionalCompareStrings" );
+
+        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
+        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
+
+        assertEquals( "one",  tsc.getCompareString( "first" ).get() );
+        assertEquals( "two", tsc.getCompareString( "second" ).get() );
+        assertEquals( "three", tsc.getCompareString( "third" ).get() );
+        assertEquals( 3, tsc.getCompareStrings().size() );
+
+        //Checking the SubScenario
+        tsc = tsc.getSubScenarios().get( 0 );
+        assertEquals( "one",  tsc.getCompareString( "first" ).get() );
+        assertEquals( "overwrite", tsc.getCompareString( "second" ).get() );
+        assertEquals( "three", tsc.getCompareString( "third" ).get() );
+        assertEquals( "additional", tsc.getCompareString( "fourth" ).get() );
+        assertEquals( 2, tsc.getCompareStrings().size() );
     }
 }
