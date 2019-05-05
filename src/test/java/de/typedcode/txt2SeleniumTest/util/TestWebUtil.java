@@ -24,11 +24,11 @@
 
 package de.typedcode.txt2SeleniumTest.util;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.ReadAction;
-import de.typedcode.txt2Selenium.actions.SelectAction;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2selenium.actions.ActionFactory;
+import de.typedcode.txt2selenium.actions.ReadAction;
+import de.typedcode.txt2selenium.actions.SelectAction;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.WebUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestWebUtil {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @BeforeEach
     void before() {
@@ -79,8 +79,8 @@ class TestWebUtil {
         assertTrue( WebUtil.getInstance().getSelectedElement() .isEmpty() );
         assertTrue( WebUtil.getInstance().getSelectedBy().isEmpty() );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id utilContent" ).execute();
-        ActionFactory.createAction( this.txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" ).execute();
+        ActionFactory.createAction( this.testScenario, SelectAction.IDENTIFIER, "id utilContent" ).execute();
+        ActionFactory.createAction( this.testScenario, ReadAction.IDENTIFIER, "myRead" ).execute();
 
         assertTrue( WebUtil.getInstance().getReadVar( "myRead" ).isPresent() );
         assertTrue( WebUtil.getInstance().getSelectedElement().isPresent() );

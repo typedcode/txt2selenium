@@ -1,10 +1,10 @@
 package de.typedcode.txt2SeleniumTest.executionContext;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.OpenAction;
-import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2selenium.actions.ActionFactory;
+import de.typedcode.txt2selenium.actions.OpenAction;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.UnitLogger;
+import de.typedcode.txt2selenium.util.WebUtil;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,12 +17,11 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestTest {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @AfterEach
     void afterEach() {
@@ -33,9 +32,9 @@ class TestTest {
     void testExecution() {
         Path openPath = Paths.get("src", "test", "resources", "executionContext", "test", "testExecution.html");
         Path testPath = Paths.get("src", "test", "resources", "executionContext", "test", "testExecution.t2s");
-        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, openPath.toUri().toString() ).execute();
+        ActionFactory.createAction( this.testScenario, OpenAction.IDENTIFIER, openPath.toUri().toString() ).execute();
 
-        de.typedcode.txt2Selenium.executionContext.Test tst = new de.typedcode.txt2Selenium.executionContext.Test( this.txt2SeleniumMock, testPath );
+        de.typedcode.txt2selenium.executionContext.Test tst = new de.typedcode.txt2selenium.executionContext.Test( this.testScenario, testPath );
 
         assertTrue( WebUtil.getInstance().getReadVar( "myRead" ).isEmpty() );
         assertEquals( "Title Test Execution", WebUtil.getInstance().getTitle() );
@@ -50,12 +49,12 @@ class TestTest {
     void testLogging(){
         Path openPath = Paths.get("src", "test", "resources", "executionContext", "test", "testExecution.html");
         Path testPath = Paths.get("src", "test", "resources", "executionContext", "test", "testExecution.t2s");
-        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, openPath.toUri().toString() ).execute();
+        ActionFactory.createAction( this.testScenario, OpenAction.IDENTIFIER, openPath.toUri().toString() ).execute();
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
 
-        de.typedcode.txt2Selenium.executionContext.Test tst = new de.typedcode.txt2Selenium.executionContext.Test( this.txt2SeleniumMock, testPath );
+        de.typedcode.txt2selenium.executionContext.Test tst = new de.typedcode.txt2selenium.executionContext.Test( this.testScenario, testPath );
 
         tst.execute();
 
@@ -76,8 +75,8 @@ class TestTest {
 
     @Test
     void testEmptyTestLogging() {
-        de.typedcode.txt2Selenium.executionContext.Test tst = new de.typedcode.txt2Selenium.executionContext.Test(
-                this.txt2SeleniumMock,
+        de.typedcode.txt2selenium.executionContext.Test tst = new de.typedcode.txt2selenium.executionContext.Test(
+                this.testScenario,
                 Paths.get( "src", "test", "resources", "executionContext", "test", "emptyTest.t2s" ) );
 
         TestLoggingHandler handler = new TestLoggingHandler();

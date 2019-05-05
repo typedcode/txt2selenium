@@ -33,8 +33,8 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import de.typedcode.txt2Selenium.exceptions.ParseException;
-import de.typedcode.txt2Selenium.parsers.CompareStringParser;
+import de.typedcode.txt2selenium.exceptions.ParseException;
+import de.typedcode.txt2selenium.parsers.CompareStringParser;
 
 class TestCompareStringParser {
 

@@ -29,10 +29,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.typedcode.txt2Selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
 import org.junit.jupiter.api.Test;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
+import de.typedcode.txt2selenium.Txt2Selenium;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,10 +70,10 @@ class TestTxt2Selenium {
         Txt2Selenium instance = new Txt2Selenium( path );
 
         TestScenario defaultTestScenario = instance.getDefaultTestScenario();
-        List<de.typedcode.txt2Selenium.executionContext.Test> tests = defaultTestScenario.getTests();
+        List<de.typedcode.txt2selenium.executionContext.Test> tests = defaultTestScenario.getTests();
 
         assertEquals(2, tests.size() );
-        tests.forEach( o -> assertTrue( wanted.contains( o.PATH ) ) );
+        tests.forEach( o -> assertTrue( wanted.contains( o.getPath()) ) );
     }
 
     @Test

@@ -30,27 +30,27 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import de.typedcode.txt2Selenium.actions.AAction;
-import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2selenium.actions.AAction;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.UnitLogger;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.OpenAction;
-import de.typedcode.txt2Selenium.actions.SelectAction;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2selenium.actions.ActionFactory;
+import de.typedcode.txt2selenium.actions.OpenAction;
+import de.typedcode.txt2selenium.actions.SelectAction;
+import de.typedcode.txt2selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2selenium.util.WebUtil;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings( "null" )
 class TestSelectAction {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @BeforeEach
     void before() {
@@ -60,7 +60,7 @@ class TestSelectAction {
     @Test
     void testSelectNoParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "" ) );
+                () -> ActionFactory.createAction( this.testScenario, SelectAction.IDENTIFIER, "" ) );
 
         assertEquals( "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id",
                 exception.getMessage() );
@@ -69,7 +69,7 @@ class TestSelectAction {
     @Test
     void testSelectOneParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "by" ) );
+                () -> ActionFactory.createAction( this.testScenario, SelectAction.IDENTIFIER, "by" ) );
 
         assertEquals( "Could not initiate the Select Action. Action needs two parameters. Use: select byIdentifier id",
                 exception.getMessage() );
@@ -79,8 +79,8 @@ class TestSelectAction {
     void testSelectById() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
-        ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id selectId" ).execute();
+        ActionFactory.createAction( this.testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( this.testScenario, SelectAction.IDENTIFIER, "id selectId" ).execute();
 
         WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
 
@@ -93,11 +93,11 @@ class TestSelectAction {
     @Test
     void testSelectByName() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction(testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        SelectAction action = ( SelectAction ) ActionFactory.createAction(testScenario, SelectAction.IDENTIFIER,
                 "name selectName" );
         action.execute();
 
@@ -112,11 +112,11 @@ class TestSelectAction {
     @Test
     void testSelectByXPath() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction(testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        SelectAction action = ( SelectAction ) ActionFactory.createAction(testScenario, SelectAction.IDENTIFIER,
                 "xpath /html/body/div/p/a[3]" );
         action.execute();
 
@@ -131,11 +131,11 @@ class TestSelectAction {
     @Test
     void testSelectByXPath2() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction(testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
-        SelectAction action = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        SelectAction action = ( SelectAction ) ActionFactory.createAction(testScenario, SelectAction.IDENTIFIER,
                 "xpath //*[contains(text(),'2')]" );
         action.execute();
 
@@ -151,8 +151,8 @@ class TestSelectAction {
     void testElementNotFoundLog() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
-        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id unknownId" );
+        ActionFactory.createAction( this.testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        AAction action = ActionFactory.createAction( this.testScenario, SelectAction.IDENTIFIER, "id unknownId" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -173,8 +173,8 @@ class TestSelectAction {
     @Test void testLog() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "selectAction", "selectActionTestfile.html" );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
-        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id selectId" );
+        ActionFactory.createAction( this.testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        AAction action = ActionFactory.createAction( this.testScenario, SelectAction.IDENTIFIER, "id selectId" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -191,7 +191,7 @@ class TestSelectAction {
 
     @Test
     void testGetCommand() {
-        AAction action = ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        AAction action = ActionFactory.createAction(testScenario, SelectAction.IDENTIFIER,
                 "xpath /html/body/div/p/a[3]" );
 
         assertEquals(String.format( "%s xpath /html/body/div/p/a[3]", SelectAction.IDENTIFIER ), action.getCommand() );

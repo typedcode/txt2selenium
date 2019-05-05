@@ -24,10 +24,10 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.*;
-import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2selenium.actions.*;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.UnitLogger;
+import de.typedcode.txt2selenium.util.WebUtil;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,20 +43,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestAssertCheckedAction {
 
-    private Txt2Selenium txt2SeleniumMock;
+    private TestScenario testScenario;
 
     @BeforeEach
     void before() {
-        this.txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+        this.testScenario = Mockito.mock( TestScenario.class );
         WebUtil.reset();
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "assertCheckedAction", "assert.html" );
 
-        ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction(testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
     }
 
     @Test
     void testNoSelectionLog() {
-        AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "" );
+        AAction action = ActionFactory.createAction(testScenario, AssertCheckedAction.IDENTIFIER, "" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -75,9 +75,9 @@ class TestAssertCheckedAction {
 
     @Test
     void testNotCheckableElementSelectedLog() {
-        ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id notCheckable").execute();
+        ActionFactory.createAction(this.testScenario, SelectAction.IDENTIFIER, "id notCheckable").execute();
 
-        AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" );
+        AAction action = ActionFactory.createAction(testScenario, AssertCheckedAction.IDENTIFIER, "true" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -97,9 +97,9 @@ class TestAssertCheckedAction {
 
     @Test
     void testElementTrueButShouldBeFalseLog() {
-        ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
+        ActionFactory.createAction(this.testScenario, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
-        AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" );
+        AAction action = ActionFactory.createAction(testScenario, AssertCheckedAction.IDENTIFIER, "false" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -121,9 +121,9 @@ class TestAssertCheckedAction {
     void testElementFalseButShouldBeTrueLog() {
         before();
 
-        ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
+        ActionFactory.createAction(this.testScenario, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
 
-        AAction action = ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" );
+        AAction action = ActionFactory.createAction(testScenario, AssertCheckedAction.IDENTIFIER, "true" );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
@@ -143,35 +143,35 @@ class TestAssertCheckedAction {
 
     @Test
     void testEvaluationTrueIgnoreCase() {
-        ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
+        ActionFactory.createAction(this.testScenario, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
-        ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "tRuE" ).execute();
+        ActionFactory.createAction(testScenario, AssertCheckedAction.IDENTIFIER, "tRuE" ).execute();
     }
 
     @Test
     void testEvaluationTrueSuccess() {
-        ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id checkedElement").execute();
+        ActionFactory.createAction(this.testScenario, SelectAction.IDENTIFIER, "id checkedElement").execute();
 
-        ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true" ).execute();
+        ActionFactory.createAction(testScenario, AssertCheckedAction.IDENTIFIER, "true" ).execute();
     }
 
     @Test
     void testEvaluationFalseSuccess() {
-        ActionFactory.createAction(this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
+        ActionFactory.createAction(this.testScenario, SelectAction.IDENTIFIER, "id uncheckedElement").execute();
 
-        ActionFactory.createAction( txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false" ).execute();
+        ActionFactory.createAction(testScenario, AssertCheckedAction.IDENTIFIER, "false" ).execute();
     }
 
     @Test
     void testGetCommandTrue() {
-        AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "true");
+        AAction action = ActionFactory.createAction(this.testScenario, AssertCheckedAction.IDENTIFIER, "true");
 
         assertEquals( String.format( "%s true", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
     }
 
     @Test
     void testGetCommandFalse() {
-        AAction action = ActionFactory.createAction(this.txt2SeleniumMock, AssertCheckedAction.IDENTIFIER, "false");
+        AAction action = ActionFactory.createAction(this.testScenario, AssertCheckedAction.IDENTIFIER, "false");
 
         assertEquals( String.format( "%s false", AssertCheckedAction.IDENTIFIER ), action.getCommand() );
     }

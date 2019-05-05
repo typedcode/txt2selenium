@@ -34,8 +34,8 @@ import org.openqa.selenium.By.ById;
 import org.openqa.selenium.By.ByName;
 import org.openqa.selenium.By.ByXPath;
 
-import de.typedcode.txt2Selenium.util.ByInitializer;
-import de.typedcode.txt2Selenium.util.ByType;
+import de.typedcode.txt2selenium.util.ByInitializer;
+import de.typedcode.txt2selenium.util.ByType;
 
 class TestByInitializer {
 

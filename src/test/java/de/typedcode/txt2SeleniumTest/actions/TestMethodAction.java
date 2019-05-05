@@ -24,12 +24,16 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.*;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.executionContext.Method;
-import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2selenium.actions.AAction;
+import de.typedcode.txt2selenium.actions.ActionFactory;
+import de.typedcode.txt2selenium.actions.MethodAction;
+import de.typedcode.txt2selenium.actions.OpenAction;
+import de.typedcode.txt2selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2selenium.executionContext.Method;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.UnitLogger;
+import de.typedcode.txt2selenium.util.WebUtil;
+import de.typedcode.txt2selenium.util.repositories.MethodRepository;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestMethodAction {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @BeforeEach
     void before() throws NoSuchFieldException, IllegalAccessException  {
@@ -59,15 +63,30 @@ class TestMethodAction {
     }
 
     @AfterEach
-    void afterEach() { WebUtil.reset(); }
+    void afterEach() throws Exception {
+        WebUtil.reset();
+
+        Field instance = MethodRepository.class.getDeclaredField("instance" );
+        instance.setAccessible( true );
+        instance.set( instance, null );
+    }
+
+    private void prepareMock( TestScenario scenario, String method, Method dummyMethod ) throws Exception {
+        MethodRepository mRep = Mockito.mock( MethodRepository.class );
+        Mockito.when( mRep.getMethod( scenario, method ) ).thenReturn( Optional.ofNullable( dummyMethod ) );
+
+        Field instance = MethodRepository.class.getDeclaredField("instance" );
+        instance.setAccessible( true );
+        instance.set( instance, mRep );
+    }
 
     @Test
-    void testGetCommand() {
-        Method dummyMethod = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
+    void testGetCommand() throws Exception {
+        Method dummyMethod = new Method( this.testScenario, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
 
-        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( Optional.of( dummyMethod ) );
+        prepareMock( this.testScenario, "testLoggingEmptyMethod", dummyMethod );
 
-        AAction action = ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "myMethod" );
+        AAction action = ActionFactory.createAction( this.testScenario, MethodAction.IDENTIFIER, "testLoggingEmptyMethod" );
 
         assertEquals( "method testLoggingEmptyMethod", action.getCommand() );
 
@@ -76,22 +95,22 @@ class TestMethodAction {
 
     @Test
     void testEmptyParameter() {
-        Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "" ) );
+        Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.testScenario, MethodAction.IDENTIFIER, "" ) );
 
         assertEquals( "Could not initiate Method Action. The name for the Method to call was empty. Usage: method methodName", exception.getMessage() );
     }
 
     @Test
     void testMethodNotFound() {
-        Mockito.when( this.txt2SeleniumMock.getMethod( "unknownMethod" ) ).thenReturn( Optional.empty() );
+        //Mockito.when( this.testScenario.getMethod( "unknownMethod" ) ).thenReturn( Optional.empty() );
 
-        Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "unknownMethod" ) );
+        Throwable exception = assertThrows( ActionInitiationException.class, () -> ActionFactory.createAction( this.testScenario, MethodAction.IDENTIFIER, "unknownMethod" ) );
 
         assertEquals( "Could not initiate Method Action. Method 'unknownMethod' was not found.", exception.getMessage() );
     }
 
     @Test
-    void testRunMethod() {
+    void testRunMethod() throws Exception {
         //Use a non mocked instance
         WebUtil.reset();
 
@@ -103,17 +122,14 @@ class TestMethodAction {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "methodAction", "page.html" );
 
         //Open before Using the method. Because of the Path this test would not run on Windows and Linux systems
-        ActionFactory.createAction( this.txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
-
-        AAction selectAction = ActionFactory.createAction( this.txt2SeleniumMock, SelectAction.IDENTIFIER, "id toSelect" );
-        AAction readAction = ActionFactory.createAction( this.txt2SeleniumMock, ReadAction.IDENTIFIER, "myRead" );
+        ActionFactory.createAction( this.testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
 
         //Preparing the Method to run
-        Method method = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testRunMethod.t2s" ) );
+        Method method = new Method( this.testScenario, Paths.get( "src", "test", "resources", "actions", "methodAction", "testRunMethod.t2s" ) );
 
-        Mockito.when( this.txt2SeleniumMock.getMethod( "myMethod" ) ).thenReturn( Optional.of( method ) );
+        prepareMock( this.testScenario, "myMethod", method );
 
-        AAction methodAction = ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "myMethod" );
+        AAction methodAction = ActionFactory.createAction( this.testScenario, MethodAction.IDENTIFIER, "myMethod" );
 
         methodAction.execute();
 
@@ -122,14 +138,15 @@ class TestMethodAction {
     }
 
     @Test
-    void testLoggingEmptyMethod() {
+    void testLoggingEmptyMethod() throws Exception {
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
 
-        Method method = new Method( this.txt2SeleniumMock, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
-        Mockito.when( this.txt2SeleniumMock.getMethod( "testLoggingEmptyMethod" ) ).thenReturn( Optional.of( method ) );
+        Method method = new Method( this.testScenario, Paths.get( "src", "test", "resources", "actions", "methodAction", "testLoggingEmptyMethod.t2s" ) );
+        prepareMock( this.testScenario, "testLoggingEmptyMethod", method );
+        //Mockito.when( this.testScenario.getMethod( "testLoggingEmptyMethod" ) ).thenReturn( Optional.of( method ) );
 
-        ActionFactory.createAction( this.txt2SeleniumMock, MethodAction.IDENTIFIER, "testLoggingEmptyMethod" ).execute();
+        ActionFactory.createAction( this.testScenario, MethodAction.IDENTIFIER, "testLoggingEmptyMethod" ).execute();
 
         List<LogRecord> records = handler.getLogRecords();
 

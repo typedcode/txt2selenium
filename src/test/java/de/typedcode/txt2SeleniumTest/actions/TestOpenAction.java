@@ -33,47 +33,47 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import de.typedcode.txt2Selenium.actions.AAction;
-import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2selenium.actions.AAction;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.UnitLogger;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.actions.OpenAction;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2selenium.actions.ActionFactory;
+import de.typedcode.txt2selenium.actions.OpenAction;
+import de.typedcode.txt2selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2selenium.util.WebUtil;
 
 class TestOpenAction {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @Test
     void testEmptyUrl() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, "" ) );
+                () -> ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER, "" ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
     void testSpaceParameter() {
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, "  " ) );
+                () -> ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER, "  " ) );
         assertEquals( "Coulnd not Initiate OpenAction. The given URL was empty.", exception.getMessage() );
     }
 
     @Test
     void testSuccessfullInitiation() throws ActionInitiationException {
         String url = "http://www.typedcode.de";
-        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, url );
+        OpenAction action = ( OpenAction ) ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER, url );
         assertEquals( url, action.URL );
     }
 
     @Test
     void testExecuteOpen() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
-        OpenAction action = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction action = ( OpenAction ) ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         action.execute();
 
@@ -83,7 +83,7 @@ class TestOpenAction {
     @Test
     void testGetCommand() {
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
-        AAction action = ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        AAction action = ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
 
         assertEquals( String.format( "%s %s", OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ), action.getCommand() );
@@ -95,7 +95,7 @@ class TestOpenAction {
         UnitLogger.addHandler( handler );
 
         Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "openAction", "open.html" );
-        ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
 
         List<LogRecord> records = handler.getLogRecords();
 

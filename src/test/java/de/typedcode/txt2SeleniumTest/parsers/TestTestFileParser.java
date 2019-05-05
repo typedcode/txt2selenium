@@ -24,36 +24,35 @@
 
 package de.typedcode.txt2SeleniumTest.parsers;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-
+import de.typedcode.txt2selenium.actions.AAction;
+import de.typedcode.txt2selenium.actions.OpenAction;
+import de.typedcode.txt2selenium.actions.ScreenshotAction;
+import de.typedcode.txt2selenium.exceptions.ParseException;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.parsers.TestFileParser;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.AAction;
-import de.typedcode.txt2Selenium.actions.OpenAction;
-import de.typedcode.txt2Selenium.actions.ScreenshotAction;
-import de.typedcode.txt2Selenium.exceptions.ParseException;
-import de.typedcode.txt2Selenium.parsers.TestFileParser;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestTestFileParser {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @Test
     void testEmptyTestFile() throws ParseException {
-        Optional< AAction > action = TestFileParser.parse( txt2SeleniumMock,
+        Optional< AAction > action = TestFileParser.parse(testScenario,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "emptyTestFile.t2s" ) );
         assertTrue( action.isEmpty() );
     }
 
     @Test
     void testMultipleActions() throws ParseException {
-        AAction action = TestFileParser.parse( txt2SeleniumMock,
+        AAction action = TestFileParser.parse(testScenario,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "multipleActions.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
@@ -70,7 +69,7 @@ class TestTestFileParser {
 
     @Test
     void testOneAction() throws ParseException {
-        AAction action = TestFileParser.parse( txt2SeleniumMock,
+        AAction action = TestFileParser.parse(testScenario,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "oneAction.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
@@ -80,7 +79,7 @@ class TestTestFileParser {
 
     @Test
     void testTwoActions() throws ParseException {
-        AAction action = TestFileParser.parse( txt2SeleniumMock,
+        AAction action = TestFileParser.parse(testScenario,
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "twoActions.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
@@ -93,7 +92,7 @@ class TestTestFileParser {
     void testInitiationError() throws ParseException {
         Path path = Paths.get( "src", "test", "resources", "parsers", "testFileParser", "initiationError.t2s");
         Throwable exception = assertThrows( ParseException.class,
-                () -> TestFileParser.parse( txt2SeleniumMock, path ) );
+                () -> TestFileParser.parse(testScenario, path ) );
         assertEquals( "Error Parsing file '" + path.toAbsolutePath().toString() + "' at line 3",
                 exception.getMessage() );
     }

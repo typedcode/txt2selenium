@@ -24,21 +24,20 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import de.typedcode.txt2selenium.actions.ActionFactory;
+import de.typedcode.txt2selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.WebUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.ActionFactory;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestActionFactory {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @BeforeEach
     void before() {
@@ -49,7 +48,7 @@ class TestActionFactory {
     void testUnknownAction() {
 
         Throwable exception = assertThrows( ActionInitiationException.class,
-                () -> ActionFactory.createAction( this.txt2SeleniumMock, "unknownAction", "" ) );
+                () -> ActionFactory.createAction( this.testScenario, "unknownAction", "" ) );
         assertEquals( "Action 'unknownAction' is unknown.", exception.getMessage() );
     }
 }

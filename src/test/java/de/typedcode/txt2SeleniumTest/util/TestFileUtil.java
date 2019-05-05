@@ -24,7 +24,7 @@
 
 package de.typedcode.txt2SeleniumTest.util;
 
-import de.typedcode.txt2Selenium.util.FileUtil;
+import de.typedcode.txt2selenium.util.FileUtil;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;

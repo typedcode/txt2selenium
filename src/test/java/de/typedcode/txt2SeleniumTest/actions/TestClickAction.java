@@ -24,12 +24,12 @@
 
 package de.typedcode.txt2SeleniumTest.actions;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.actions.*;
-import de.typedcode.txt2Selenium.exceptions.ActionExecutionException;
-import de.typedcode.txt2Selenium.exceptions.ActionInitiationException;
-import de.typedcode.txt2Selenium.util.UnitLogger;
-import de.typedcode.txt2Selenium.util.WebUtil;
+import de.typedcode.txt2selenium.actions.*;
+import de.typedcode.txt2selenium.exceptions.ActionExecutionException;
+import de.typedcode.txt2selenium.exceptions.ActionInitiationException;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.UnitLogger;
+import de.typedcode.txt2selenium.util.WebUtil;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestClickAction {
 
-    private Txt2Selenium txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    private TestScenario testScenario = Mockito.mock( TestScenario.class );
 
     @BeforeEach
     void before() {
@@ -55,7 +55,7 @@ class TestClickAction {
 
     @Test
     void testClickWithoutselect() {
-        AAction ca = ActionFactory.createAction( this.txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
+        AAction ca = ActionFactory.createAction( this.testScenario, ClickAction.IDENTIFIER, "" );
 
         Throwable exception = assertThrows( ActionExecutionException.class, ca::execute );
 
@@ -65,17 +65,17 @@ class TestClickAction {
     @Test
     void testClickById() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
         assertEquals( "Before Click", WebUtil.getInstance().getTitle() );
 
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( testScenario, SelectAction.IDENTIFIER,
                 "id clickActionId" );
         selectAction.execute();
 
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
+        ClickAction action = ( ClickAction ) ActionFactory.createAction( testScenario, ClickAction.IDENTIFIER, "" );
         action.execute();
 
         assertEquals( "After Click Id", WebUtil.getInstance().getTitle() );
@@ -84,17 +84,17 @@ class TestClickAction {
     @Test
     void testClickByName() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
         assertEquals( "Before Click", WebUtil.getInstance().getTitle() );
 
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( testScenario, SelectAction.IDENTIFIER,
                 "name clickActionName" );
         selectAction.execute();
 
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
+        ClickAction action = ( ClickAction ) ActionFactory.createAction( testScenario, ClickAction.IDENTIFIER, "" );
         action.execute();
 
         assertEquals( "After Click Name", WebUtil.getInstance().getTitle() );
@@ -103,17 +103,17 @@ class TestClickAction {
     @Test
     void testClickByXPath() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
         assertEquals( "Before Click", WebUtil.getInstance().getTitle() );
 
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( testScenario, SelectAction.IDENTIFIER,
                 "xpath /html/body/div/p/a[3]" );
         selectAction.execute();
 
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
+        ClickAction action = ( ClickAction ) ActionFactory.createAction( testScenario, ClickAction.IDENTIFIER, "" );
         action.execute();
 
         assertEquals( "After Click XPath", WebUtil.getInstance().getTitle() );
@@ -122,17 +122,17 @@ class TestClickAction {
     @Test
     void testClickByXPath2() throws ActionInitiationException {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/beforeClick.html" );
-        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER,
+        OpenAction openAction = ( OpenAction ) ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER,
                 fileToOpen.toUri().toString() );
         openAction.execute();
 
         assertEquals( "Before Click", WebUtil.getInstance().getTitle() );
 
-        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER,
+        SelectAction selectAction = ( SelectAction ) ActionFactory.createAction( testScenario, SelectAction.IDENTIFIER,
                 "xpath //*[contains(text(),'with spaces')]" );
         selectAction.execute();
 
-        ClickAction action = ( ClickAction ) ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
+        ClickAction action = ( ClickAction ) ActionFactory.createAction( testScenario, ClickAction.IDENTIFIER, "" );
         action.execute();
 
         assertEquals( "After Click XPath 2", WebUtil.getInstance().getTitle() );
@@ -140,7 +140,7 @@ class TestClickAction {
 
     @Test
     void testGetCommand() {
-        AAction action = ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" );
+        AAction action = ActionFactory.createAction( testScenario, ClickAction.IDENTIFIER, "" );
 
         assertEquals( ClickAction.IDENTIFIER, action.getCommand() );
     }
@@ -149,13 +149,13 @@ class TestClickAction {
     void testLogging() {
         Path fileToOpen = Paths.get( "src/test/resources/actions/clickAction/logging.html" );
 
-        ActionFactory.createAction( txt2SeleniumMock, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
-        ActionFactory.createAction( txt2SeleniumMock, SelectAction.IDENTIFIER, "id clickElement" ).execute();
+        ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( testScenario, SelectAction.IDENTIFIER, "id clickElement" ).execute();
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
 
-        ActionFactory.createAction( txt2SeleniumMock, ClickAction.IDENTIFIER, "" ).execute();
+        ActionFactory.createAction( testScenario, ClickAction.IDENTIFIER, "" ).execute();
 
         List<LogRecord > logRecords = handler.getLogRecords();
 

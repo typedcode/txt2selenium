@@ -1,37 +1,53 @@
 package de.typedcode.txt2SeleniumTest.executionContext;
 
-import de.typedcode.txt2Selenium.Txt2Selenium;
-import de.typedcode.txt2Selenium.executionContext.TestScenario;
-import de.typedcode.txt2Selenium.util.UnitLogger;
+import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.Configuration;
+import de.typedcode.txt2selenium.util.UnitLogger;
 import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestTestScenario {
 
-    private Txt2Selenium txt2SeleniumMock;
+    private TestScenario testScenario;
+    private Configuration configuration;
 
     @BeforeEach
-    void before() {
-        this.txt2SeleniumMock = Mockito.mock( Txt2Selenium.class );
+    void before() throws NoSuchFieldException, IllegalAccessException {
+        this.testScenario = Mockito.mock( TestScenario.class );
+
+        configuration = Mockito.mock( Configuration.class );
+        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        instance.setAccessible( true );
+        instance.set( instance, configuration );
+    }
+
+    @AfterAll
+    static void cleanup() throws Exception {
+        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        instance.setAccessible( true );
+        instance.set( instance, null );
     }
 
     @Test
     void testTestsOnly() {
         Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "testsOnly" );
-        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
+        Mockito.when( this.configuration.getMainDirectory() ).thenReturn( Optional.of (scenarioPath.getParent() ) );
 
-        TestScenario tsc = new TestScenario( this.txt2SeleniumMock,scenarioPath );
+        TestScenario tsc = new TestScenario( this.testScenario,scenarioPath );
 
         assertTrue( tsc.getSubScenarios().isEmpty() );
         assertEquals( 3, tsc.getTests().size() );
@@ -67,9 +83,9 @@ class TestTestScenario {
     void testSubScenarioOnly() {
         //Scenario does not contain any tests but a Sub-Scenario which does
         Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "subScenarioOnly" );
-        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
+        Mockito.when( this.configuration.getMainDirectory() ).thenReturn( Optional.of (scenarioPath.getParent() ) );
 
-        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
+        TestScenario tsc = new TestScenario( this.testScenario, scenarioPath );
 
 
         assertTrue( tsc.getTests().isEmpty() );
@@ -98,8 +114,8 @@ class TestTestScenario {
     @Test
     void testEmptyAndSubScenarioEmpty() {
         Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "emptyScenario" );
-        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
-        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
+        Mockito.when( this.configuration.getMainDirectory() ).thenReturn( Optional.of (scenarioPath.getParent() ) );
+        TestScenario tsc = new TestScenario( this.testScenario, scenarioPath );
 
         assertTrue( tsc.getTests().isEmpty() );
         assertTrue( tsc.getSubScenarios().isEmpty() );
@@ -118,46 +134,13 @@ class TestTestScenario {
     }
 
     @Test
-    void testNoCompareStrings() {
-        Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "emptyScenario" );
+    void testMethodDirectoryIsNoSubScenario() {
+        Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "methodDirectoryIsNoSubScenario" );
+        Mockito.when( this.configuration.getMainDirectory() ).thenReturn( Optional.of (scenarioPath.getParent() ) );
 
-        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
-        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
+        TestScenario tsc = new TestScenario( this.testScenario, scenarioPath );
 
-        assertTrue( tsc.getCompareStrings().isEmpty() );
-    }
-
-    @Test
-    void testCompareStringsScenarioOnly() {
-        Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "scenarioOnly" );
-
-        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
-        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
-
-        assertEquals( "one",  tsc.getCompareString( "first" ).get() );
-        assertEquals( "two", tsc.getCompareString( "second" ).get() );
-        assertEquals( "three", tsc.getCompareString( "third" ).get() );
-        assertEquals( 3, tsc.getCompareStrings().size() );
-    }
-
-    @Test
-    void testAdditionalCompareStrings() {
-        Path scenarioPath = Paths.get( "src", "test", "resources", "executionContext", "testScenario", "additionalCompareStrings" );
-
-        Mockito.when( this.txt2SeleniumMock.getMainDirectory() ).thenReturn( scenarioPath.getParent() );
-        TestScenario tsc = new TestScenario( this.txt2SeleniumMock, scenarioPath );
-
-        assertEquals( "one",  tsc.getCompareString( "first" ).get() );
-        assertEquals( "two", tsc.getCompareString( "second" ).get() );
-        assertEquals( "three", tsc.getCompareString( "third" ).get() );
-        assertEquals( 3, tsc.getCompareStrings().size() );
-
-        //Checking the SubScenario
-        tsc = tsc.getSubScenarios().get( 0 );
-        assertEquals( "one",  tsc.getCompareString( "first" ).get() );
-        assertEquals( "overwrite", tsc.getCompareString( "second" ).get() );
-        assertEquals( "three", tsc.getCompareString( "third" ).get() );
-        assertEquals( "additional", tsc.getCompareString( "fourth" ).get() );
-        assertEquals( 2, tsc.getCompareStrings().size() );
+        assertTrue( tsc.getTests().isEmpty() );
+        assertTrue( tsc.getSubScenarios().isEmpty() );
     }
 }

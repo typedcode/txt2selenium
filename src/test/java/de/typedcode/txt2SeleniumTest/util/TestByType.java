@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import de.typedcode.txt2Selenium.util.ByType;
+import de.typedcode.txt2selenium.util.ByType;
 
 class TestByType {
 
