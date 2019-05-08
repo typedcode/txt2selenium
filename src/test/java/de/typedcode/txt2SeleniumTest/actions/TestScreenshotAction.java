@@ -67,14 +67,14 @@ class TestScreenshotAction {
         this.testScenario = Mockito.mock( TestScenario.class );
         this.configuration = Mockito.mock( Configuration.class );
 
-        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        Field instance = Configuration.class.getDeclaredField("instance" );
         instance.setAccessible( true );
         instance.set( instance, this.configuration );
     }
 
     @AfterAll
     static void cleanUp() throws Exception {
-        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        Field instance = Configuration.class.getDeclaredField("instance" );
         instance.setAccessible( true );
         instance.set( instance, null );
     }

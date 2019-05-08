@@ -28,7 +28,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 public class Configuration {
-    private static Configuration INSTANCE;
+    private static Configuration instance;
 
     private Path mainDirectory;
 
@@ -36,11 +36,11 @@ public class Configuration {
     }
 
     public static Configuration getInstance() {
-        if( INSTANCE == null ) {
-            INSTANCE = new Configuration();
+        if( instance == null ) {
+            instance = new Configuration();
         }
 
-        return INSTANCE;
+        return instance;
     }
 
     public void setMainDirectory( Path mainDirectory ) {

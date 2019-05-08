@@ -48,7 +48,7 @@ class TestCompareStringRepository {
     void before() throws NoSuchFieldException, IllegalAccessException {
         this.testScenario = Mockito.mock( TestScenario.class );
         Configuration configuration = Mockito.mock(Configuration.class);
-        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        Field instance = Configuration.class.getDeclaredField("instance" );
         instance.setAccessible( true );
         instance.set( instance, configuration);
     }
@@ -60,7 +60,7 @@ class TestCompareStringRepository {
 
     @AfterAll
     static void cleanup() throws Exception {
-        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        Field instance = Configuration.class.getDeclaredField("instance" );
         instance.setAccessible( true );
         instance.set( instance, null );
     }

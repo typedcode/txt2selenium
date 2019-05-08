@@ -61,7 +61,7 @@ public class AssertCheckedAction extends AAction {
         UnitLogger.logInfo( getCommand() );
         Optional<WebElement> optionalSelectedElement = WebUtil.getInstance().getSelectedElement();
 
-        if( ((Optional) optionalSelectedElement).isEmpty() ) {
+        if( optionalSelectedElement.isEmpty() ) {
             UnitLogger.logSevere( "Error: No Element selected to check for selection status." );
             return;
         }

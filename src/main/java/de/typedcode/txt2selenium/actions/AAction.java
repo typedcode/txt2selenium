@@ -31,7 +31,7 @@ public abstract class AAction {
     /**
      * The action to perform after this action was run. Can be null. Will only be null if this action is the last to perform.
      */
-    public AAction nextAction;
+    private AAction nextAction;
 
     /**
      * Scenario in which this Action will run.
@@ -52,4 +52,12 @@ public abstract class AAction {
      * @return Command String
      */
     public abstract String getCommand();
+
+    public void setNextAction( AAction nextAction ) {
+        this.nextAction = nextAction;
+    }
+
+    public AAction getNextAction() {
+        return this.nextAction;
+    }
 }

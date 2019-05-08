@@ -45,7 +45,7 @@ import java.util.Optional;
  */
 public class ScreenshotAction extends AAction {
 
-    public final static String IDENTIFIER = "screenshot";
+    public static final String IDENTIFIER = "screenshot";
 
     private String pathIdentifier;
 

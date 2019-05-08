@@ -38,9 +38,9 @@ public class OpenAction extends AAction {
 
     public static final String IDENTIFIER = "open";
 
-    public final String URL;
+    private final String url;
 
-    OpenAction( TestScenario scenario, String url ) throws ActionInitiationException {
+    OpenAction( TestScenario scenario, String url ) {
         super( scenario );
 
         String trimUrl = url.trim();
@@ -49,7 +49,7 @@ public class OpenAction extends AAction {
             throw new ActionInitiationException( "Coulnd not Initiate OpenAction. The given URL was empty." );
         }
 
-        URL = trimUrl;
+        this.url = trimUrl;
     }
 
     /**
@@ -60,11 +60,15 @@ public class OpenAction extends AAction {
     public void execute() {
         UnitLogger.logInfo( getCommand() );
 
-        WebUtil.getInstance().openUrl( URL );
+        WebUtil.getInstance().openUrl( url );
     }
 
     @Override
     public String getCommand() {
-        return String.format( "%s %s", IDENTIFIER, this.URL);
+        return String.format( "%s %s", IDENTIFIER, this.url);
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 }

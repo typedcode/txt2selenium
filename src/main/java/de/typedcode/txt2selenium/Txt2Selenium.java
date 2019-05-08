@@ -25,72 +25,55 @@
 package de.typedcode.txt2selenium;
 
 import de.typedcode.txt2selenium.exceptions.InstanceInitiationException;
-import de.typedcode.txt2selenium.executionContext.Method;
 import de.typedcode.txt2selenium.executionContext.TestScenario;
-import de.typedcode.txt2selenium.util.FileUtil;
+import de.typedcode.txt2selenium.util.Configuration;
 import de.typedcode.txt2selenium.util.UnitLogger;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class Txt2Selenium {
     public static final String FILE_EXTENSION = ".t2s";
     public static final String COMPARE_STRINGS_FILE_NAME = "compareStrings" + FILE_EXTENSION;
-    private final String TEST_FILE_FOLDER = "tests";
+    private static final String TEST_FILE_FOLDER = "tests";
     public static final String METHOD_FILE_FOLDER = "methods";
 
-    private Path mainDirectory;
     private TestScenario defaultTestScenario;
-    private Map<String, Method> methods;
-    private Path COMPARE_STRINGS_FILE;
 
-    public Txt2Selenium( Path directory ) {
-        this.mainDirectory = directory;
-        this.methods = new HashMap<>();
+    public Txt2Selenium() {
+        Optional<Path> mainDirectoryOptional = Configuration.getInstance().getMainDirectory();
 
-        if( !Files.exists( this.mainDirectory ) ) {
-            throw new InstanceInitiationException( "Given directory does not exist: " + this.mainDirectory );
+
+
+        if( mainDirectoryOptional.isEmpty() ) {
+            throw new InstanceInitiationException( "No directory was set." );
         }
 
-        if( !Files.isDirectory( this.mainDirectory ) ) {
-            throw new InstanceInitiationException( "Given Path is not a directory: " + this.mainDirectory );
+        Path mainDirectory = mainDirectoryOptional.get();
+
+        if( !Files.exists(  mainDirectory ) ) {
+            throw new InstanceInitiationException( "Given directory does not exist: " + mainDirectory );
         }
 
-        parseMethodFiles();
-        prepareScenarios();
-    }
+        if( !Files.isDirectory( mainDirectory ) ) {
+            throw new InstanceInitiationException( "Given Path is not a directory: " + mainDirectory );
+        }
 
-    /**
-     * Searches and parses the method-files
-     */
-    private void parseMethodFiles() {
-        //Getting the methodfiles
-        Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.METHOD_FILE_FOLDER );
-
-        List<Path> methodFiles = FileUtil.getTestFiles( testFileDirectory );
-
-        //methodFiles.forEach( methodFile -> {
-        //    Method method = new Method(this, methodFile);
-        //    this.methods.put( method.getName(), method );
-        //} );
+        prepareScenarios( Paths.get( mainDirectory.toString(), TEST_FILE_FOLDER) );
     }
 
     /**
      * Searches for and parses the testfiles.
      */
-    private void prepareScenarios() {
+    private void prepareScenarios( Path scenarioPath ) {
         //Getting the testfiles
-        Path testFileDirectory = Paths.get( this.mainDirectory.toString(), this.TEST_FILE_FOLDER );
-        this.defaultTestScenario = new TestScenario( null, testFileDirectory );
+        this.defaultTestScenario = new TestScenario( null, scenarioPath );
 
         if( !TestScenario.testsExist() ) {
             throw new InstanceInitiationException(
-                    "Given test-direcotry does not contain any testfiles: " + testFileDirectory );
+                    "Given test-direcotry does not contain any testfiles: " + scenarioPath );
         }
     }
 
@@ -103,24 +86,6 @@ public class Txt2Selenium {
         this.defaultTestScenario.execute();
 
         UnitLogger.logInfo( "Test Execution Finished" );
-    }
-
-    /**
-     * Returns the Main-Directory where the application was launched.
-     * @return Path where the Application was launched.
-     */
-    public Path getMainDirectory() {
-        return this.mainDirectory;
-    }
-
-    /**
-     * Returns the Method represented by the methodName. Will return am Empty Optional if the Method was not found.
-     *
-     * @param methodName Name of the Method to return
-     * @return Method represented by methodName or null if the Method was not found
-     */
-    public Optional<Method> getMethod(String methodName ) {
-        return Optional.ofNullable( this.methods.get(methodName) );
     }
 
     public TestScenario getDefaultTestScenario() {

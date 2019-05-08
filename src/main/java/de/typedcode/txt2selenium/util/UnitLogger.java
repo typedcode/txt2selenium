@@ -24,17 +24,19 @@
 
 package de.typedcode.txt2selenium.util;
 
+import de.typedcode.txt2selenium.exceptions.LoggerException;
+
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UnitLogger {
 
-    private static Logger INSTANCE;
+    private static Logger instance;
 
     static {
         // Logging will only be done to the stdout
-        INSTANCE = Logger.getLogger( Logger.GLOBAL_LOGGER_NAME );
+        instance = Logger.getLogger( Logger.GLOBAL_LOGGER_NAME );
     }
 
     /**
@@ -50,7 +52,7 @@ public class UnitLogger {
      * @param level Level to log.
      */
     public static void setLogLevel( Level level ) {
-        INSTANCE.setLevel( level );
+        instance.setLevel( level );
     }
 
     /**
@@ -64,10 +66,10 @@ public class UnitLogger {
      *            The throwable to log. Can be null if no throwable is to log.
      */
     private static void log( Level logLevel, String logMessage, Throwable throwable ) {
-        Logger localInstance = INSTANCE;
+        Logger localInstance = instance;
 
         if( localInstance == null ) {
-            throw new RuntimeException( "Logging not Possible. Instance is null." );
+            throw new LoggerException();
         }
 
         if( throwable == null ) {
@@ -135,7 +137,7 @@ public class UnitLogger {
      * @param handler Handler to add.
      */
     public static void addHandler( Handler handler ) {
-        INSTANCE.addHandler( handler );
+        instance.addHandler( handler );
     }
 
     /**
@@ -144,6 +146,6 @@ public class UnitLogger {
      * @param handler Handler to remove.
      */
     public static void removeHandler( Handler handler ) {
-        INSTANCE.removeHandler( handler );
+        instance.removeHandler( handler );
     }
 }

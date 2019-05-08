@@ -56,15 +56,15 @@ class TestTestFileParser {
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "multipleActions.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
-        assertEquals( "http://www.markus-fischer.net", ( ( OpenAction ) action ).URL );
-        action = action.nextAction;
+        assertEquals( "http://www.markus-fischer.net", ( ( OpenAction ) action ).getUrl() );
+        action = action.getNextAction();
         assertEquals( ScreenshotAction.class, action.getClass() );
-        action = action.nextAction;
+        action = action.getNextAction();
         assertEquals( OpenAction.class, action.getClass() );
-        assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).URL );
-        action = action.nextAction;
+        assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).getUrl() );
+        action = action.getNextAction();
         assertEquals( ScreenshotAction.class, action.getClass() );
-        assertNull( action.nextAction );
+        assertNull( action.getNextAction() );
     }
 
     @Test
@@ -73,8 +73,8 @@ class TestTestFileParser {
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "oneAction.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
-        assertNull( action.nextAction );
-        assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).URL );
+        assertNull( action.getNextAction() );
+        assertEquals( "http://www.typedcode.de", ( ( OpenAction ) action ).getUrl() );
     }
 
     @Test
@@ -83,9 +83,9 @@ class TestTestFileParser {
                 Paths.get( "src", "test", "resources", "parsers", "testFileParser", "twoActions.t2s" ) ).get();
 
         assertEquals( OpenAction.class, action.getClass() );
-        action = action.nextAction;
+        action = action.getNextAction();
         assertEquals( ScreenshotAction.class, action.getClass() );
-        assertNull( action.nextAction );
+        assertNull( action.getNextAction() );
     }
 
     @Test

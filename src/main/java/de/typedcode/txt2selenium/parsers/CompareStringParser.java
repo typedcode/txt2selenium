@@ -36,6 +36,10 @@ import de.typedcode.txt2selenium.exceptions.ParseException;
 
 public class CompareStringParser {
 
+    private CompareStringParser() {
+        //Do not instantiate
+    }
+
     /**
      * Parses the given File as Key-Value pairs.
      * 
@@ -50,7 +54,7 @@ public class CompareStringParser {
      *             Throws the Exception if the key is duplicated in the given File
      *             or if an IOException is thrown.
      */
-    public static Map< String, String > parse( Path stringFile ) throws ParseException {
+    public static Map< String, String > parse( Path stringFile ) {
         Map< String, String > result = new HashMap<>();
 
         try( Stream< ? > stream = Files.lines( stringFile ) ) {
@@ -67,17 +71,9 @@ public class CompareStringParser {
 
                 lineNumber++;
 
-                if( line == null ) {
-                    continue;
-                }
-
                 // Skip lines that start with a space
-                if( line.startsWith( " " ) ) {
-                    continue;
-                }
-
                 // Skip Empty lines
-                if( line.isEmpty() ) {
+                if( line == null || line.startsWith( " " ) || line.isEmpty() ) {
                     continue;
                 }
 

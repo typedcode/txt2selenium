@@ -59,22 +59,22 @@ public class WebUtil {
     /**
      * Instance of the WebUtil.
      */
-    private static WebUtil WEB_UTIL;
+    private static WebUtil webUtil;
 
     /**
      * Resets the WebUtil. Resets the driver, the selected element and previously
      * read text.
      */
     public static void reset() {
-        WEB_UTIL = new WebUtil();
+        webUtil = new WebUtil();
     }
 
     public static WebUtil getInstance() {
-        if( WEB_UTIL == null ) {
+        if( webUtil == null ) {
             reset();
         }
 
-        return WEB_UTIL;
+        return webUtil;
     }
 
     /**
@@ -121,7 +121,7 @@ public class WebUtil {
      * @throws NullPointerException
      *             if there was no Element selected.
      */
-    public void click() throws NullPointerException {
+    public void click() {
         if( this.selectedElement != null ) {
             this.selectedElement.click();
         }

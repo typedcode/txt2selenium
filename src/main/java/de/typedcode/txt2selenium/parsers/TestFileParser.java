@@ -55,7 +55,7 @@ public class TestFileParser {
      *            File to parse
      * @return The first action to execute after parsing the file
      */
-    public static Optional< AAction > parse(TestScenario testScenario, Path testFile ) throws ParseException {
+    public static Optional< AAction > parse(TestScenario testScenario, Path testFile ) {
         AAction firstAction = null;
         AAction currentAction;
         AAction lastAction = null;
@@ -82,34 +82,20 @@ public class TestFileParser {
                 split = line.split( " ", 2 );
 
                 if( split.length > 0 ) {
-                    try {
-                        String aName = split[ 0 ];
-                        String aParam = "";
+                    currentAction = getaAction(testScenario, testFile, split, lineNumber);
+                    if (currentAction != null) {
 
-                        if( split.length == 2 && split[ 1 ] != null ) {
-                            aParam = split[ 1 ];
-                        }
-
-                        if( aName != null ) {
-                            currentAction = ActionFactory.createAction( testScenario, aName, aParam );
+                        if (firstAction == null) {
+                            // First Action is also the last action at this point. After this the first
+                            // Action will NOT be changed again.
+                            firstAction = currentAction;
+                            lastAction = currentAction;
                         } else {
-                            continue;
+                            // Last action gets a new successor and will be reset to the just now created
+                            // action
+                            lastAction.setNextAction(currentAction);
+                            lastAction = currentAction;
                         }
-                    } catch( ActionInitiationException ai ) {
-                        throw new ParseException( "Error Parsing file '" + testFile.toAbsolutePath().toString()
-                                + "' at line " + lineNumber, ai );
-                    }
-
-                    if( firstAction == null ) {
-                        // First Action is also the last action at this point. After this the first
-                        // Action will NOT be changed again.
-                        firstAction = currentAction;
-                        lastAction = currentAction;
-                    } else {
-                        // Last action gets a new successor and will be reset to the just now created
-                        // action
-                        lastAction.nextAction = currentAction;
-                        lastAction = currentAction;
                     }
                 }
             }
@@ -118,5 +104,27 @@ public class TestFileParser {
         }
 
         return Optional.ofNullable( firstAction );
+    }
+
+    private static AAction getaAction(TestScenario testScenario, Path testFile, String[] split, int lineNumber) {
+        AAction currentAction;
+        try {
+            String aName = split[ 0 ];
+            String aParam = "";
+
+            if( split.length == 2 && split[ 1 ] != null ) {
+                aParam = split[ 1 ];
+            }
+
+            if( aName != null ) {
+                currentAction = ActionFactory.createAction( testScenario, aName, aParam );
+            } else {
+                return null;
+            }
+        } catch( ActionInitiationException ai ) {
+            throw new ParseException( "Error Parsing file '" + testFile.toAbsolutePath().toString()
+                    + "' at line " + lineNumber, ai );
+        }
+        return currentAction;
     }
 }

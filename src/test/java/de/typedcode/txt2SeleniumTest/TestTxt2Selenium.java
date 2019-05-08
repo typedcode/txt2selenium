@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.typedcode.txt2selenium.executionContext.TestScenario;
+import de.typedcode.txt2selenium.util.Configuration;
 import org.junit.jupiter.api.Test;
 
 import de.typedcode.txt2selenium.Txt2Selenium;
@@ -42,8 +43,9 @@ class TestTxt2Selenium {
     void testInitiationNonExistingDirectory() {
         Path path = Paths.get( "test", "notExisting" );
 
-        Throwable exception = assertThrows( RuntimeException.class,
-                () -> new Txt2Selenium( path ) );
+        Configuration.getInstance().setMainDirectory( path );
+
+        Throwable exception = assertThrows( RuntimeException.class, Txt2Selenium::new);
         assertEquals( String.format( "Given directory does not exist: %s", path.toString() ), exception.getMessage() );
 
     }
@@ -52,7 +54,9 @@ class TestTxt2Selenium {
     void testInitiationDirectoryIsFile() {
         Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "files", "globalOneTestfile", "global.t2s" );
 
-        Throwable exception = assertThrows( RuntimeException.class, () -> new Txt2Selenium( path ) );
+        Configuration.getInstance().setMainDirectory( path );
+
+        Throwable exception = assertThrows( RuntimeException.class, Txt2Selenium::new );
         assertEquals(
                 String.format( "Given Path is not a directory: %s", path.toString() ), exception.getMessage() );
     }
@@ -67,23 +71,14 @@ class TestTxt2Selenium {
         wanted.add( first );
         wanted.add( second );
 
-        Txt2Selenium instance = new Txt2Selenium( path );
+        Configuration.getInstance().setMainDirectory( path );
+
+        Txt2Selenium instance = new Txt2Selenium();
 
         TestScenario defaultTestScenario = instance.getDefaultTestScenario();
         List<de.typedcode.txt2selenium.executionContext.Test> tests = defaultTestScenario.getTests();
 
         assertEquals(2, tests.size() );
         tests.forEach( o -> assertTrue( wanted.contains( o.getPath()) ) );
-    }
-
-    @Test
-    void testResolvingMethodsFiles() {
-        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
-
-        Txt2Selenium instance = new Txt2Selenium( path );
-
-        assertNotNull( instance.getMethod( "firstMethod" ) );
-        assertNotNull( instance.getMethod( "secondMethod" ) );
-        assertTrue( instance.getMethod( "someUnknownMethod" ).isEmpty() );
     }
 }

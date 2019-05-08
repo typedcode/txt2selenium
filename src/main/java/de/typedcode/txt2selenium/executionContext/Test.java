@@ -80,7 +80,7 @@ public class Test extends ExecutionContext {
 
         while( currentAction != null ) {
             currentAction.execute();
-            currentAction = currentAction.nextAction;
+            currentAction = currentAction.getNextAction();
         }
 
         UnitLogger.logInfo( getExecuteFinishMessage() );

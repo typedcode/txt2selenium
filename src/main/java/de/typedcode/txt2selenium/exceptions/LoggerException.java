@@ -22,49 +22,15 @@
  * SOFTWARE.
  */
 
-package de.typedcode.txt2selenium.util;
+package de.typedcode.txt2selenium.exceptions;
 
-import org.openqa.selenium.By;
-
-public class ByInitializer {
-
-    /**
-     * Do not Initialize.
-     */
-    private ByInitializer() {
-
-    }
+public class LoggerException extends RuntimeException {
+    private static final long serialVersionUID = 2321677703092470817L;
 
     /**
-     * Initializes the By Element to search for Elements within a Web-Page
-     * 
-     * @param byType
-     *            Type to create the Element for
-     * @param param
-     *            Parameters to pass to the By-Element
-     * @return A corresponding By-Object to use in Selenium for searching
-     *         WebElements within a Web-Page
-     * @throws NullPointerException
-     *             if the given ByType is not supported.
+     * Exception to throw when the Logger could not be instantiated.
      */
-    public static By initialize( ByType byType, String param ) {
-        By returnValue;
-
-        switch( byType ) {
-            case ID:
-                returnValue = By.id( param );
-                break;
-            case NAME:
-                returnValue = By.name( param );
-                break;
-            case XPATH:
-                returnValue = By.xpath( param );
-                break;
-            default:
-                returnValue = null;
-                break;
-        }
-
-        return returnValue;
+    public LoggerException() {
+        super( "Could not instantiate Logging" );
     }
 }

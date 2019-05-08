@@ -59,7 +59,7 @@ class TestAssertEqualsAction {
         this.webUtil = Mockito.mock( WebUtil.class );
         CompareStringRepository compareStringRepository = Mockito.mock(CompareStringRepository.class);
 
-        Field instance = WebUtil.class.getDeclaredField("WEB_UTIL" );
+        Field instance = WebUtil.class.getDeclaredField("webUtil" );
         instance.setAccessible( true );
         instance.set( instance, this.webUtil );
 
@@ -70,7 +70,7 @@ class TestAssertEqualsAction {
 
     @AfterAll
     static void cleanUp() throws Exception {
-        Field instance = WebUtil.class.getDeclaredField("WEB_UTIL" );
+        Field instance = WebUtil.class.getDeclaredField("webUtil" );
         instance.setAccessible( true );
         instance.set( instance, null );
 

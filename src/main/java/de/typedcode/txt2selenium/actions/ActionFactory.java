@@ -45,37 +45,26 @@ public class ActionFactory {
      * @param parameters Parameters for the Action.
      * @return Action
      */
-    public static AAction createAction( TestScenario scenario, String action, String parameters )
-            throws ActionInitiationException {
+    public static AAction createAction( TestScenario scenario, String action, String parameters ) {
         switch( action ) {
-            case OpenAction.IDENTIFIER: {
+            case OpenAction.IDENTIFIER:
                 return new OpenAction( scenario, parameters );
-            }
-            case ScreenshotAction.IDENTIFIER: {
-                // Second Parameter is
+            case ScreenshotAction.IDENTIFIER:
                 return new ScreenshotAction( scenario, parameters );
-            }
-            case ClickAction.IDENTIFIER: {
+            case ClickAction.IDENTIFIER:
                 return new ClickAction( scenario );
-            }
-            case SelectAction.IDENTIFIER: {
+            case SelectAction.IDENTIFIER:
                 return new SelectAction( scenario, parameters );
-            }
-            case ReadAction.IDENTIFIER: {
+            case ReadAction.IDENTIFIER:
                 return new ReadAction( scenario, parameters );
-            }
-            case TypeAction.IDENTIFIER: {
+            case TypeAction.IDENTIFIER:
                 return new TypeAction( scenario, parameters );
-            }
-            case AssertEqualsAction.IDENTIFIER: {
+            case AssertEqualsAction.IDENTIFIER:
                 return new AssertEqualsAction( scenario, parameters );
-            }
-            case AssertCheckedAction.IDENTIFIER: {
+            case AssertCheckedAction.IDENTIFIER:
                 return new AssertCheckedAction( scenario, parameters );
-            }
-            case MethodAction.IDENTIFIER: {
+            case MethodAction.IDENTIFIER:
                 return new MethodAction( scenario, parameters );
-            }
             default:
                 throw new ActionInitiationException( "Action '" + action + "' is unknown." );
         }

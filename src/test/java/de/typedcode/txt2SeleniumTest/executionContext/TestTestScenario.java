@@ -30,14 +30,14 @@ class TestTestScenario {
         this.testScenario = Mockito.mock( TestScenario.class );
 
         configuration = Mockito.mock( Configuration.class );
-        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        Field instance = Configuration.class.getDeclaredField("instance" );
         instance.setAccessible( true );
         instance.set( instance, configuration );
     }
 
     @AfterAll
     static void cleanup() throws Exception {
-        Field instance = Configuration.class.getDeclaredField("INSTANCE" );
+        Field instance = Configuration.class.getDeclaredField("instance" );
         instance.setAccessible( true );
         instance.set( instance, null );
     }

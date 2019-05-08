@@ -31,6 +31,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FileUtil {
 
@@ -48,16 +49,16 @@ public class FileUtil {
      */
     public static List<Path > getTestFiles( Path path ) {
         List<Path > files = new ArrayList<>();
-        try {
-            PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*" + Txt2Selenium.FILE_EXTENSION );
+        PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*" + Txt2Selenium.FILE_EXTENSION );
 
-            files = Files.walk( path, 1 )
-                    .filter( o -> Files.isRegularFile( o ) )
+        try ( Stream< Path > filesStream = Files.walk( path, 1 ) ) {
+            files = filesStream
+                    .filter( Files::isRegularFile )
                     .filter( o -> matcher.matches( o.getFileName() ) )
                     .collect(Collectors.toList());
 
         } catch( IOException e ) {
-            e.printStackTrace();
+            UnitLogger.logSevere( String.format( "Error getting Test Files for %s", path ), e );
         }
 
         return files;
@@ -71,13 +72,13 @@ public class FileUtil {
     public static List<Path> getTestDirectories( Path path ) {
         List<Path> result = new ArrayList<>();
 
-        try {
-            result = Files.walk( path, 1 )
+        try ( Stream< Path > filesStream = Files.walk( path, 1 ) ) {
+            result = filesStream
                     .filter( Files::isDirectory )
                     .filter( o -> !o.equals( path ) )  //Ignore the given path
                     .collect( Collectors.toList() );
         } catch( IOException e ) {
-            //TODO add exception Handling
+            UnitLogger.logSevere( String.format( "Error getting Test Directories for %s", path ), e );
         }
 
         return result;

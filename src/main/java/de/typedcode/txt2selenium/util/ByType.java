@@ -42,7 +42,7 @@ public enum ByType {
      * @throws NullPointerException
      *             If the given <code>type</code> is unknown.
      */
-    public static ByType getType( String type ) throws NullPointerException {
+    public static ByType getType( String type ) {
         String lowerCaseType = type.toLowerCase();
 
         if( NAME.type.equals( lowerCaseType ) ) {

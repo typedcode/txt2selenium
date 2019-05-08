@@ -67,7 +67,7 @@ class TestOpenAction {
     void testSuccessfullInitiation() throws ActionInitiationException {
         String url = "http://www.typedcode.de";
         OpenAction action = ( OpenAction ) ActionFactory.createAction( testScenario, OpenAction.IDENTIFIER, url );
-        assertEquals( url, action.URL );
+        assertEquals( url, action.getUrl() );
     }
 
     @Test
