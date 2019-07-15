@@ -65,6 +65,8 @@ public class ActionFactory {
                 return new AssertCheckedAction( scenario, parameters );
             case MethodAction.IDENTIFIER:
                 return new MethodAction( scenario, parameters );
+            case AssertReadEqualsAction.IDENTIFIER:
+                return new AssertReadEqualsAction( scenario, parameters );
             default:
                 throw new ActionInitiationException( "Action '" + action + "' is unknown." );
         }

@@ -18,6 +18,13 @@ Checks if a previous selected elements status is the same as true|false.
 Checks if the previous read variable identified by actualIdentifier is equal to the element contained in the Compare Strings.
 If the true|false flag is set to false, this check can be used to check that the elements do not match.
 
+### Assert Read Equals
+
+```assertReadEquals expectedIdentifier actualIdentifier```
+```assertReadEquals true|false expectedIdentiier actualIdentifier```
+
+Works like ```assertEquals``` but compares two values that where previously read to each other.
+
 ### Click
 
 ```click```
