@@ -3,5 +3,5 @@
 .settings/
 bin/
 target/
-txt2selenium.iml
+*.iml
 .idea/

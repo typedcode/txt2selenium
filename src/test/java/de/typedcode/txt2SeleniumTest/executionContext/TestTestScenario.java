@@ -64,17 +64,17 @@ class TestTestScenario {
         assertEquals( 11, records.size() );
         assertEquals( "Starting Scenario: testsOnly", records.get( 0 ).getMessage() );
 
-        assertEquals( "Starting Test: test3", records.get( 1 ).getMessage() );
+        assertEquals( "Starting Test: test2", records.get( 1 ).getMessage() );
         assertEquals( "Test empty", records.get( 2 ).getMessage() );
-        assertEquals( "Ending Test: test3", records.get( 3 ).getMessage() );
+        assertEquals( "Ending Test: test2", records.get( 3 ).getMessage() );
 
-        assertEquals( "Starting Test: test1", records.get( 4 ).getMessage() );
+        assertEquals( "Starting Test: test3", records.get( 4 ).getMessage() );
         assertEquals( "Test empty", records.get( 5 ).getMessage() );
-        assertEquals( "Ending Test: test1", records.get( 6 ).getMessage() );
+        assertEquals( "Ending Test: test3", records.get( 6 ).getMessage() );
 
-        assertEquals( "Starting Test: test2", records.get( 7 ).getMessage() );
+        assertEquals( "Starting Test: test1", records.get( 7 ).getMessage() );
         assertEquals( "Test empty", records.get( 8 ).getMessage() );
-        assertEquals( "Ending Test: test2", records.get( 9 ).getMessage() );
+        assertEquals( "Ending Test: test1", records.get( 9 ).getMessage() );
 
         assertEquals( "Ending Scenario: testsOnly", records.get( 10 ).getMessage() );
     }
