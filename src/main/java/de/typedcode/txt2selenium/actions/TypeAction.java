@@ -67,8 +67,10 @@ public class TypeAction extends AAction {
 
         String tagName = selectedElement.getTagName();
 
-        if( "textarea".equals( tagName )
-                || ( "input".equals( tagName ) && "text".equals( selectedElement.getAttribute( "type" ) ) ) ) {
+        if( "textarea".equals( tagName ) ||
+                ( "input".equals( tagName ) &&
+                    ( "text".equals( selectedElement.getAttribute( "type" ) ) ) ) ||
+                    ( "password".equals( selectedElement.getAttribute( "type" )) ) ) {
             selectedElement.sendKeys( this.textToType );
         } else {
             // No suitable Element to input text

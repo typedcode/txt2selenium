@@ -160,6 +160,24 @@ class TestTypeAction {
     }
 
     @Test
+    void testTypeToPasswordField() throws ActionInitiationException {
+        Path fileToOpen = Paths.get( "src", "test", "resources", "actions", "typeAction", "typeAction.html" );
+
+        ActionFactory.createAction( this.testScenario, OpenAction.IDENTIFIER, fileToOpen.toUri().toString() ).execute();
+        ActionFactory.createAction( this.testScenario, SelectAction.IDENTIFIER, "id passwordField" ).execute();
+
+        WebElement selectedElement = WebUtil.getInstance().getSelectedElement().get();
+
+        assertNotNull( selectedElement );
+
+        assertEquals( "", selectedElement.getText() );
+
+        ActionFactory.createAction( this.testScenario, TypeAction.IDENTIFIER, "Text to type" ).execute();
+
+        assertEquals( "Text to type", selectedElement.getAttribute( "value" ) );
+    }
+
+    @Test
     void testGetCommand() {
         AAction action = ActionFactory.createAction( this.testScenario, TypeAction.IDENTIFIER, "Text to type" );
 
