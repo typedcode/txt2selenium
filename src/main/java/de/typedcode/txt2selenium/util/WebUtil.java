@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
@@ -128,7 +129,21 @@ public class WebUtil {
         else {
             throw new NullPointerException( "No Element Selected." );
         }
+    }
 
+    /**
+     * Sends the given <code>key</code> to the selected element.
+     *
+     * @param key Key to send to the selected element.
+     * @throws NullPointerException if there was no Element selected.
+     */
+    public void sendSpecialKey( Keys key ) {
+        if( this.selectedElement != null ) {
+            this.selectedElement.sendKeys( key );
+        }
+        else {
+            throw new NullPointerException( "No Element Selected." );
+        }
     }
 
     /**

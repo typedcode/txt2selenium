@@ -67,6 +67,8 @@ public class ActionFactory {
                 return new MethodAction( scenario, parameters );
             case AssertReadEqualsAction.IDENTIFIER:
                 return new AssertReadEqualsAction( scenario, parameters );
+            case SendSpecialKeyAction.IDENTIFIER:
+                return new SendSpecialKeyAction( scenario, parameters );
             default:
                 throw new ActionInitiationException( "Action '" + action + "' is unknown." );
         }
