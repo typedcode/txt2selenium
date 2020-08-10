@@ -45,15 +45,13 @@ public class Txt2Selenium {
     public Txt2Selenium() {
         Optional<Path> mainDirectoryOptional = Configuration.getInstance().getMainDirectory();
 
-
-
         if( mainDirectoryOptional.isEmpty() ) {
             throw new InstanceInitiationException( "No directory was set." );
         }
 
         Path mainDirectory = mainDirectoryOptional.get();
 
-        if( !Files.exists(  mainDirectory ) ) {
+        if( !Files.exists( mainDirectory ) ) {
             throw new InstanceInitiationException( "Given directory does not exist: " + mainDirectory );
         }
 
@@ -90,5 +88,20 @@ public class Txt2Selenium {
 
     public TestScenario getDefaultTestScenario() {
         return this.defaultTestScenario;
+    }
+
+    public static void main(String[] args) {
+        if( args.length == 0 ) {
+            Configuration.getInstance().setMainDirectory( Path.of( "." ) );
+        }
+        else if ( args.length == 1 ){
+            Configuration.getInstance().setMainDirectory( Path.of( args[0] ) );
+        }
+        else {
+            throw new IllegalArgumentException( "Run txt2Selenium with path as argument onlny. e.g. java -jar txt2Selenium.jar path/to/tests" );
+        }
+
+        Txt2Selenium txt2Selenium = new Txt2Selenium();
+        txt2Selenium.execute();
     }
 }
