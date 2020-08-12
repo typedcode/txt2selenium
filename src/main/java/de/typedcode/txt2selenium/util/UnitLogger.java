@@ -25,10 +25,9 @@
 package de.typedcode.txt2selenium.util;
 
 import de.typedcode.txt2selenium.exceptions.LoggerException;
+import java.util.Date;
 
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class UnitLogger {
 
@@ -37,6 +36,18 @@ public class UnitLogger {
     static {
         // Logging will only be done to the stdout
         instance = Logger.getLogger( Logger.GLOBAL_LOGGER_NAME );
+        instance.setUseParentHandlers( false );
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter( new SimpleFormatter() {
+            private static final String format = "[%1$tF %1$tT] [%2$-7s] %3$s %n";
+
+            @Override
+            public synchronized String format( LogRecord lr ) {
+                return String.format( format, new Date( lr.getMillis() ), lr.getLevel().getLocalizedName(), lr.getMessage() );
+            }
+        });
+
+        instance.addHandler( handler );
     }
 
     /**
