@@ -27,6 +27,7 @@ package de.typedcode.txt2selenium.actions;
 import de.typedcode.txt2selenium.exceptions.ActionExecutionException;
 import de.typedcode.txt2selenium.executionContext.TestScenario;
 import de.typedcode.txt2selenium.util.Configuration;
+import de.typedcode.txt2selenium.util.PathFactory;
 import de.typedcode.txt2selenium.util.UnitLogger;
 import de.typedcode.txt2selenium.util.WebUtil;
 
@@ -73,10 +74,10 @@ public class ScreenshotAction extends AAction {
         String fileName;
 
         if( this.pathIdentifier.isEmpty() ) {
-            fileName = String.format( "screenshot_%s.html", date );
+            fileName = String.format( "screenshot_%s", date );
         }
         else {
-            fileName = String.format( "screenshot_%s_%s.html", this.pathIdentifier, date );
+            fileName = String.format( "screenshot_%s_%s", this.pathIdentifier, date );
         }
 
         try {
@@ -87,13 +88,13 @@ public class ScreenshotAction extends AAction {
                 return;
             }
 
-            this.screenshotFile = Paths.get( mainDirectory.get().toString(), fileName );
+            this.screenshotFile = PathFactory.get( mainDirectory.get(), fileName, ".html");
 
             Files.createFile( this.screenshotFile );
 
             Files.write( this.screenshotFile, source.getBytes() );
 
-            UnitLogger.logInfo( String.format( "Saved screenshot to %s", fileName ) );
+            UnitLogger.logInfo( String.format( "Saved screenshot to %s", this.screenshotFile.getFileName() ) );
         } catch( IOException e ) {
             throw new ActionExecutionException( "Could not write File.", e );
         }
