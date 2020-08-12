@@ -33,7 +33,7 @@ import org.openqa.selenium.Keys;
 
 public class SendSpecialKeyAction extends AAction {
 
-    public static final String IDENTIFIER = "sendspecialkey";
+    public static final String IDENTIFIER = "sendSpecialKey";
     private Keys key;
 
 

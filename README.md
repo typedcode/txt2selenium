@@ -13,6 +13,7 @@ Checks if a previous selected elements status is the same as true|false.
 ### Assert Equals
 
 ```assertEquals expectedIdentifier actualIdentifier```
+
 ```assertEquals true|false expectedIdentiier actualIdentifier```
 
 Checks if the previous read variable identified by actualIdentifier is equal to the element contained in the Compare Strings.
@@ -21,6 +22,7 @@ If the true|false flag is set to false, this check can be used to check that the
 ### Assert Read Equals
 
 ```assertReadEquals expectedIdentifier actualIdentifier```
+
 ```assertReadEquals true|false expectedIdentiier actualIdentifier```
 
 Works like ```assertEquals``` but compares two values that where previously read to each other.
@@ -48,9 +50,16 @@ Will open the given URL. The Action can also be used to open a local file.
 Will read the previous selected elements content and safe it in the readVars under the given name 'varName'.
 If the action is used multiple times on the same varName, the content will be overwritten.
 
+### Send Special Key
+```sendSpecialKey KEY```
+
+Will send a special key (e.g. enter, tab...) to a previous selected element. Every key specified in 
+https://www.selenium.dev/selenium/docs/api/java/org/openqa/selenium/Keys.html is allowed.
+
 ### Screenshot
 
 ```screenshot```
+
 ```screenshot prefix```
 
 Will save the currently open Page to the file-system. The name will be named like
@@ -62,7 +71,9 @@ If the prefix is set, the resulting filename will be
 ### Select
 
 ```select id idToSelect```
+
 ```select name nameToSelect```
+
 ```select xPath pathToElement```
 
 This action will select the element identified by either the id- or name-Attribute or by the xPath.
