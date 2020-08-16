@@ -144,7 +144,7 @@ public class TestScenario extends ExecutionContext {
 
         testFiles.stream()
                 .filter( o -> !Txt2Selenium.COMPARE_STRINGS_FILE_NAME.equals( o.getFileName().toString() ) )
-                .forEach( o -> this.tests.add( new Test( this.testScenario, o ) ) );
+                .forEach( o -> this.tests.add( new Test( this, o ) ) );
 
         if( !tests.isEmpty() ) {
             TestScenario.setTestsExist();

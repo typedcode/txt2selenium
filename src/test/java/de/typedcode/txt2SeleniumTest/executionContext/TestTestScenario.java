@@ -51,6 +51,7 @@ class TestTestScenario {
 
         assertTrue( tsc.getSubScenarios().isEmpty() );
         assertEquals( 3, tsc.getTests().size() );
+        assertEquals( tsc, tsc.getTests().get( 0 ).getTestScenario() );
 
         TestLoggingHandler handler = new TestLoggingHandler();
         UnitLogger.addHandler( handler );
