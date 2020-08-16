@@ -98,7 +98,7 @@ public class Txt2Selenium {
             Configuration.getInstance().setMainDirectory( Path.of( args[0] ) );
         }
         else {
-            throw new IllegalArgumentException( "Run txt2Selenium with path as argument onlny. e.g. java -jar txt2Selenium.jar path/to/tests" );
+            throw new IllegalArgumentException( "Run txt2Selenium with path as argument only. e.g. java -jar txt2Selenium.jar path/to/tests" );
         }
 
         Txt2Selenium txt2Selenium = new Txt2Selenium();
