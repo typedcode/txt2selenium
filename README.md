@@ -33,6 +33,12 @@ Works like ```assertEquals``` but compares two values that where previously read
 
 This action will Click on an previous selected element.
 
+### Comment
+
+```comment MESSAGE```
+
+Adds the given Message to the log.
+
 ### Method
 
 ```method methodName```
