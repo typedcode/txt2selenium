@@ -73,7 +73,7 @@ public class TestFileParser {
                 line = ( String ) lineIterator.next();
                 lineNumber++;
 
-                if( line == null ) {
+                if( line == null || line.trim().isEmpty() ) {
                     continue;
                 }
 

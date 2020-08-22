@@ -89,6 +89,17 @@ class TestTestFileParser {
     }
 
     @Test
+    void testTwoActionsWihEmptyNewline() throws ParseException {
+        AAction action = TestFileParser.parse(testScenario,
+                Paths.get( "src", "test", "resources", "parsers", "testFileParser", "twoActionsWithEmptyNewline.t2s" ) ).get();
+
+        assertEquals( OpenAction.class, action.getClass() );
+        action = action.getNextAction();
+        assertEquals( ScreenshotAction.class, action.getClass() );
+        assertNull( action.getNextAction() );
+    }
+
+    @Test
     void testInitiationError() throws ParseException {
         Path path = Paths.get( "src", "test", "resources", "parsers", "testFileParser", "initiationError.t2s");
         Throwable exception = assertThrows( ParseException.class,
