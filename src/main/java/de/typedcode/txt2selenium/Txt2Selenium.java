@@ -79,11 +79,11 @@ public class Txt2Selenium {
      * Runs the Tests contained in <code>this.testFiles</code>
      */
     public void execute() {
-        UnitLogger.logInfo( "Starting Test Execution" );
+        UnitLogger.logInfo( "Starting test execution" );
 
         this.defaultTestScenario.execute();
 
-        UnitLogger.logInfo( "Test Execution Finished" );
+        UnitLogger.logInfo( "Test execution finished" );
     }
 
     public TestScenario getDefaultTestScenario() {

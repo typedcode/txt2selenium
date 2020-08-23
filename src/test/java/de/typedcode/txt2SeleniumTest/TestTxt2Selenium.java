@@ -28,9 +28,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.LogRecord;
 
+import de.typedcode.txt2SeleniumTest.testUtils.TestLoggingHandler;
 import de.typedcode.txt2selenium.executionContext.TestScenario;
 import de.typedcode.txt2selenium.util.Configuration;
+import de.typedcode.txt2selenium.util.UnitLogger;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import de.typedcode.txt2selenium.Txt2Selenium;
@@ -38,6 +43,19 @@ import de.typedcode.txt2selenium.Txt2Selenium;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestTxt2Selenium {
+
+    private TestLoggingHandler handler;
+
+    @BeforeEach
+    void before() {
+        this.handler = new TestLoggingHandler();
+        UnitLogger.addHandler( handler );
+    }
+
+    @AfterEach
+    void afterEach() {
+        UnitLogger.removeHandler( this.handler );
+    }
 
     @Test
     void testInitiationNonExistingDirectory() {
@@ -47,7 +65,6 @@ class TestTxt2Selenium {
 
         Throwable exception = assertThrows( RuntimeException.class, Txt2Selenium::new);
         assertEquals( String.format( "Given directory does not exist: %s", path.toString() ), exception.getMessage() );
-
     }
 
     @Test
@@ -80,5 +97,37 @@ class TestTxt2Selenium {
 
         assertEquals(2, tests.size() );
         tests.forEach( o -> assertTrue( wanted.contains( o.getPath()) ) );
+    }
+
+    @Test
+    void testMainMethodToManyArguments() {
+        String[] arguments = new String[] { "first", "second" };
+        Throwable exception = assertThrows( RuntimeException.class, () -> { Txt2Selenium.main( arguments ); } );
+        assertEquals(
+                "Run txt2Selenium with path as argument only. e.g. java -jar txt2Selenium.jar path/to/tests",
+                exception.getMessage() );
+    }
+
+    @Test
+    void testMainSettingMainDirectory() {
+        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
+        String[] arguments = new String[] { path.toString() };
+
+        Txt2Selenium.main( arguments );
+
+        assertEquals( path, Configuration.getInstance().getMainDirectory().get() );
+    }
+
+    @Test
+    void testExecutionLogging() {
+        Path path = Paths.get( "src", "test", "resources", "Txt2Selenium", "initiation", "testResolving" );
+        String[] arguments = new String[] { path.toString() };
+
+        Txt2Selenium.main( arguments );
+
+        List<LogRecord> logRecords = this.handler.getLogRecords();
+
+        assertEquals( "Starting test execution", logRecords.get( 0 ).getMessage() );
+        assertEquals( "Test execution finished", logRecords.get( logRecords.size() - 1 ).getMessage() );
     }
 }
